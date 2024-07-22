@@ -13,10 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setUserData,
-  clearUserData,
-} from "../../reducers/authentication/authSlice";
+import { setUserData, clearUserData } from "../../reducers/authentication/authSlice";
 import axios from "axios";
 
 const settings = [
@@ -32,7 +29,7 @@ function ResponsiveAppBar() {
 
   const getUser = async () => {
     try {
-      const response = await axios.get("http://localhost:5500/login/success", {
+      const response = await axios.get(`http://localhost:5500/login/success`, {
         withCredentials: true,
       });
       if (response.data.authenticated) {
@@ -56,11 +53,11 @@ function ResponsiveAppBar() {
   };
 
   const handleLogin = () => {
-    window.open("http://localhost:5500/auth/google", "_self");
+    window.open(`http://localhost:5500/auth/google`, "_self");
   };
 
   const handleLogout = () => {
-    window.open("http://localhost:5500/logout", "_self");
+    window.open(`http://localhost:5500/logout`, "_self");
     dispatch(clearUserData());
   };
 
