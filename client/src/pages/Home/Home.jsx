@@ -18,7 +18,7 @@ export default function Home() {
   }, [userData]);
   return (
     <div>
-      <Box display="flex" justifyContent="space-between" flexWrap="wrap" mt={0}>
+      <Box display="flex" justifyContent="space-between">
         <Box>
           <Typography
             fontSize={30}

@@ -29,8 +29,15 @@ router.get("/:id", async (req, res) => {
 
 // Create a quiz
 router.post("/create", async (req, res) => {
-  const { QuizId, CreatorMail, title, noOfQuestions, questions, duration ,visibility} =
-    req.body;
+  const {
+    QuizId,
+    CreatorMail,
+    title,
+    noOfQuestions,
+    questions,
+    duration,
+    visibility,
+  } = req.body;
 
   try {
     let quiz = new QuizPaper({
@@ -40,7 +47,7 @@ router.post("/create", async (req, res) => {
       noOfQuestions,
       questions,
       duration,
-      visibility
+      visibility,
     });
 
     await quiz.save();
@@ -77,9 +84,10 @@ router.put("/:id", async (req, res) => {
 });
 
 // Delete a quiz
-router.delete("/:id", async (req, res) => {
+router.delete("/:QuizId", async (req, res) => {
   try {
-    const quiz = await QuizPaper.findById(req.params.id);
+    // console.log(req.params.QuizId)
+    const quiz = await QuizPaper.findOne({ QuizId: req.params.QuizId });
     if (!quiz) {
       return res.status(404).json({ msg: "Quiz not found" });
     }
@@ -87,8 +95,8 @@ router.delete("/:id", async (req, res) => {
     await quiz.deleteOne();
     res.json({ msg: "Quiz removed" });
   } catch (error) {
-    console.error(`Error: ${error}`);
-    res.status(500).send("Server error");
+    console.error(`Error: ${error.message}`);
+    res.status(500).json({ msg: "Server error", error: error.message });
   }
 });
 
