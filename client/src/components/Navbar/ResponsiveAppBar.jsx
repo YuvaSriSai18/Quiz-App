@@ -13,7 +13,10 @@ import MenuItem from "@mui/material/MenuItem";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import { useSelector, useDispatch } from "react-redux";
-import { setUserData, clearUserData } from "../../reducers/authentication/authSlice";
+import {
+  setUserData,
+  clearUserData,
+} from "../../reducers/authentication/authSlice";
 import axios from "axios";
 
 const settings = [

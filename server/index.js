@@ -46,7 +46,7 @@ app.use(passport.session());
 app.get("/", (req, res) => {
   res.send(`Hello to server !! 😊.`);
 });
- 
+
 // Initialize Google Login
 app.get(
   "/auth/google",
@@ -63,6 +63,7 @@ app.get(
 
 app.get("/login/success", (req, res) => {
   if (req.user) {
+    // console.log(req.user)
     res.status(200).json({ authenticated: true, user: req.user });
   } else {
     res.status(401).json({ authenticated: false, message: "Not Authorized" });
@@ -77,6 +78,11 @@ app.get("/logout", (req, res, next) => {
     res.redirect("http://localhost:5173");
   });
 });
+
+// Quiz Router
+
+const QuizRouter = require("./routers/Quiz");
+app.use("/quiz", QuizRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);

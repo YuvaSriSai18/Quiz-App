@@ -49,9 +49,7 @@ const Dashboard = () => {
                   marginBottom: "10px",
                 }}
               />
-              <Typography variant="h6">
-                {userData.displayName.toUpperCase()}
-              </Typography>
+              <Typography variant="h6">{userData.displayName}</Typography>
 
               {isMobile && (
                 <>
