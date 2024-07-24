@@ -212,14 +212,14 @@ const Quiz_QP_Create = () => {
                     row
                   >
                     <FormControlLabel
-                      value="byJoiningRoom"
-                      control={<Radio />}
-                      label="By joining Room"
-                    />
-                    <FormControlLabel
                       value="openToAll"
                       control={<Radio />}
                       label="Open to All"
+                    />
+                    <FormControlLabel
+                      value="byJoiningRoom"
+                      control={<Radio />}
+                      label="By Joining Room"
                     />
                   </RadioGroup>
                 </FormControl>
