@@ -29,14 +29,8 @@ router.get("/:QuizId", async (req, res) => {
 
 // Create a quiz
 router.post("/create", async (req, res) => {
-  const {
-    QuizId,
-    CreatorMail,
-    title,
-    questions,
-    duration,
-    roomPass,
-  } = req.body;
+  const { QuizId, CreatorMail, title, questions, duration, roomPass } =
+    req.body;
 
   try {
     let quiz = new QuizPaper({

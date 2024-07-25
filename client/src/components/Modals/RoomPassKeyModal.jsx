@@ -1,7 +1,14 @@
-import React, { useState } from 'react';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { TextField, IconButton, InputAdornment, Box, Typography, Tooltip } from '@mui/material';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import React, { useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import {
+  TextField,
+  IconButton,
+  InputAdornment,
+  Box,
+  Typography,
+  Tooltip,
+} from "@mui/material";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 const RoomPassKeyCopyModal = ({ roomPass, onClose }) => {
   const [copied, setCopied] = useState(false);
@@ -12,23 +19,25 @@ const RoomPassKeyCopyModal = ({ roomPass, onClose }) => {
   };
 
   return (
-    <Box sx={{
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width: '90%',
-      maxWidth: 400,
-      bgcolor: 'background.paper',
-      borderRadius:'5px',
-      boxShadow: 24,
-      p: 4,
-    }}>
+    <Box
+      sx={{
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        width: "90%",
+        maxWidth: 400,
+        bgcolor: "background.paper",
+        borderRadius: "5px",
+        boxShadow: 24,
+        p: 4,
+      }}
+    >
       <Typography variant="h6" gutterBottom>
         Room Pass Key
       </Typography>
       <TextField
-        value={roomPass || 'EmptyField'}
+        value={roomPass || "EmptyField"}
         readOnly
         variant="outlined"
         fullWidth
@@ -46,7 +55,11 @@ const RoomPassKeyCopyModal = ({ roomPass, onClose }) => {
           ),
         }}
       />
-      {copied && <Typography color="secondary" variant="body2" sx={{ mt: 1 }}>Copied to clipboard.</Typography>}
+      {copied && (
+        <Typography color="secondary" variant="body2" sx={{ mt: 1 }}>
+          Copied to clipboard.
+        </Typography>
+      )}
     </Box>
   );
 };

@@ -142,7 +142,9 @@ const Quiz_Update = () => {
   return (
     <Card sx={{ width: { xs: "100%", md: "50%" }, margin: "30px auto" }}>
       <CardContent>
-        <Typography variant="h5" fontWeight={600} textAlign={'center'}>Update Quiz</Typography>
+        <Typography variant="h5" fontWeight={600} textAlign={"center"}>
+          Update Quiz
+        </Typography>
         <form onSubmit={handleSubmit}>
           <TextField
             label="Title"
@@ -259,7 +261,13 @@ const Quiz_Update = () => {
               </Box>
             </div>
           ))}
-          <Box display={'flex'} flexDirection={'column'} rowGap={2} width={'fit-content'} m={'auto'}>
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            rowGap={2}
+            width={"fit-content"}
+            m={"auto"}
+          >
             <Button
               onClick={handleAddQuestion}
               variant="contained"

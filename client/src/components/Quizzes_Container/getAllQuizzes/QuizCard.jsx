@@ -24,7 +24,7 @@ export default function QuizCard({ QuizObj, onDelete }) {
       .delete(`http://localhost:5500/quiz/${QuizObj.QuizId}`)
       .then((response) => {
         window.alert(response.data.msg);
-        location.reload()
+        location.reload();
         handleClose();
         if (onDelete) {
           onDelete(QuizObj.QuizId);
@@ -85,7 +85,9 @@ export default function QuizCard({ QuizObj, onDelete }) {
           horizontal: "right",
         }}
       >
-        <MenuItem onClick={() => navigate(`/update/${QuizObj.QuizId}`)}>Modify</MenuItem>
+        <MenuItem onClick={() => navigate(`/update/${QuizObj.QuizId}`)}>
+          Modify
+        </MenuItem>
         <MenuItem onClick={deleteQuiz}>Delete</MenuItem>
       </Menu>
     </div>

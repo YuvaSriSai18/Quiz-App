@@ -8,23 +8,23 @@ import { useSelector } from "react-redux";
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth:'100%',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  maxWidth: "100%",
   width: {
-    xs: '100%', // 100% width on extra-small screens
+    xs: "100%", // 100% width on extra-small screens
     md: 400, // Fixed width on medium and larger screens
   },
   margin: {
-    xs: '0px 10px', // Margin of 0px 10px on extra-small screens
-    md: '0px', // No margin on medium and larger screens
+    xs: "0px 10px", // Margin of 0px 10px on extra-small screens
+    md: "0px", // No margin on medium and larger screens
   },
-  bgcolor: 'background.paper',
+  bgcolor: "background.paper",
   boxShadow: 24,
   p: 5,
-  borderRadius:'5px'
+  borderRadius: "5px",
 };
 
 export default function Home() {
@@ -168,10 +168,10 @@ export default function Home() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          margin:{
-            xs:'0px 8px',
-            md:'0px'
-          }
+          margin: {
+            xs: "0px 8px",
+            md: "0px",
+          },
         }}
       >
         <Box sx={style}>

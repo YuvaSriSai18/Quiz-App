@@ -322,7 +322,10 @@ const Quiz_QP_Create = () => {
         </CardContent>
       </Card>
       <Modal open={isModalOpen} onClose={handleCloseModal}>
-        <RoomPassKeyCopyModal roomPass={questionPaper.roomPass} onClose={handleCloseModal} />
+        <RoomPassKeyCopyModal
+          roomPass={questionPaper.roomPass}
+          onClose={handleCloseModal}
+        />
       </Modal>
     </center>
   );

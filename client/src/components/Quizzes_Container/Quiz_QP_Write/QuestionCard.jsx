@@ -33,12 +33,14 @@ export default function QuestionCard({
             border: "2px solid #b8b4b4",
             padding: "10px",
             borderRadius: "12px",
-            display:'flex',
-            justifyContent:'space-between'
+            display: "flex",
+            justifyContent: "space-between",
           }}
         >
-          <p style={{margin:0}}><strong>{questionNumber} .  </strong> {question.question}</p>
-          <p style={{margin:0,fontWeight:'600'}}>{question.mark} M </p>
+          <p style={{ margin: 0 }}>
+            <strong>{questionNumber} . </strong> {question.question}
+          </p>
+          <p style={{ margin: 0, fontWeight: "600" }}>{question.mark} M </p>
         </Box>
 
         <Box
