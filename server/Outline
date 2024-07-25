@@ -91,6 +91,6 @@ Features to be implemented
     b. QUIZ CARD
 
 
-a.join room (user wil enter room number) { Here we keep a middleware that checks the room number , if True next() else return} -> quiz name (ensure that quiz details are correct)  -> instructions and details (quiz instructions) -> quiz  -> Automatically Room should be closed when the timer is set to 0
+a.join room (user will enter room number) { Here we keep a middleware that checks the room number , if True next() else return} -> quiz name (ensure that quiz details are correct)  -> instructions and details (quiz instructions) -> quiz  -> Automatically Room should be closed when the timer is set to 0
 
 b. quiz card (user will select the quiz from the live quizzes section) -> enter code (user will enter the room code )  { Here we keep a middleware that checks the room number , if True next() else return} -> instructions and details (quiz instructions)-> quiz -> -> Automatically Room should be closed when the timer is set to 0
