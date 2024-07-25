@@ -1,0 +1,96 @@
+Backend Part
+
+    1. Authentication
+        |_Firebase  (Email and Password Sign In)
+    2. Database Storage
+        |__Mongo DB
+
+        DB Collections
+            2.1 Question Schema
+                2.1.1.{
+                    question:string,
+                    options:["","","",""],
+                    correctOption:"",
+                    mark:double default 1
+                }
+            2.2 Question Papers Schema
+                2.2.1. {
+                    QuizId:string,
+                    CreaterMail:string,
+                    title:string,
+                    noOfQuestions:number,
+                    questions:[
+                        {
+                            new Question
+                        }
+                    ],
+                    openTime:time,
+                    closeTime:time
+                }
+            2.3 StudentUser Schema
+                2.3.1. {
+                    mail:string, // here we retrieve the mail from the authenticated part 
+                    rollNo:string 
+                    name: string
+                    successRate:double 
+                    attemptedQuizes : [
+                        {
+                            QuizId:string,
+                            quizTitle:string,
+                            optedOptions: string []
+                            pointsEarned:double initial 0
+                        }
+                    ]
+                    points:null default 0,
+                    pointsCalculator:()=>{
+                         return ((this.points + this.attemptedQuizes[attemptedQuizes.length - 1].pointsEarned)/attemptedQuizes.length)
+                    }
+
+                }
+            2.4 Responses Schema 
+                2.4.1. {
+                    quizId: string,
+                    responses:[
+                        {
+                            studentMail:string,
+                            marksObtained:double,
+                            cratedAt : time
+                        }
+                    ]
+                }
+
+
+Features to be implemented
+    1. LeaderBoard
+        1.1 Position
+        1.2 Name
+        1.3 Points
+    2. Creating Quiz Forms  (CRUD)
+    3. disable screenshot // optional
+    4. blocking navigation //optional
+    5. Dashboard
+        5.1 Student Dashboard  //  If possible we retrieve the data from college Database
+            5.1.1 Regd No 
+            5.1.2 Name
+            5.1.3 Branch
+            5.1.4 Year
+            5.1.5 Section
+            5.1.6 Email
+        5.2 Lecturer Dashboard   //  If possible we retrieve the data from college Database
+            5.2.1 Name
+            5.2.2 Branch
+            5.2.3 Mail 
+            5.2.4 Regd No
+
+
+
+
+
+2 methods:
+    a. JOIN ROOM
+    b. QUIZ CARD
+
+
+a.join room (user wil enter room number) { Here we keep a middleware that checks the room number , if True next() else return} -> quiz name (ensure that quiz details are correct)  -> instructions and details (quiz instructions) -> quiz  -> Automatically Room should be closed when the timer is set to 0
+
+b. quiz card (user will select the quiz from the live quizzes section) -> enter code (user will enter the room code )  { Here we keep a middleware that checks the room number , if True next() else return} -> instructions and details (quiz instructions)-> quiz -> -> Automatically Room should be closed when the timer is set to 0
