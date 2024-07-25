@@ -36,6 +36,7 @@ const Quiz_Update = () => {
     ],
     duration: 0,
     roomPass: Math.floor(100000 + Math.random() * 900000),
+    openTime: "",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -166,6 +167,19 @@ const Quiz_Update = () => {
               setQuestionPaper((prevState) => ({
                 ...prevState,
                 duration: e.target.value,
+              }))
+            }
+            fullWidth
+            margin="normal"
+          />
+          <TextField
+            label="Open Time (YYYY-MM-DD HH:MM)"
+            value={questionPaper.openTime}
+            type="datetime-local"
+            onChange={(e) =>
+              setQuestionPaper((prevState) => ({
+                ...prevState,
+                openTime: e.target.value,
               }))
             }
             fullWidth
