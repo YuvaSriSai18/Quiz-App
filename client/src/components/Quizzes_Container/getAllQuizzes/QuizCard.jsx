@@ -64,6 +64,7 @@ export default function QuizCard({ QuizObj }) {
       </p>
       <h6 className="heading_1">{QuizObj.title}</h6>
       <p className="para_1">
+        {/* <p>Pass : {QuizObj.roomPass} </p> */}
         <p>Time : {QuizObj.duration} Min</p>
         <p>Questions : {QuizObj.noOfQuestions} </p>
       </p>

@@ -17,6 +17,7 @@ const QuestionPaperSchema = new Schema(
     questions: { type: [QuestionSchema], required: true },
     duration: { type: Number, required: true },
     // visibility:{type:String,required:true}
+    roomPass:{ type: Number, required: true }
   },
   { timestamps: true }
 );

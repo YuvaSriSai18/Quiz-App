@@ -12,6 +12,7 @@ import {
   Typography,
   Grid,
   Box,
+  Modal,
   FormControl,
   FormLabel,
   RadioGroup,
@@ -21,6 +22,7 @@ import {
 import { Add } from "@mui/icons-material";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
+import RoomPassKeyCopyModal from "../../components/Modals/RoomPassKeyModal";
 
 const Quiz_QP_Create = () => {
   const userData = useSelector((state) => state.auth.userData); // Assuming user data is in the 'auth.userData' field
@@ -39,8 +41,10 @@ const Quiz_QP_Create = () => {
     ],
     openTime: "",
     duration: "",
-    // visibility: "openToAll", // Default value
+    roomPass: Math.floor(100000 + Math.random() * 900000),
   });
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleChange = (field, value) => {
     setQuestionPaper((prevState) => ({
@@ -109,7 +113,7 @@ const Quiz_QP_Create = () => {
     try {
       await axios.post("http://localhost:5500/quiz/create", questionPaper);
       window.alert("Quiz is Created");
-      window.location.href = "/";
+      setIsModalOpen(true); // Open the modal after creating the quiz
     } catch (err) {
       window.alert("Error in creating Quiz");
       console.error(err);
@@ -119,6 +123,11 @@ const Quiz_QP_Create = () => {
   const handleSubmit = () => {
     console.log(questionPaper);
     createQuiz();
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    window.location.href = "/"; // Redirect to home after closing the modal
   };
 
   return (
@@ -186,45 +195,6 @@ const Quiz_QP_Create = () => {
                 InputProps={{ inputProps: { min: 1 } }}
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <Box>
-                <FormControl
-                  component="fieldset"
-                  sx={{
-                    display: "flex",
-                    flexGrow: 1,
-                    flexDirection: { md: "row", xs: "column" },
-                    textAlign: { xs: "left" },
-                    color: "#000",
-                    columnGap: "10px",
-                  }}
-                >
-                  <FormLabel>
-                    <Typography variant="h6" mr={2} pt={0.5}>
-                      Type of Quiz
-                    </Typography>
-                  </FormLabel>
-                  <RadioGroup
-                    aria-label="visibility"
-                    name="visibility"
-                    value={questionPaper.visibility}
-                    onChange={(e) => handleChange("visibility", e.target.value)}
-                    row
-                  >
-                    <FormControlLabel
-                      value="openToAll"
-                      control={<Radio />}
-                      label="Open to All"
-                    />
-                    <FormControlLabel
-                      value="byJoiningRoom"
-                      control={<Radio />}
-                      label="By Joining Room"
-                    />
-                  </RadioGroup>
-                </FormControl>
-              </Box>
-            </Grid> */}
             {questionPaper.questions.map((question, qIndex) => (
               <Grid item xs={12} key={qIndex}>
                 <Card sx={{ margin: "20px 0" }}>
@@ -360,6 +330,9 @@ const Quiz_QP_Create = () => {
           </Grid>
         </CardContent>
       </Card>
+      <Modal open={isModalOpen} onClose={handleCloseModal}>
+        <RoomPassKeyCopyModal roomPass={questionPaper.roomPass} onClose={handleCloseModal} />
+      </Modal>
     </center>
   );
 };

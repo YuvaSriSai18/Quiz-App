@@ -37,6 +37,7 @@ router.post("/create", async (req, res) => {
     questions,
     duration,
     // visibility,
+    roomPass
   } = req.body;
 
   try {
@@ -48,6 +49,7 @@ router.post("/create", async (req, res) => {
       questions,
       duration,
       // visibility,
+      roomPass
     });
 
     await quiz.save();
