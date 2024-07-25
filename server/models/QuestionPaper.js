@@ -16,7 +16,7 @@ const QuestionPaperSchema = new Schema(
     noOfQuestions: { type: Number, required: true },
     questions: { type: [QuestionSchema], required: true },
     duration: { type: Number, required: true },
-    visibility:{type:String,required:true}
+    // visibility:{type:String,required:true}
   },
   { timestamps: true }
 );

@@ -39,7 +39,7 @@ const Quiz_QP_Create = () => {
     ],
     openTime: "",
     duration: "",
-    visibility: "openToAll", // Default value
+    // visibility: "openToAll", // Default value
   });
 
   const handleChange = (field, value) => {
@@ -186,7 +186,7 @@ const Quiz_QP_Create = () => {
                 InputProps={{ inputProps: { min: 1 } }}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Box>
                 <FormControl
                   component="fieldset"
@@ -224,7 +224,7 @@ const Quiz_QP_Create = () => {
                   </RadioGroup>
                 </FormControl>
               </Box>
-            </Grid>
+            </Grid> */}
             {questionPaper.questions.map((question, qIndex) => (
               <Grid item xs={12} key={qIndex}>
                 <Card sx={{ margin: "20px 0" }}>

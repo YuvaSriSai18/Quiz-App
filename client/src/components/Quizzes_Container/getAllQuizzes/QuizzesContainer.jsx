@@ -12,11 +12,11 @@ export default function QuizzesContainer() {
   const getQuizzes = async () => {
     try {
       const response = await axios.get("http://localhost:5500/quiz");
-      const filteredQuizzes = response.data.filter(
-        (quiz) => quiz.visibility === "openToAll"
-      );
-      console.log(filteredQuizzes); // Log the filtered quizzes
-      setQuizzes(filteredQuizzes);
+      // const filteredQuizzes = response.data.filter(
+      //   (quiz) => quiz.visibility === "openToAll"
+      // );
+      // console.log(filteredQuizzes); // Log the filtered quizzes
+      setQuizzes(response.data);
     } catch (error) {
       console.error("Error fetching quizzes:", error);
     }

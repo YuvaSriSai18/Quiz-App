@@ -36,7 +36,7 @@ router.post("/create", async (req, res) => {
     noOfQuestions,
     questions,
     duration,
-    visibility,
+    // visibility,
   } = req.body;
 
   try {
@@ -47,7 +47,7 @@ router.post("/create", async (req, res) => {
       noOfQuestions,
       questions,
       duration,
-      visibility,
+      // visibility,
     });
 
     await quiz.save();
