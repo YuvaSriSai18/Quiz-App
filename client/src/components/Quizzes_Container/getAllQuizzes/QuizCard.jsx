@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import "./Quizzes.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
 
-export default function QuizCard({ QuizObj }) {
+export default function QuizCard({ QuizObj, onDelete }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,13 +23,14 @@ export default function QuizCard({ QuizObj }) {
     axios
       .delete(`http://localhost:5500/quiz/${QuizObj.QuizId}`)
       .then((response) => {
-        // Assuming your server sends a message as { msg: "Quiz removed" }
         window.alert(response.data.msg);
-        window.location.reload();
-        // Optionally, you might want to refresh the list or perform other actions
+        location.reload()
+        handleClose();
+        if (onDelete) {
+          onDelete(QuizObj.QuizId);
+        }
       })
       .catch((err) => {
-        // console.error(`Error occurred in deleting a Quiz: ${err}`);
         window.alert(`Error occurred in deleting a Quiz: ${err.message}`);
       });
   };
@@ -37,10 +39,8 @@ export default function QuizCard({ QuizObj }) {
     <div
       className="outer_card"
       style={{
-        width: {
-          xs: "100%",
-          md: "200px",
-        },
+        width: "100%",
+        maxWidth: "200px",
         height: "250px",
         border: "2px solid #bbbbbb",
         borderRadius: "12px",
@@ -48,7 +48,7 @@ export default function QuizCard({ QuizObj }) {
         display: "flex",
         flexDirection: "column",
         textAlign: "left",
-        position: "relative", // Ensure proper positioning for the menu
+        position: "relative",
       }}
     >
       <p className="inner_card">
@@ -64,9 +64,8 @@ export default function QuizCard({ QuizObj }) {
       </p>
       <h6 className="heading_1">{QuizObj.title}</h6>
       <p className="para_1">
-        {/* <p>Pass : {QuizObj.roomPass} </p> */}
         <p>Time : {QuizObj.duration} Min</p>
-        <p>Questions : {QuizObj.noOfQuestions} </p>
+        <p>Questions : {QuizObj.noOfQuestions}</p>
       </p>
       <NavLink to={`/writequiz/${QuizObj.QuizId}`}>
         <button className="button">Start</button>
@@ -86,7 +85,7 @@ export default function QuizCard({ QuizObj }) {
           horizontal: "right",
         }}
       >
-        <MenuItem onClick={handleClose}>Modify</MenuItem>
+        <MenuItem onClick={() => navigate(`/update/${QuizObj.QuizId}`)}>Modify</MenuItem>
         <MenuItem onClick={deleteQuiz}>Delete</MenuItem>
       </Menu>
     </div>

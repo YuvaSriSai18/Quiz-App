@@ -13,10 +13,10 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get a single quiz by ID
-router.get("/:id", async (req, res) => {
+// Get a single quiz by QuizId
+router.get("/:QuizId", async (req, res) => {
   try {
-    const quiz = await QuizPaper.findById(req.params.id);
+    const quiz = await QuizPaper.findOne({ QuizId: req.params.QuizId });
     if (!quiz) {
       return res.status(404).json({ msg: "Quiz not found" });
     }
@@ -33,11 +33,9 @@ router.post("/create", async (req, res) => {
     QuizId,
     CreatorMail,
     title,
-    noOfQuestions,
     questions,
     duration,
-    // visibility,
-    roomPass
+    roomPass,
   } = req.body;
 
   try {
@@ -45,11 +43,10 @@ router.post("/create", async (req, res) => {
       QuizId,
       CreatorMail,
       title,
-      noOfQuestions,
+      noOfQuestions: questions.length,
       questions,
       duration,
-      // visibility,
-      roomPass
+      roomPass,
     });
 
     await quiz.save();
@@ -60,22 +57,23 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// Update a quiz
-router.put("/:id", async (req, res) => {
+// Update a quiz by QuizId
+router.put("/:QuizId", async (req, res) => {
   try {
-    const { CreatorMail, title, noOfQuestions, questions, durationOfQuiz } =
-      req.body;
+    const { title, questions, duration } = req.body;
 
-    const quiz = await QuizPaper.findById(req.params.id);
+    const quiz = await QuizPaper.findOne({ QuizId: req.params.QuizId });
     if (!quiz) {
       return res.status(404).json({ msg: "Quiz not found" });
     }
 
-    quiz.CreatorMail = CreatorMail || quiz.CreatorMail;
     quiz.title = title || quiz.title;
-    quiz.noOfQuestions = noOfQuestions || quiz.noOfQuestions;
-    quiz.questions = questions || quiz.questions;
-    quiz.durationOfQuiz = durationOfQuiz || quiz.durationOfQuiz;
+    if (questions) {
+      quiz.questions = questions;
+      quiz.noOfQuestions = questions.length;
+    }
+    quiz.duration = duration || quiz.duration;
+    // roomPass and CreatorMail are not updated
 
     const updatedQuiz = await quiz.save();
     res.json(updatedQuiz);
@@ -85,10 +83,9 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a quiz
+// Delete a quiz by QuizId
 router.delete("/:QuizId", async (req, res) => {
   try {
-    // console.log(req.params.QuizId)
     const quiz = await QuizPaper.findOne({ QuizId: req.params.QuizId });
     if (!quiz) {
       return res.status(404).json({ msg: "Quiz not found" });

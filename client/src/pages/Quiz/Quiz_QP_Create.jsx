@@ -11,13 +11,7 @@ import {
   Button,
   Typography,
   Grid,
-  Box,
   Modal,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { v4 as uuidv4 } from "uuid";
@@ -25,12 +19,11 @@ import { useSelector } from "react-redux";
 import RoomPassKeyCopyModal from "../../components/Modals/RoomPassKeyModal";
 
 const Quiz_QP_Create = () => {
-  const userData = useSelector((state) => state.auth.userData); // Assuming user data is in the 'auth.userData' field
+  const userData = useSelector((state) => state.auth.userData);
   const [questionPaper, setQuestionPaper] = useState({
     QuizId: uuidv4(),
-    CreatorMail: userData?.email || "abc@gmail.com", // Optional chaining for safety
+    CreatorMail: userData?.email || "abc@gmail.com",
     title: "",
-    noOfQuestions: 1,
     questions: [
       {
         question: "",
@@ -74,7 +67,6 @@ const Quiz_QP_Create = () => {
   const addQuestion = () => {
     setQuestionPaper((prevState) => ({
       ...prevState,
-      noOfQuestions: prevState.noOfQuestions + 1,
       questions: [
         ...prevState.questions,
         {
@@ -91,7 +83,6 @@ const Quiz_QP_Create = () => {
     const newQuestions = questionPaper.questions.filter((_, i) => i !== index);
     setQuestionPaper((prevState) => ({
       ...prevState,
-      noOfQuestions: prevState.noOfQuestions - 1,
       questions: newQuestions,
     }));
   };
@@ -113,7 +104,7 @@ const Quiz_QP_Create = () => {
     try {
       await axios.post("http://localhost:5500/quiz/create", questionPaper);
       window.alert("Quiz is Created");
-      setIsModalOpen(true); // Open the modal after creating the quiz
+      setIsModalOpen(true);
     } catch (err) {
       window.alert("Error in creating Quiz");
       console.error(err);
@@ -127,7 +118,7 @@ const Quiz_QP_Create = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    window.location.href = "/"; // Redirect to home after closing the modal
+    window.location.href = "/";
   };
 
   return (
@@ -278,7 +269,7 @@ const Quiz_QP_Create = () => {
                             handleQuestionChange(
                               qIndex,
                               "correctOption",
-                              parseInt(e.target.value) || 0 // Ensure the value is a number
+                              parseInt(e.target.value) || 0
                             )
                           }
                           margin="normal"
@@ -296,7 +287,7 @@ const Quiz_QP_Create = () => {
                             handleQuestionChange(
                               qIndex,
                               "mark",
-                              parseInt(e.target.value) || 1 // Ensure the value is a number
+                              parseInt(e.target.value) || 1
                             )
                           }
                           margin="normal"

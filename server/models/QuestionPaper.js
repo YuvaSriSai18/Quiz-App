@@ -13,7 +13,7 @@ const QuestionPaperSchema = new Schema(
     QuizId: { type: String, required: true },
     CreatorMail: { type: String, required: true },
     title: { type: String, required: true },
-    noOfQuestions: { type: Number, required: true },
+    noOfQuestions: { type: Number },
     questions: { type: [QuestionSchema], required: true },
     duration: { type: Number, required: true },
     // visibility:{type:String,required:true}
