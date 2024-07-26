@@ -6,6 +6,8 @@ import QuizzesContainer from "../../components/Quizzes_Container/getAllQuizzes/Q
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { useSelector } from "react-redux";
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
+import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
+import { LineChart } from "@mui/x-charts/LineChart";
 
 const style = {
   position: "absolute",
@@ -14,12 +16,12 @@ const style = {
   transform: "translate(-50%, -50%)",
   maxWidth: "100%",
   width: {
-    xs: "100%", // 100% width on extra-small screens
-    md: 400, // Fixed width on medium and larger screens
+    xs: "100%",
+    md: 400,
   },
   margin: {
-    xs: "0px 10px", // Margin of 0px 10px on extra-small screens
-    md: "0px", // No margin on medium and larger screens
+    xs: "0px 10px",
+    md: "0px",
   },
   bgcolor: "background.paper",
   boxShadow: 24,
@@ -29,17 +31,22 @@ const style = {
 
 export default function Home() {
   const userData = useSelector((state) => state.auth.userData);
-  const [Name, setName] = useState("");
+  const [name, setName] = useState("User");
+  const [averageScore, setAverageScore] = useState(75); // Dummy data
+  const [quizScores, setQuizScores] = useState([0.2,0.8,0.5,0.9,0.6,0.7]); // Dummy data
+  const [quizLabels, setQuizLabels] = useState(["Quiz 1", "Quiz 2", "Quiz 3", "Quiz 4", "Quiz 5","Quiz 6"]); // Dummy data
+  const [totalQuizzes, setTotalQuizzes] = useState(10); // Dummy data
 
-  useEffect(() => {
-    setName(
-      userData?.displayName
-        ? userData.displayName.split(" ")[0].toUpperCase()
-        : "User"
-    );
-  }, [userData]);
+  // useEffect(() => {
+  //   if (userData) {
+  //     setName(userData.displayName ? userData.displayName.split(" ")[0].toUpperCase() : "User");
+  //     setAverageScore(userData.averageScore || 0);
+  //     setQuizScores(userData.quizScores || []);
+  //     setQuizLabels(userData.quizLabels || []);
+  //     setTotalQuizzes(userData.totalQuizzes || 0);
+  //   }
+  // }, [userData]);
 
-  // Modals
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -58,7 +65,7 @@ export default function Home() {
               fontWeight: "600",
             }}
           >
-            Hi, {Name} 👋
+            Hi, {name} 👋
             <br />
             <Typography
               fontWeight={300}
@@ -91,11 +98,11 @@ export default function Home() {
               }}
               mb={1}
             >
-              <Typography fontSize={35} m={"auto"} fontWeight={800}>
+              <Typography fontSize={35} m="auto" fontWeight={800}>
                 🎯
               </Typography>
-              <Typography m={"auto"} textAlign={"center"}>
-                Success Rate <br /> {userData ? userData.successRate : "N/A"}%
+              <Typography m="auto" textAlign="center">
+                Success Rate <br /> {userData?.successRate || "N/A"}%
               </Typography>
             </Box>
 
@@ -118,11 +125,11 @@ export default function Home() {
               }}
               mb={1}
             >
-              <Typography fontSize={35} m={"auto"} fontWeight={800}>
+              <Typography fontSize={35} m="auto" fontWeight={800}>
                 🏆
               </Typography>
-              <Typography m={"auto"} textAlign={"center"}>
-                Ranking <br /> {userData ? userData.ranking : "N/A"}
+              <Typography m="auto" textAlign="center">
+                Ranking <br /> {userData?.ranking || "N/A"}
               </Typography>
             </Box>
 
@@ -146,12 +153,12 @@ export default function Home() {
               }}
               onClick={handleOpen}
             >
-              <Typography fontSize={35} m={"auto"} fontWeight={800}>
+              <Typography fontSize={35} m="auto" fontWeight={800}>
                 <AddCircleOutlineRoundedIcon
                   sx={{ fontSize: "35px", fontWeight: 800 }}
                 />
               </Typography>
-              <Typography m={"auto"} textAlign={"center"}>
+              <Typography m="auto" textAlign="center">
                 Join Room
               </Typography>
             </Box>
@@ -159,6 +166,82 @@ export default function Home() {
         </Box>
         <LottieFile />
       </Box>
+
+      {/* Gauges and Line Chart */}
+      <Box display="flex" flexDirection={{ xs: "column", md: "row" }} alignItems="center" justifyContent="center" mt={4}>
+        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
+          <Gauge
+            value={averageScore}
+            min={0}
+            max={100}
+            valueFormat={(value) => `${value.toFixed(1)}%`}
+            startAngle={-110}
+            endAngle={110}
+            sx={{
+              width: 200,
+              height: 200,
+              [`& .${gaugeClasses.valueText}`]: {
+                fontSize: 30,
+                fontWeight: "bold",
+              },
+            }}
+          />
+          <Typography variant="h6" align="center" mt={2}>
+            Average Score
+          </Typography>
+        </Box>
+        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
+          <Gauge
+            value={totalQuizzes}
+            min={0}
+            max={50}
+            valueFormat={(value) => `${value}`}
+            startAngle={-110}
+            endAngle={110}
+            sx={{
+              width: 200,
+              height: 200,
+              [`& .${gaugeClasses.valueText}`]: {
+                fontSize: 30,
+                fontWeight: "bold",
+              },
+            }}
+          />
+          <Typography variant="h6" align="center" mt={2}>
+            Total Quizzes
+          </Typography>
+        </Box>
+        <Box sx={{ border: "1px solid black", p: 2 }}>
+          {quizScores.length > 0 && quizLabels.length > 0 ? (
+            <LineChart
+              width={500}
+              height={300}
+              series={[
+                { data: quizScores, label: "Score", curve: "linear" },
+              ]}
+              xAxis={[{ scaleType: "point", data: quizLabels }]}
+              yAxis={[{ min: 0, max: 1 }]}
+              sx={{
+                ".MuiLineElement-root": {
+                  stroke: "#8884d8",
+                  strokeWidth: 2,
+                },
+                ".MuiMarkElement-root": {
+                  stroke: "#8884d8",
+                  scale: "0.6",
+                  fill: "#fff",
+                },
+              }}
+            />
+          ) : (
+            <Typography>No quiz data available</Typography>
+          )}
+          <Typography variant="h6" align="center" mt={2}>
+            Quiz Performance
+          </Typography>
+        </Box>
+      </Box>
+
       <QuizzesContainer />
 
       {/* Modals */}
