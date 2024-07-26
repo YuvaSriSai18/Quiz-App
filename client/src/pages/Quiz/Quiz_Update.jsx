@@ -36,7 +36,7 @@ const Quiz_Update = () => {
     ],
     duration: 0,
     roomPass: Math.floor(100000 + Math.random() * 900000),
-    openTime: "",
+    // openTime: "",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -172,7 +172,7 @@ const Quiz_Update = () => {
             fullWidth
             margin="normal"
           />
-          <TextField
+          {/* <TextField
             label="Open Time (YYYY-MM-DD HH:MM)"
             value={questionPaper.openTime}
             type="datetime-local"
@@ -184,7 +184,7 @@ const Quiz_Update = () => {
             }
             fullWidth
             margin="normal"
-          />
+          /> */}
           {questionPaper.questions.map((question, index) => (
             <div key={index} style={{ marginBottom: "20px" }}>
               <Tooltip
@@ -192,7 +192,7 @@ const Quiz_Update = () => {
                 sx={{ float: "right" }}
               >
                 <IconButton onClick={() => handleRemoveQuestion(index)}>
-                  <RemoveCircleRoundedIcon />
+                  <RemoveCircleRoundedIcon color="error" />
                 </IconButton>
               </Tooltip>
               <TextField
@@ -230,20 +230,22 @@ const Quiz_Update = () => {
                 </div>
               ))}
               <center>
-                <IconButton
-                  variant="contained"
-                  onClick={() => handleAddOption(index)}
-                  sx={{
-                    backgroundColor: "#559dc2",
-                    color: "#fff",
-                    ":hover": {
-                      backgroundColor: "#0b70a3",
+                <Tooltip title="Add Option">
+                  <IconButton
+                    variant="contained"
+                    onClick={() => handleAddOption(index)}
+                    sx={{
+                      backgroundColor: "#559dc2",
                       color: "#fff",
-                    },
-                  }}
-                >
-                  <Add />
-                </IconButton>
+                      ":hover": {
+                        backgroundColor: "#0b70a3",
+                        color: "#fff",
+                      },
+                    }}
+                  >
+                    <Add />
+                  </IconButton>
+                </Tooltip>
               </center>
               <Box display={"flex"} justifyContent={"space-around"} mt={1}>
                 <TextField

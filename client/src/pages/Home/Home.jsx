@@ -6,7 +6,7 @@ import QuizzesContainer from "../../components/Quizzes_Container/getAllQuizzes/Q
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { useSelector } from "react-redux";
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
-
+import JoinRoomWithoutAuth from "../../components/Modals/JoinRoomWithoutAuth";
 const style = {
   position: "absolute",
   top: "50%",
@@ -175,7 +175,7 @@ export default function Home() {
         }}
       >
         <Box sx={style}>
-          <JoinRoomModal />
+          {userData.email ? <JoinRoomModal /> : <JoinRoomWithoutAuth />}
         </Box>
       </Modal>
     </div>

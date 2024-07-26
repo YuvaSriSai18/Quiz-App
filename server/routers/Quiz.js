@@ -76,7 +76,6 @@ router.put("/:QuizId", async (req, res) => {
     }
     quiz.duration = duration || quiz.duration;
     // roomPass and CreatorMail are not updated
-
     const updatedQuiz = await quiz.save();
     res.json(updatedQuiz);
   } catch (error) {
