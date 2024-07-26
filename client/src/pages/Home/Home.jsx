@@ -6,9 +6,13 @@ import QuizzesContainer from "../../components/Quizzes_Container/getAllQuizzes/Q
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { useSelector } from "react-redux";
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
+<<<<<<< HEAD
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { LineChart } from "@mui/x-charts/LineChart";
 
+=======
+import JoinRoomWithoutAuth from "../../components/Modals/JoinRoomWithoutAuth";
+>>>>>>> 6f982c78a0af5c93b0075a0709981f8f6ae0538c
 const style = {
   position: "absolute",
   top: "50%",
@@ -258,7 +262,7 @@ export default function Home() {
         }}
       >
         <Box sx={style}>
-          <JoinRoomModal />
+          {userData.email ? <JoinRoomModal /> : <JoinRoomWithoutAuth />}
         </Box>
       </Modal>
     </div>
