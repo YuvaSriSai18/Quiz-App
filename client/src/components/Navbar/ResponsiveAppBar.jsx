@@ -104,7 +104,7 @@ function ResponsiveAppBar() {
 
           {userData && userData.email ? (
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open Profile">
+              <Tooltip title="Open Profile" arrow placement="bottom">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="User Avatar"

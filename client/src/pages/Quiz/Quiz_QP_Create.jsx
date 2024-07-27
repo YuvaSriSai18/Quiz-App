@@ -28,7 +28,7 @@ const Quiz_QP_Create = () => {
       {
         question: "",
         options: [""],
-        correctOption: 0,
+        correctOption: 1,
         mark: 1,
       },
     ],
@@ -37,7 +37,49 @@ const Quiz_QP_Create = () => {
     roomPass: Math.floor(100000 + Math.random() * 900000),
   });
 
+  const [errors, setErrors] = useState({
+    title: "",
+    openTime: "",
+    duration: "",
+  });
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const validate = () => {
+    let isValid = true;
+    const newErrors = {
+      title: "",
+      openTime: "",
+      duration: "",
+    };
+
+    if (!questionPaper.title.trim()) {
+      newErrors.title = "Title is required";
+      isValid = false;
+    }
+
+    if (!questionPaper.openTime.trim()) {
+      newErrors.openTime = "Open time is required";
+      isValid = false;
+    }
+
+    if (!questionPaper.duration.trim()) {
+      newErrors.duration = "Duration is required";
+      isValid = false;
+    } else if (questionPaper.duration <= 0) {
+      newErrors.duration = "Duration must be greater than 0";
+      isValid = false;
+    }
+
+    questionPaper.questions.forEach((question) => {
+      if (!question.question.trim() || question.options.length < 1) {
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    return isValid;
+  };
 
   const handleChange = (field, value) => {
     setQuestionPaper((prevState) => ({
@@ -72,7 +114,7 @@ const Quiz_QP_Create = () => {
         {
           question: "",
           options: [""],
-          correctOption: 0,
+          correctOption: 1,
           mark: 1,
         },
       ],
@@ -80,11 +122,13 @@ const Quiz_QP_Create = () => {
   };
 
   const removeQuestion = (index) => {
-    const newQuestions = questionPaper.questions.filter((_, i) => i !== index);
-    setQuestionPaper((prevState) => ({
-      ...prevState,
-      questions: newQuestions,
-    }));
+    if (questionPaper.questions.length > 1) {
+      const newQuestions = questionPaper.questions.filter((_, i) => i !== index);
+      setQuestionPaper((prevState) => ({
+        ...prevState,
+        questions: newQuestions,
+      }));
+    }
   };
 
   const addOption = (qIndex) => {
@@ -112,8 +156,10 @@ const Quiz_QP_Create = () => {
   };
 
   const handleSubmit = () => {
-    console.log(questionPaper);
-    createQuiz();
+    if (validate()) {
+      console.log(questionPaper);
+      createQuiz();
+    }
   };
 
   const handleCloseModal = () => {
@@ -160,6 +206,8 @@ const Quiz_QP_Create = () => {
                 value={questionPaper.title}
                 onChange={(e) => handleChange("title", e.target.value)}
                 margin="normal"
+                error={!!errors.title}
+                helperText={errors.title}
               />
             </Grid>
             <Grid item xs={6}>
@@ -172,6 +220,8 @@ const Quiz_QP_Create = () => {
                 onChange={(e) => handleChange("openTime", e.target.value)}
                 margin="normal"
                 InputLabelProps={{ shrink: true }}
+                error={!!errors.openTime}
+                helperText={errors.openTime}
               />
             </Grid>
             <Grid item xs={6}>
@@ -184,6 +234,8 @@ const Quiz_QP_Create = () => {
                 onChange={(e) => handleChange("duration", e.target.value)}
                 margin="normal"
                 InputProps={{ inputProps: { min: 1 } }}
+                error={!!errors.duration}
+                helperText={errors.duration}
               />
             </Grid>
             {questionPaper.questions.map((question, qIndex) => (
@@ -198,6 +250,7 @@ const Quiz_QP_Create = () => {
                             color="error"
                             onClick={() => removeQuestion(qIndex)}
                             sx={{ float: "right", margin: 0, fontSize: "18px" }}
+                            disabled={questionPaper.questions.length <= 1}
                           >
                             <RemoveCircleRoundedIcon />
                           </IconButton>
@@ -269,11 +322,11 @@ const Quiz_QP_Create = () => {
                             handleQuestionChange(
                               qIndex,
                               "correctOption",
-                              parseInt(e.target.value) || 0
+                              parseInt(e.target.value) || 1
                             )
                           }
                           margin="normal"
-                          InputProps={{ inputProps: { min: 0 } }}
+                          InputProps={{ inputProps: { min: 1 } }}
                         />
                       </Grid>
                       <Grid item xs={6}>

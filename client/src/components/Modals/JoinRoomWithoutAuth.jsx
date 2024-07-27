@@ -1,12 +1,22 @@
-import { Box, TextField, InputAdornment, Button } from "@mui/material";
 import React, { useState } from "react";
+import {
+  Box,
+  TextField,
+  InputAdornment,
+  Button,
+  Typography,
+} from "@mui/material";
 import HttpsIcon from "@mui/icons-material/Https";
-import { useSelector } from "react-redux";
 
 export default function JoinRoomModal() {
   const [email, setEmail] = useState("");
   const [regdNo, setRegdNo] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
+  const [errors, setErrors] = useState({
+    email: "",
+    regdNo: "",
+    roomNumber: "",
+  });
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -20,10 +30,40 @@ export default function JoinRoomModal() {
     setRoomNumber(event.target.value);
   };
 
+  const validateForm = () => {
+    const newErrors = {
+      email: "",
+      regdNo: "",
+      roomNumber: "",
+    };
+    let isValid = true;
+
+    if (!email.trim()) {
+      newErrors.email = "Name is required.";
+      isValid = false;
+    }
+
+    if (!regdNo.trim() || !regdNo.startsWith("AP")) {
+      newErrors.regdNo = "Use Institute Registered Number";
+      isValid = false;
+    }
+
+    const roomNumberPattern = /^\d{6}$/;
+    if (!roomNumberPattern.test(roomNumber)) {
+      newErrors.roomNumber = "Please enter a valid Room Number";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleSubmit = () => {
-    // Handle the form submission logic here
-    console.log({ email, regdNo, roomNumber });
-    // You can add your API call or other logic here
+    if (validateForm()) {
+      // Handle the form submission logic here
+      console.log({ email, regdNo, roomNumber });
+      // You can add your API call or other logic here
+    }
   };
 
   return (
@@ -35,6 +75,8 @@ export default function JoinRoomModal() {
         onChange={handleEmailChange}
         variant="outlined"
         sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        error={!!errors.email}
+        helperText={errors.email}
       />
       <TextField
         label="Roll No"
@@ -43,6 +85,8 @@ export default function JoinRoomModal() {
         onChange={handleRegdNoChange}
         variant="outlined"
         sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        error={!!errors.regdNo}
+        helperText={errors.regdNo}
       />
       <TextField
         id="room-number"
@@ -58,6 +102,8 @@ export default function JoinRoomModal() {
           ),
         }}
         variant="outlined"
+        error={!!errors.roomNumber}
+        helperText={errors.roomNumber}
       />
       <center>
         <Button variant="contained" onClick={handleSubmit}>

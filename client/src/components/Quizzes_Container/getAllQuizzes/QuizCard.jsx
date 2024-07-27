@@ -1,22 +1,39 @@
 import React, { useState } from "react";
 import "./Quizzes.css";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import axios from "axios";
-
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
+import { format } from "date-fns";
 export default function QuizCard({ QuizObj, onDelete }) {
   const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [open, setOpen] = useState(false);
+  const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleCloseMenu = () => {
     setAnchorEl(null);
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpen(false);
   };
 
   const deleteQuiz = () => {
@@ -25,7 +42,7 @@ export default function QuizCard({ QuizObj, onDelete }) {
       .then((response) => {
         window.alert(response.data.msg);
         location.reload();
-        handleClose();
+        handleCloseMenu();
         if (onDelete) {
           onDelete(QuizObj.QuizId);
         }
@@ -64,18 +81,18 @@ export default function QuizCard({ QuizObj, onDelete }) {
       </p>
       <h6 className="heading_1">{QuizObj.title}</h6>
       <p className="para_1">
-        <p>Time : {QuizObj.duration} Min</p>
+        <p>Duration : {QuizObj.duration} Min</p>
         <p>Questions : {QuizObj.noOfQuestions}</p>
       </p>
-      <NavLink to={`/writequiz/${QuizObj.QuizId}`}>
-        <button className="button">Start</button>
-      </NavLink>
+      <button onClick={handleClickOpen} className="button">
+        View Details
+      </button>
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
         anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
+        open={openMenu}
+        onClose={handleCloseMenu}
         anchorOrigin={{
           vertical: "top",
           horizontal: "right",
@@ -90,6 +107,35 @@ export default function QuizCard({ QuizObj, onDelete }) {
         </MenuItem>
         <MenuItem onClick={deleteQuiz}>Delete</MenuItem>
       </Menu>
+
+      <Dialog open={open} maxWidth="100%" onClose={handleCloseModal}>
+        <DialogTitle>
+          <b style={{ textDecoration: "underline" }}>Quiz Details</b>
+        </DialogTitle>
+        <DialogContent>
+          <Typography>
+            <strong>Title :</strong> {QuizObj.title}
+          </Typography>
+          <Typography>
+            <strong>Duration :</strong> {QuizObj.duration} Min
+          </Typography>
+          <Typography>
+            <strong>Questions :</strong> {QuizObj.noOfQuestions}
+          </Typography>
+          <Typography>
+            <strong>Pass Key :</strong> {QuizObj.roomPass}
+          </Typography>
+          <Typography>
+            <strong>Open Time :</strong>{" "}
+            {format(new Date(QuizObj.openTime), "MMM d, EEE, h:mm a")}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseModal} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }

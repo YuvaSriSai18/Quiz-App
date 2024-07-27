@@ -38,15 +38,16 @@ export default function Home() {
   const [quizLabels, setQuizLabels] = useState(["Quiz 1", "Quiz 2", "Quiz 3", "Quiz 4", "Quiz 5","Quiz 6"]); // Dummy data
   const [totalQuizzes, setTotalQuizzes] = useState(10); // Dummy data
 
-  // useEffect(() => {
-  //   if (userData) {
-  //     setName(userData.displayName ? userData.displayName.split(" ")[0].toUpperCase() : "User");
-  //     setAverageScore(userData.averageScore || 0);
-  //     setQuizScores(userData.quizScores || []);
-  //     setQuizLabels(userData.quizLabels || []);
-  //     setTotalQuizzes(userData.totalQuizzes || 0);
-  //   }
-  // }, [userData]);
+  useEffect(() => {
+    if (userData) {
+      const userName = userData.displayName ? userData.displayName.split(" ")[0].toUpperCase() : "User"
+      setName(userName);
+      // setAverageScore(userData.averageScore || 0);
+      // setQuizScores(userData.quizScores || []);
+      // setQuizLabels(userData.quizLabels || []);
+      // setTotalQuizzes(userData.totalQuizzes || 0);
+    }
+  }, [userData]);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -103,7 +104,7 @@ export default function Home() {
                 🎯
               </Typography>
               <Typography m="auto" textAlign="center">
-                Success Rate <br /> {userData?.successRate || "N/A"}%
+                Success Rate <br /> {userData?.successRate || "N/A "}%
               </Typography>
             </Box>
 
@@ -130,7 +131,7 @@ export default function Home() {
                 🏆
               </Typography>
               <Typography m="auto" textAlign="center">
-                Ranking <br /> {userData?.ranking || "N/A"}
+                Ranking <br /> {userData?.ranking || "N/A "}
               </Typography>
             </Box>
 
@@ -243,7 +244,7 @@ export default function Home() {
         </Box>
       </Box>
 
-      <QuizzesContainer />
+      {/* <QuizzesContainer /> */}
 
       {/* Modals */}
       <Modal

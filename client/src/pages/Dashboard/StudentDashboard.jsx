@@ -1,13 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { Grid, Card, CardContent, Typography, Avatar } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+
 const StudentDashboard = ({ userData, isMobile }) => {
+  // Calculate studentName and batch
+  const studentName = userData ? userData.firstName : "";
+  const rollArray = userData.rollNo.split("");
+  const batch = userData ? `20${rollArray[2] + rollArray[3]}` : "";
+
   return (
     <Grid
       container
       justifyContent="center"
       alignItems="stretch"
-      sx={{ minHeight: "88vh", backgroundColor: "#eee", padding: 2 }}
+      sx={{minHeight:'88vh',backgroundColor: "transparent", padding: 2 }}
     >
       <Grid container item xs={12} md={10} lg={8} spacing={2}>
         {/* Top row */}
@@ -17,12 +22,14 @@ const StudentDashboard = ({ userData, isMobile }) => {
             <Card
               sx={{
                 borderRadius: 2,
-                boxShadow: 3,
+                // boxShadow: 3,
                 height: "100%",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
               }}
+
+              elevation={8}
             >
               <CardContent align="center">
                 <Avatar
@@ -30,11 +37,11 @@ const StudentDashboard = ({ userData, isMobile }) => {
                     userData.photoUrl ||
                     "https://static-00.iconduck.com/assets.00/profile-default-icon-2048x2045-u3j7s5nj.png"
                   }
-                  alt={userData.firstName}
-                  sx={{ width: 100, height: 100, margin: "0 auto 10px" }}
+                  alt={studentName}
+                  sx={{ width: 200, height: 200, borderRadius: "50%" }}
                 />
-                <Typography variant="h6" noWrap>
-                  {userData.displayName}
+                <Typography variant="h6" mt={2} noWrap>
+                  {studentName}
                 </Typography>
 
                 {isMobile && (
@@ -60,15 +67,17 @@ const StudentDashboard = ({ userData, isMobile }) => {
               <Card
                 sx={{
                   borderRadius: 2,
-                  boxShadow: 3,
+                  // boxShadow: 3, 
                   height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
+                  // display: "flex",
+                  // flexDirection: "column",
+                  // justifyContent: "center",
                 }}
+
+                elevation={8}
               >
                 <CardContent>
-                  <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                  <Typography fontSize={'20px'} fontWeight={500} textAlign={"center"} m={0} p={0} mb={2} mt={2}>
                     User Details
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
@@ -81,8 +90,26 @@ const StudentDashboard = ({ userData, isMobile }) => {
                     Course: {userData.course}
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                    Year: {userData.year}
+                    Batch: {batch}
                   </Typography>
+                  {/* <table>
+                    <tr>
+                      <th>Registration Number</th>
+                      <td>{userData.rollNo}</td>
+                    </tr>
+                    <tr>
+                      <th>Email ID </th>
+                      <td>{userData.email}</td>
+                    </tr>
+                    <tr>
+                      <th>Course</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Batch</th>
+                      <td>{batch}</td>
+                    </tr>
+                  </table> */}
                 </CardContent>
               </Card>
             )}
@@ -95,11 +122,14 @@ const StudentDashboard = ({ userData, isMobile }) => {
             sx={{
               borderRadius: 2,
               boxShadow: 3,
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              mt: 2,
+              // display: "flex",
+              // flexDirection: "column",
+              // justifyContent: "center",
+              // mt: 2,
+              padding:'12px'
             }}
+
+            elevation={8}
           >
             <CardContent>
               <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
@@ -114,6 +144,25 @@ const StudentDashboard = ({ userData, isMobile }) => {
               <Typography variant="body1" noWrap>
                 Position🏆:{" "}
               </Typography>
+
+              {/* <table>
+                <tr>
+                  <th>Attempted</th>
+                  <td>7</td>
+                </tr>
+                <tr>
+                  <th>Score</th>
+                  <td></td>
+                </tr>
+                <tr>
+                  <th>Performance</th>
+                  <td> % </td>
+                </tr>
+                <tr>
+                  <th>Position</th>
+                  <td> 7 🏆 </td>
+                </tr>
+              </table> */}
             </CardContent>
           </Card>
         </Grid>
