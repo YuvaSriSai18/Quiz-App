@@ -87,3 +87,8 @@ Features to be implemented
         6.3 instructions and details (quiz instructions) =>
         6.4 Take Quiz =>
         6.5 Automatically Room should be closed when the timer is set to 0
+
+
+1. Handle Responses When submitted
+2. Evaluate Given Responses and allocate points
+3. Join Room Feature 

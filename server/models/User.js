@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema(
     rollNo: { type: String },
     firstName: { type: String },
     lastName: { type: String },
+    batch: { type: String },
   },
   { timestamps: true }
 );

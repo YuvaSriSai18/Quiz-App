@@ -2,17 +2,15 @@ import React from "react";
 import { Grid, Card, CardContent, Typography, Avatar } from "@mui/material";
 
 const StudentDashboard = ({ userData, isMobile }) => {
-  // Calculate studentName and batch
-  const studentName = userData ? userData.firstName : "";
-  const rollArray = userData.rollNo.split("");
-  const batch = userData ? `20${rollArray[2] + rollArray[3]}` : "";
+  // Calculate studentName
+  const studentName = userData ? userData.displayName : "";
 
   return (
     <Grid
       container
       justifyContent="center"
       alignItems="stretch"
-      sx={{minHeight:'88vh',backgroundColor: "transparent", padding: 2 }}
+      sx={{ minHeight: "88vh", backgroundColor: "transparent", padding: 2 }}
     >
       <Grid container item xs={12} md={10} lg={8} spacing={2}>
         {/* Top row */}
@@ -28,7 +26,6 @@ const StudentDashboard = ({ userData, isMobile }) => {
                 flexDirection: "column",
                 justifyContent: "center",
               }}
-
               elevation={8}
             >
               <CardContent align="center">
@@ -40,9 +37,11 @@ const StudentDashboard = ({ userData, isMobile }) => {
                   alt={studentName}
                   sx={{ width: 200, height: 200, borderRadius: "50%" }}
                 />
-                <Typography variant="h6" mt={2} noWrap>
-                  {studentName}
-                </Typography>
+                <div title={studentName}>
+                  <Typography variant="h6" mt={2} noWrap>
+                    {studentName}
+                  </Typography>
+                </div>
 
                 {isMobile && (
                   <>
@@ -67,18 +66,28 @@ const StudentDashboard = ({ userData, isMobile }) => {
               <Card
                 sx={{
                   borderRadius: 2,
-                  // boxShadow: 3, 
+                  // boxShadow: 3,
                   height: "100%",
                   // display: "flex",
                   // flexDirection: "column",
                   // justifyContent: "center",
                 }}
-
                 elevation={8}
               >
                 <CardContent>
-                  <Typography fontSize={'20px'} fontWeight={500} textAlign={"center"} m={0} p={0} mb={2} mt={2}>
+                  <Typography
+                    fontSize={"20px"}
+                    fontWeight={500}
+                    textAlign={"center"}
+                    m={0}
+                    p={0}
+                    mb={2}
+                    mt={2}
+                  >
                     User Details
+                  </Typography>
+                  <Typography variant="body1" noWrap mb={1}>
+                    Full Name : {userData.displayName}
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
                     Reg. No: {userData.rollNo}
@@ -90,9 +99,13 @@ const StudentDashboard = ({ userData, isMobile }) => {
                     Course: {userData.course}
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                    Batch: {batch}
+                    Batch: {userData.batch}
                   </Typography>
                   {/* <table>
+                    <tr>
+                      <th>Full Name</th>
+                      <td>{userData.displayName}</td>
+                    </tr>
                     <tr>
                       <th>Registration Number</th>
                       <td>{userData.rollNo}</td>
@@ -107,7 +120,7 @@ const StudentDashboard = ({ userData, isMobile }) => {
                     </tr>
                     <tr>
                       <th>Batch</th>
-                      <td>{batch}</td>
+                      <td>{userData.batch}</td>
                     </tr>
                   </table> */}
                 </CardContent>
@@ -126,9 +139,8 @@ const StudentDashboard = ({ userData, isMobile }) => {
               // flexDirection: "column",
               // justifyContent: "center",
               // mt: 2,
-              padding:'12px'
+              padding: "12px",
             }}
-
             elevation={8}
           >
             <CardContent>

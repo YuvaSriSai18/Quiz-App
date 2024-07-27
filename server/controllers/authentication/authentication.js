@@ -12,6 +12,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
+        // console.log(profile)
         const email = profile.emails[0].value;
         const domain = email.split("@")[1];
 
@@ -20,14 +21,20 @@ passport.use(
           return done(null, false, { message: "Unauthorized domain" });
         }
 
-        const displayName =
-          profile.displayName.split(" | ")[0] || profile.displayName;
+        const displayName = capitalizeFirstLetterOfEachWord(
+          profile.displayName.split(" | ")[0] || profile.displayName
+        );
         const rollNo = profile.displayName.split(" | ")[1] || "";
         const photoUrl = profile.photos[0].value;
         const role = assignRole(email);
-        const firstName = profile.name.givenName;
-        const lastName = profile.name.familyName.split(" | ")[0];
-
+        const firstName = capitalizeFirstLetterOfEachWord(
+          profile.name.givenName
+        );
+        const lastName = capitalizeFirstLetterOfEachWord(
+          profile.name.familyName.split(" | ")[0]
+        );
+        const rollArray = rollNo.split("");
+        const batch = rollNo ? `20${rollArray[2] + rollArray[3]}` : "";
         const user = await User.findOneAndUpdate(
           { email },
           {
@@ -38,6 +45,7 @@ passport.use(
             role,
             firstName,
             lastName,
+            batch,
           },
           { new: true, upsert: true } // `upsert: true` will create a new document if no match is found
         );
@@ -73,5 +81,10 @@ const assignRole = (email) => {
     return "Unknown";
   }
 };
-
+function capitalizeFirstLetterOfEachWord(str) {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(" ");
+}
 module.exports = passport;
