@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Quizzes.css";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -87,6 +87,10 @@ export default function QuizCard({ QuizObj, onDelete }) {
       <button onClick={handleClickOpen} className="button">
         View Details
       </button>
+
+      <NavLink to={`/writequiz/${QuizObj.QuizId}`}>
+        <button className="button">Start</button>
+      </NavLink>
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"

@@ -12,7 +12,7 @@ export default function WriteQuiz() {
   const getQuizzes = async () => {
     try {
       const response = await axios.get("http://localhost:5500/quiz");
-      console.log(response.data); // Log the response
+      // console.log(response.data); // Log the response
       setQuizzes(response.data);
     } catch (error) {
       console.error("Error fetching quizzes:", error);
@@ -21,10 +21,10 @@ export default function WriteQuiz() {
 
   useEffect(() => {
     getQuizzes();
-  }, []);
+  }, [QuizId]);
 
   const quiz = quizzes.find((quiz) => quiz.QuizId === QuizId);
-  console.log(quiz);
+  // console.log(quiz);
 
   if (!quiz) {
     return <Typography>Not Found</Typography>;

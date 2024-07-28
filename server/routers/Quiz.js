@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const QuizPaper = require("../models/QuestionPaper");
+const Responses = require("../models/Responses");
 
 // Get all quizzes
 router.get("/", async (req, res) => {
@@ -51,8 +52,20 @@ router.post("/create", async (req, res) => {
       openTime,
     });
 
+    const correctAnswers = questions.map((question, index) => ({
+      questionNumber: index + 1,
+      correctOptionIndex: question.correctOption, // No need to subtract 1 here as it should be zero-based already
+    }));
+
+    let responses = new Responses({
+      quizId: QuizId,
+      correctAnswers,
+    });
+
     await quiz.save();
-    res.json(quiz);
+    await responses.save();
+
+    res.json({ quiz, responses });
   } catch (error) {
     console.error(`Error: ${error}`);
     res.status(500).send("Server error");
@@ -73,9 +86,19 @@ router.put("/:QuizId", async (req, res) => {
     if (questions) {
       quiz.questions = questions;
       quiz.noOfQuestions = questions.length;
+
+      const correctAnswers = questions.map((question, index) => ({
+        questionNumber: index + 1,
+        correctOptionIndex: question.correctOption, // Ensure this is correctly handled
+      }));
+
+      await Responses.findOneAndUpdate(
+        { quizId: req.params.QuizId },
+        { correctAnswers }
+      );
     }
     quiz.duration = duration || quiz.duration;
-    // roomPass and CreatorMail are not updated
+
     const updatedQuiz = await quiz.save();
     res.json(updatedQuiz);
   } catch (error) {
@@ -93,6 +116,8 @@ router.delete("/:QuizId", async (req, res) => {
     }
 
     await quiz.deleteOne();
+    await Responses.deleteOne({ quizId: req.params.QuizId });
+
     res.json({ msg: "Quiz removed" });
   } catch (error) {
     console.error(`Error: ${error.message}`);

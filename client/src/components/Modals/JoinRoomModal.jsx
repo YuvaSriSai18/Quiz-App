@@ -31,22 +31,22 @@ export default function JoinRoomModal() {
       return;
     }
     // Handle the form submission logic here
-    console.log({ roomNumber });
+    // console.log({ roomNumber });
     // You can add your API call or other logic here
   };
 
   return (
     <Box sx={{ width: "100%" }}>
       <TextField
-        label="Email"
-        id="user-email"
-        value={userData?.email || "No email"}
+        label="Name"
+        id="user-name"
+        value={userData?.displayName || "No Name"}
         readOnly
         variant="outlined"
         sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
       />
       <TextField
-        label="Regd No"
+        label="Roll Number"
         id="user-id"
         value={userData?.rollNo || "No ID"}
         readOnly

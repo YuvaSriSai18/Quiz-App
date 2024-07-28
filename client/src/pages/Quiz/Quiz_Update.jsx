@@ -128,7 +128,7 @@ const Quiz_Update = () => {
     axios
       .put(`http://localhost:5500/quiz/${QuizId}`, updateData)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         alert("Quiz updated successfully");
         navigate("/"); // Redirect to home page
       })

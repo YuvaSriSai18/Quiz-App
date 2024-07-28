@@ -18,7 +18,7 @@ function App() {
           withCredentials: true,
         }
       );
-      console.log("res", response);
+      // console.log("res", response);
       dispatch(setUserData(response.data.user));
     } catch (error) {
       console.log(error);

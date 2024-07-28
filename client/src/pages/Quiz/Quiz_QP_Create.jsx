@@ -28,7 +28,7 @@ const Quiz_QP_Create = () => {
       {
         question: "",
         options: [""],
-        correctOption: 1,
+        correctOption: 1, // Default to 1 (1-based index for user convenience)
         mark: 1,
       },
     ],
@@ -72,7 +72,16 @@ const Quiz_QP_Create = () => {
     }
 
     questionPaper.questions.forEach((question) => {
-      if (!question.question.trim() || question.options.length < 1) {
+      if (!question.question.trim()) {
+        newErrors.question = "Question is required";
+        isValid = false;
+      }
+      if (
+        question.options.length < 1 ||
+        question.options.some((option) => !option.trim())
+      ) {
+        newErrors.options =
+          "Each question must have at least one non-empty option";
         isValid = false;
       }
     });
@@ -114,7 +123,7 @@ const Quiz_QP_Create = () => {
         {
           question: "",
           options: [""],
-          correctOption: 1,
+          correctOption: 1, // Default to 1 (1-based index for user convenience)
           mark: 1,
         },
       ],
@@ -123,7 +132,9 @@ const Quiz_QP_Create = () => {
 
   const removeQuestion = (index) => {
     if (questionPaper.questions.length > 1) {
-      const newQuestions = questionPaper.questions.filter((_, i) => i !== index);
+      const newQuestions = questionPaper.questions.filter(
+        (_, i) => i !== index
+      );
       setQuestionPaper((prevState) => ({
         ...prevState,
         questions: newQuestions,
@@ -146,7 +157,20 @@ const Quiz_QP_Create = () => {
 
   const createQuiz = async () => {
     try {
-      await axios.post("http://localhost:5500/quiz/create", questionPaper);
+      const formattedQuestions = questionPaper.questions.map((question) => ({
+        ...question,
+        correctOption: question.correctOption - 1, // Convert to zero-based index
+      }));
+
+      const formattedQuestionPaper = {
+        ...questionPaper,
+        questions: formattedQuestions,
+      };
+
+      await axios.post(
+        "http://localhost:5500/quiz/create",
+        formattedQuestionPaper
+      );
       window.alert("Quiz is Created");
       setIsModalOpen(true);
     } catch (err) {
@@ -157,7 +181,7 @@ const Quiz_QP_Create = () => {
 
   const handleSubmit = () => {
     if (validate()) {
-      console.log(questionPaper);
+      // console.log(questionPaper);
       createQuiz();
     }
   };
@@ -270,6 +294,12 @@ const Quiz_QP_Create = () => {
                             )
                           }
                           margin="normal"
+                          error={!question.question.trim()}
+                          helperText={
+                            !question.question.trim()
+                              ? "Question is required"
+                              : ""
+                          }
                         />
                       </Grid>
                       {question.options.map((option, oIndex) => (
@@ -283,6 +313,10 @@ const Quiz_QP_Create = () => {
                               handleOptionChange(qIndex, oIndex, e.target.value)
                             }
                             margin="normal"
+                            error={!option.trim()}
+                            helperText={
+                              !option.trim() ? "Option cannot be empty" : ""
+                            }
                           />
                           <Tooltip title="Delete Option">
                             <IconButton
@@ -327,6 +361,16 @@ const Quiz_QP_Create = () => {
                           }
                           margin="normal"
                           InputProps={{ inputProps: { min: 1 } }}
+                          error={
+                            question.correctOption <= 0 ||
+                            question.correctOption > question.options.length
+                          }
+                          helperText={
+                            question.correctOption <= 0 ||
+                            question.correctOption > question.options.length
+                              ? "Correct option must be a valid option number"
+                              : ""
+                          }
                         />
                       </Grid>
                       <Grid item xs={6}>

@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import QuestionCard from "./QuestionCard";
 import Button from "@mui/material/Button";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
+  const userData = useSelector((state) => state.auth.userData);
+
   const [responses, setResponses] = useState({
     QuizId: QuizQuestionsData.QuizId,
-    StudentEmail: "", // You can set this dynamically based on the logged-in user
+    StudentRoll: userData.rollNo,
     answers: QuizQuestionsData.questions.map((_, index) => ({
       questionNumber: index + 1,
       givenAnswer: null,
     })),
   });
-
+  // console.log(responses)
   const handleResponseChange = (questionIndex, answer) => {
     const updatedResponses = responses.answers.map((response, index) => {
       if (index === questionIndex) {
@@ -22,7 +26,17 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
 
     setResponses({ ...responses, answers: updatedResponses });
   };
-  console.log(responses);
+
+  const postResponse = async () => {
+    try {
+      await axios.post("http://localhost:5500/response/submit", responses);
+      alert("Quiz Submitted Successfully");
+      window.location.href("/");
+    } catch (err) {
+      alert(err.response.data.msg);
+    }
+  };
+
   return (
     <div>
       {QuizQuestionsData.questions.length > 0 ? (
@@ -51,12 +65,12 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
               marginBottom: "16px",
               borderRadius: "14px",
             }}
+            onClick={postResponse}
           >
             Submit
           </Button>
         </center>
       )}
-      {/* You can add a submit button here to handle the submission of the responses */}
     </div>
   );
 }

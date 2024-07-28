@@ -30,7 +30,7 @@ Backend Part
             2.3 StudentUser Schema
                 2.3.1. {
                     mail:string, // here we retrieve the mail from the authenticated part 
-                    rollNo:string 
+                    rollNo:string
                     name: string
                     successRate:double 
                     attemptedQuizes : [
@@ -48,16 +48,31 @@ Backend Part
 
                 }
             2.4 Responses Schema 
-                2.4.1. {
-                    quizId: string,
-                    responses:[
+                2.4.1. [
                         {
-                            studentMail:string,
-                            marksObtained:double,
-                            cratedAt : time
+                            quizId: string,
+                            correctAnswers : [
+                                {
+                                    questionNumber: Number,
+                                    givenAns: String
+                                }
+                            ],
+                            responses: [
+                                {
+                                    studentMail: String,
+                                    studentName: String,
+                                    answersGivenByUser: [
+                                        {
+                                            questionNumber: Number,
+                                            givenAns: String
+                                        }
+                                    ],
+                                    marksObtained: Number,
+                                    createdAt: { type: Date, default: Date.now },
+                                }
+                            ],
                         }
                     ]
-                }
 
 
 Features to be implemented
@@ -81,7 +96,7 @@ Features to be implemented
             5.2.2 Branch
             5.2.3 Mail 
             5.2.4 Regd No
-    6. Join Room
+    6. Join Room  // Process
         6.1 join room (user will enter room number) => { Here we keep a middleware that checks the room number , if True next() else return}
         6.2 quiz name (ensure that quiz details are correct) =>
         6.3 instructions and details (quiz instructions) =>
@@ -89,6 +104,6 @@ Features to be implemented
         6.5 Automatically Room should be closed when the timer is set to 0
 
 
-1. Handle Responses When submitted
+1. Handle Responses When submitted  ✅
 2. Evaluate Given Responses and allocate points
 3. Join Room Feature 

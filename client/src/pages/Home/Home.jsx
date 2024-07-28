@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+
 import Typography from "@mui/material/Typography";
 import { Box, Modal } from "@mui/material";
-import LottieFile from "../../components/animation/LottieFile";
-import QuizzesContainer from "../../components/Quizzes_Container/getAllQuizzes/QuizzesContainer";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import { useSelector } from "react-redux";
-import JoinRoomModal from "../../components/Modals/JoinRoomModal";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { LineChart } from "@mui/x-charts/LineChart";
 
+import JoinRoomModal from "../../components/Modals/JoinRoomModal";
+import LottieFile from "../../components/animation/LottieFile";
 import JoinRoomWithoutAuth from "../../components/Modals/JoinRoomWithoutAuth";
+import StartQuizCard from "../../components/StartQuizCard";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -34,13 +36,22 @@ export default function Home() {
   const userData = useSelector((state) => state.auth.userData);
   const [name, setName] = useState("User");
   const [averageScore, setAverageScore] = useState(75); // Dummy data
-  const [quizScores, setQuizScores] = useState([0.2,0.8,0.5,0.9,0.6,0.7]); // Dummy data
-  const [quizLabels, setQuizLabels] = useState(["Quiz 1", "Quiz 2", "Quiz 3", "Quiz 4", "Quiz 5","Quiz 6"]); // Dummy data
+  const [quizScores, setQuizScores] = useState([0.2, 0.8, 0.5, 0.9, 0.6, 0.7]); // Dummy data
+  const [quizLabels, setQuizLabels] = useState([
+    "Quiz 1",
+    "Quiz 2",
+    "Quiz 3",
+    "Quiz 4",
+    "Quiz 5",
+    "Quiz 6",
+  ]); // Dummy data
   const [totalQuizzes, setTotalQuizzes] = useState(10); // Dummy data
 
   useEffect(() => {
     if (userData) {
-      const userName = userData.displayName ? userData.displayName.split(" ")[0].toUpperCase() : "User"
+      const userName = userData.displayName
+        ? userData.displayName.split(" ")[0]
+        : "User";
       setName(userName);
       // setAverageScore(userData.averageScore || 0);
       // setQuizScores(userData.quizScores || []);
@@ -170,7 +181,13 @@ export default function Home() {
       </Box>
 
       {/* Gauges and Line Chart */}
-      <Box display="flex" flexDirection={{ xs: "column", md: "row" }} alignItems="center" justifyContent="center" mt={4}>
+      <Box
+        display="flex"
+        flexDirection={{ xs: "column", md: "row" }}
+        alignItems="center"
+        justifyContent="center"
+        mt={4}
+      >
         <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
           <Gauge
             value={averageScore}
@@ -218,9 +235,7 @@ export default function Home() {
             <LineChart
               width={500}
               height={300}
-              series={[
-                { data: quizScores, label: "Score", curve: "linear" },
-              ]}
+              series={[{ data: quizScores, label: "Score", curve: "linear" }]}
               xAxis={[{ scaleType: "point", data: quizLabels }]}
               yAxis={[{ min: 0, max: 1 }]}
               sx={{
@@ -245,6 +260,8 @@ export default function Home() {
       </Box>
 
       {/* <QuizzesContainer /> */}
+
+      <StartQuizCard />
 
       {/* Modals */}
       <Modal

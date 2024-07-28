@@ -84,6 +84,11 @@ app.get("/logout", (req, res, next) => {
 const QuizRouter = require("./routers/Quiz");
 app.use("/quiz", QuizRouter);
 
+// Response Router
+
+const responseRouter = require("./routers/Response_Router");
+app.use("/response", responseRouter);
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
