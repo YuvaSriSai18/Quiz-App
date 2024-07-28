@@ -9,6 +9,8 @@ import {
   TableRow,
   Paper,
   Box,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal, faStar, faTrophy } from "@fortawesome/free-solid-svg-icons";
@@ -69,6 +71,9 @@ const getIcon = (index) => {
 };
 
 const Leaderboard = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   return (
     <Container>
       <Box
@@ -100,7 +105,8 @@ const Leaderboard = () => {
                 padding: 2,
                 borderRadius: 2,
                 textAlign: "center",
-                width: `${800 - index * 90}px`, // Updated width
+                width: isMobile ? "90%" : `${800 - index * 90}px`, // Responsive width
+                maxWidth: "100%",
                 background: getBackgroundColor(index), // Apply gradient background
                 position: "relative", // Position relative for child alignment
                 display: "flex",
@@ -134,8 +140,9 @@ const Leaderboard = () => {
               <Typography
                 variant="body1"
                 sx={{
-                  position: "absolute",
-                  bottom: 10,
+                  marginTop: isMobile ? 1 : 0,
+                  position: isMobile ? "static" : "absolute",
+                  bottom: isMobile ? "auto" : 10,
                   left: 10,
                   margin: 0,
                 }}
@@ -145,8 +152,9 @@ const Leaderboard = () => {
               <Typography
                 variant="body1"
                 sx={{
-                  position: "absolute",
-                  bottom: 10,
+                  marginTop: isMobile ? 1 : 0,
+                  position: isMobile ? "static" : "absolute",
+                  bottom: isMobile ? "auto" : 10,
                   right: 10,
                   margin: 0,
                 }}
@@ -158,36 +166,37 @@ const Leaderboard = () => {
         </Box>
 
         {/* Remaining positions */}
-        <TableContainer
-          component={Paper}
-          sx={{
-            backgroundColor: "#f0f0f0", // Light gray background
-            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", // Floating effect
-            borderRadius: 2,
-            overflow: "hidden",
-            border: "4px solid #a8a8a8", // Dark gray border
-            mt: 4, // Margin top to separate from the leaderboard
-          }}
-        >
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableBody>
-              {leaderboardData.slice(3).map((row) => (
-                <TableRow
-                  key={row.position}
-                  sx={{
-                    "&:last-child td, &:last-child th": { border: 0 },
-                    backgroundColor: "#f0f0f0", // Light gray background for rows
-                  }}
-                >
-                  <TableCell align="center" sx={{ color: "#333333" }}>{row.position}</TableCell>
-                  <TableCell align="center" sx={{ color: "#333333" }}>{row.rollNumber}</TableCell>
-                  <TableCell align="center" sx={{ color: "#333333" }}>{row.fullName}</TableCell>
-                  <TableCell align="center" sx={{ color: "#333333" }}>{row.score}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Box sx={{ width: "100%", overflowX: "auto" }}>
+          <TableContainer
+            component={Paper}
+            sx={{
+              backgroundColor: "#f0f0f0", // Light gray background
+              boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", // Floating effect
+              borderRadius: 2,
+              border: "4px solid #a8a8a8", // Dark gray border
+              mt: 4, // Margin top to separate from the leaderboard
+            }}
+          >
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableBody>
+                {leaderboardData.slice(3).map((row) => (
+                  <TableRow
+                    key={row.position}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                      backgroundColor: "#f0f0f0", // Light gray background for rows
+                    }}
+                  >
+                    <TableCell align="center" sx={{ color: "#333333" }}>{row.position}</TableCell>
+                    <TableCell align="center" sx={{ color: "#333333" }}>{row.rollNumber}</TableCell>
+                    <TableCell align="center" sx={{ color: "#333333" }}>{row.fullName}</TableCell>
+                    <TableCell align="center" sx={{ color: "#333333" }}>{row.score}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
       </Box>
     </Container>
   );
