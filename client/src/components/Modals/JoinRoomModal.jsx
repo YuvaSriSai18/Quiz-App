@@ -38,22 +38,22 @@ export default function JoinRoomModal() {
   return (
     <Box sx={{ width: "100%" }}>
       <TextField
-        label="Email"
-        id="user-email"
-        value={userData?.email || "No email"}
+        label="Name"
+        id="user-name"
+        value={userData?.displayName || "No Name"}
         readOnly
         variant="outlined"
         sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
-        InputProps={{
-          readOnly: true,
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockIcon />
-            </InputAdornment>
-          ),
-          disableUnderline: true,
-          style: { cursor: 'not-allowed' },
-        }}
+        // InputProps={{
+        //   readOnly: true,
+        //   startAdornment: (
+        //     <InputAdornment position="start">
+        //       <LockIcon />
+        //     </InputAdornment>
+        //   ),
+        //   disableUnderline: true,
+        //   style: { cursor: 'not-allowed' },
+        // }}
       />
       <TextField
         label="Regd No"
@@ -62,16 +62,16 @@ export default function JoinRoomModal() {
         readOnly
         variant="outlined"
         sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
-        InputProps={{
-          readOnly: true,
-          startAdornment: (
-            <InputAdornment position="start">
-              <LockIcon />
-            </InputAdornment>
-          ),
-          disableUnderline: true,
-          style: { cursor: 'not-allowed' },
-        }}
+        // InputProps={{
+        //   readOnly: true,
+        //   startAdornment: (
+        //     <InputAdornment position="start">
+        //       <LockIcon />
+        //     </InputAdornment>
+        //   ),
+        //   disableUnderline: true,
+        //   style: { cursor: 'not-allowed' },
+        // }}
       />
       <TextField
         id="room-number"
@@ -83,7 +83,7 @@ export default function JoinRoomModal() {
           startAdornment: (
             <InputAdornment position="start">
               {/* <HttpsIcon /> */}
-              <EditIcon />
+              <LockIcon />
             </InputAdornment>
           ),
         }}
