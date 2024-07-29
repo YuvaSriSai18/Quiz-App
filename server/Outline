@@ -107,3 +107,21 @@ Features to be implemented
 1. Handle Responses When submitted  ✅
 2. Evaluate Given Responses and allocate points
 3. Join Room Feature 
+
+
+Current important things need to be done by 4th:
+1) Quiz questions Card
+2) Handle Responses
+3) Evaluate Given Responses and allocate points.
+4) LeaderBoard after each Question
+5) leaderboard after the quiz
+6) creating logic for the leaderboard caluclation
+7)
+
+
+
+New features need to be implemented after website goes live:
+1) Classes wise
+2) Room creation
+3) Lock Room
+4) Class wise LeaderBoard
