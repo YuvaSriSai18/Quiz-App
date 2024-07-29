@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Box, TextField, InputAdornment, Button } from "@mui/material";
 import HttpsIcon from "@mui/icons-material/Https";
+import LockIcon from "@mui/icons-material/Lock";
 import { useSelector } from "react-redux";
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function JoinRoomModal() {
   const userData = useSelector((state) => state.auth.userData);
@@ -16,9 +18,7 @@ export default function JoinRoomModal() {
     // Validation logic
     const roomNumberPattern = /^\d{6}$/;
     if (value && !roomNumberPattern.test(value)) {
-      setError(
-        "Room Number should be exactly 6 digits and contain no letters."
-      );
+      setError("Room Number should be exactly 6 digits and contain no letters.");
     } else {
       setError("");
     }
@@ -31,27 +31,47 @@ export default function JoinRoomModal() {
       return;
     }
     // Handle the form submission logic here
-    // console.log({ roomNumber });
+    console.log({ roomNumber });
     // You can add your API call or other logic here
   };
 
   return (
     <Box sx={{ width: "100%" }}>
       <TextField
-        label="Name"
-        id="user-name"
-        value={userData?.displayName || "No Name"}
+        label="Email"
+        id="user-email"
+        value={userData?.email || "No email"}
         readOnly
         variant="outlined"
         sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        InputProps={{
+          readOnly: true,
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockIcon />
+            </InputAdornment>
+          ),
+          disableUnderline: true,
+          style: { cursor: 'not-allowed' },
+        }}
       />
       <TextField
-        label="Roll Number"
+        label="Regd No"
         id="user-id"
         value={userData?.rollNo || "No ID"}
         readOnly
         variant="outlined"
         sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        InputProps={{
+          readOnly: true,
+          startAdornment: (
+            <InputAdornment position="start">
+              <LockIcon />
+            </InputAdornment>
+          ),
+          disableUnderline: true,
+          style: { cursor: 'not-allowed' },
+        }}
       />
       <TextField
         id="room-number"
@@ -62,7 +82,8 @@ export default function JoinRoomModal() {
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              <HttpsIcon />
+              {/* <HttpsIcon /> */}
+              <EditIcon />
             </InputAdornment>
           ),
         }}
