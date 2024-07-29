@@ -104,24 +104,57 @@ Features to be implemented
         6.5 Automatically Room should be closed when the timer is set to 0
 
 
-1. Handle Responses When submitted  ✅
-2. Evaluate Given Responses and allocate points
-3. Join Room Feature 
-
-
 Current important things need to be done by 4th:
-1) Quiz questions Card
-2) Handle Responses
-3) Evaluate Given Responses and allocate points.
-4) LeaderBoard after each Question
-5) leaderboard after the quiz
-6) creating logic for the leaderboard caluclation
-7)
+1. Quiz questions Card
+2. Handle Responses   -- Here we have to handle each question answer given by user 
+3. Evaluate Given Responses and allocate points.   -- Evaluate the given answer with the actual answer if yes, increament 1 mark else increament by 0
+4. LeaderBoard after each Question -- have to show leaderboard after that question for the students within that room who has answered
+5. leaderboard after the quiz -- At last we have to show leaderboard for whole quiz ,like who will be the toppest (Top 20 only)
+6. creating logic for the leaderboard calculation
+7. Join Room Feature
 
+    Example of how we calculate the quiz marks obtained to give the stars in the leaderboard as there is no score 
+        Here is an example:
+
+            Quiz 1:
+
+                Maximum score: 50
+                Student A's score: 40
+                Normalized score: (40/50) x 100 = 80
+
+            Quiz 2:
+
+                Maximum score: 100
+                Student A's score: 90
+                Normalized score: (90/100)x 100 = 90
+                
+            Quiz 3:
+
+                Maximum score: 20
+                Student A's score: 18
+                Normalized score: (18/20)x 100 = 90
+                
+                To find the average normalized score for Student A over these three quizzes:
+
+                S_average = (80 + 90 + 90 ) / 3 = 86.67
+
+            if (percentage >= 90) {
+                stars = 5;
+            } else if (percentage >= 75) {
+                stars = 4;
+            } else if (percentage >= 60) {
+                stars = 3;
+            } else if (percentage >= 45) {
+                stars = 2;
+            } else if (percentage >= 30) {
+                stars = 1;
+            } else {
+                stars = 0;
+            }
 
 
 New features need to be implemented after website goes live:
-1) Classes wise
-2) Room creation
-3) Lock Room
-4) Class wise LeaderBoard
+1 Classes wise
+2 Room creation
+3 Lock Room
+4 Class wise LeaderBoard
