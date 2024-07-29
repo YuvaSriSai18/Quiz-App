@@ -166,7 +166,7 @@ const Leaderboard = () => {
         </Box>
 
         {/* Remaining positions */}
-        <Box sx={{ width: "100%", overflowX: "auto" }}>
+        <Box sx={{ width: "100%" }}>
           <TableContainer
             component={Paper}
             sx={{
