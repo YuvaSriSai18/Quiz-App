@@ -81,7 +81,6 @@ export default function QuizCard({ QuizObj, onDelete }) {
       </p>
       <h6 className="heading_1">{QuizObj.title}</h6>
       <p className="para_1">
-        <p>Duration : {QuizObj.duration} Min</p>
         <p>Questions : {QuizObj.noOfQuestions}</p>
       </p>
       <button onClick={handleClickOpen} className="button">

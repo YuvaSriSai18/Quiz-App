@@ -29,7 +29,7 @@
   font-size: 12px;
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   font-weight: 500;
 }
 .para_1 p {

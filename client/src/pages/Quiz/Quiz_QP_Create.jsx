@@ -30,17 +30,16 @@ const Quiz_QP_Create = () => {
         options: [""],
         correctOption: 1, // Default to 1 (1-based index for user convenience)
         mark: 1,
+        duration: 10, // Default duration set to 10 seconds
       },
     ],
     openTime: "",
-    duration: "",
     roomPass: Math.floor(100000 + Math.random() * 900000),
   });
 
   const [errors, setErrors] = useState({
     title: "",
     openTime: "",
-    duration: "",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,7 +49,6 @@ const Quiz_QP_Create = () => {
     const newErrors = {
       title: "",
       openTime: "",
-      duration: "",
     };
 
     if (!questionPaper.title.trim()) {
@@ -63,25 +61,21 @@ const Quiz_QP_Create = () => {
       isValid = false;
     }
 
-    if (!questionPaper.duration.trim()) {
-      newErrors.duration = "Duration is required";
-      isValid = false;
-    } else if (questionPaper.duration <= 0) {
-      newErrors.duration = "Duration must be greater than 0";
-      isValid = false;
-    }
-
-    questionPaper.questions.forEach((question) => {
+    questionPaper.questions.forEach((question, index) => {
       if (!question.question.trim()) {
-        newErrors.question = "Question is required";
+        newErrors[`question_${index}`] = "Question is required";
         isValid = false;
       }
       if (
         question.options.length < 1 ||
         question.options.some((option) => !option.trim())
       ) {
-        newErrors.options =
+        newErrors[`options_${index}`] =
           "Each question must have at least one non-empty option";
+        isValid = false;
+      }
+      if (question.duration < 10) {
+        newErrors[`duration_${index}`] = "Duration must be at least 10 seconds";
         isValid = false;
       }
     });
@@ -125,21 +119,19 @@ const Quiz_QP_Create = () => {
           options: [""],
           correctOption: 1, // Default to 1 (1-based index for user convenience)
           mark: 1,
+          duration: 10, // Default duration set to 10 seconds
         },
       ],
     }));
   };
 
   const removeQuestion = (index) => {
-    if (questionPaper.questions.length > 1) {
-      const newQuestions = questionPaper.questions.filter(
-        (_, i) => i !== index
-      );
-      setQuestionPaper((prevState) => ({
-        ...prevState,
-        questions: newQuestions,
-      }));
-    }
+    const newQuestions = [...questionPaper.questions];
+    newQuestions.splice(index, 1);
+    setQuestionPaper((prevState) => ({
+      ...prevState,
+      questions: newQuestions,
+    }));
   };
 
   const addOption = (qIndex) => {
@@ -148,297 +140,235 @@ const Quiz_QP_Create = () => {
   };
 
   const removeOption = (qIndex, oIndex) => {
-    const currentOptions = questionPaper.questions[qIndex].options;
-    if (currentOptions.length > 1) {
-      const newOptions = currentOptions.filter((_, i) => i !== oIndex);
-      handleQuestionChange(qIndex, "options", newOptions);
-    }
+    const newOptions = [...questionPaper.questions[qIndex].options];
+    newOptions.splice(oIndex, 1);
+    handleQuestionChange(qIndex, "options", newOptions);
   };
 
-  const createQuiz = async () => {
-    try {
-      const formattedQuestions = questionPaper.questions.map((question) => ({
-        ...question,
-        correctOption: question.correctOption - 1, // Convert to zero-based index
-      }));
-
-      const formattedQuestionPaper = {
-        ...questionPaper,
-        questions: formattedQuestions,
-      };
-
-      await axios.post(
-        "http://localhost:5500/quiz/create",
-        formattedQuestionPaper
-      );
-      window.alert("Quiz is Created");
-      setIsModalOpen(true);
-    } catch (err) {
-      window.alert("Error in creating Quiz");
-      console.error(err);
-    }
-  };
-
-  const handleSubmit = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
     if (validate()) {
-      // console.log(questionPaper);
-      createQuiz();
+      try {
+        const response = await axios.post(
+          "http://localhost:5500/quiz/create",
+          questionPaper
+        );
+        console.log(response.data);
+
+        if (response.data.quiz) {
+          setIsModalOpen(true);
+        }
+      } catch (error) {
+        console.error("Error creating quiz:", error);
+        alert("An error occurred while creating the quiz. Please try again.");
+      }
     }
   };
 
-  const handleCloseModal = () => {
+  const handleModalClose = () => {
     setIsModalOpen(false);
-    window.location.href = "/";
+    window.location.href = "/"; // Redirect to home after successful quiz creation
   };
 
   return (
-    <center>
-      <Card
-        sx={{
-          padding: "5px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          maxWidth: {
-            xs: "100%",
-            md: "50%",
-          },
-          height: "80%",
-          background: "rgb(255, 255, 255)",
-          borderRadius: "1rem",
-          margin: "50px auto",
-          boxShadow:
-            "rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px",
-          transition: "all ease-in-out 0.3s",
-          "&:hover": {
-            backgroundColor: "#fdfdfd",
-            boxShadow:
-              "rgba(0, 0, 0, 0.09) 0px 2px 1px, rgba(0, 0, 0, 0.09) 0px 4px 2px, rgba(0, 0, 0, 0.09) 0px 8px 4px, rgba(0, 0, 0, 0.09) 0px 16px 8px, rgba(0, 0, 0, 0.09) 0px 32px 16px",
-          },
-        }}
-      >
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Create Quiz
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                label="Quiz Title"
-                variant="outlined"
-                fullWidth
-                value={questionPaper.title}
-                onChange={(e) => handleChange("title", e.target.value)}
-                margin="normal"
-                error={!!errors.title}
-                helperText={errors.title}
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <TextField
-                label="Open Time"
-                type="datetime-local"
-                variant="outlined"
-                fullWidth
-                value={questionPaper.openTime}
-                onChange={(e) => handleChange("openTime", e.target.value)}
-                margin="normal"
-                InputLabelProps={{ shrink: true }}
-                error={!!errors.openTime}
-                helperText={errors.openTime}
-              />
-            </Grid>
-            {/* <Grid item xs={6}>
-              <TextField
-                label="Duration"
-                type="number"
-                variant="outlined"
-                fullWidth
-                value={questionPaper.duration}
-                onChange={(e) => handleChange("duration", e.target.value)}
-                margin="normal"
-                InputProps={{ inputProps: { min: 1 } }}
-                error={!!errors.duration}
-                helperText={errors.duration}
-              />
-            </Grid> */}
-            {questionPaper.questions.map((question, qIndex) => (
-              <Grid item xs={12} key={qIndex}>
-                <Card sx={{ margin: "20px 0" }}>
-                  <CardContent>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <Tooltip title="Remove Question">
-                          <IconButton
-                            variant="outlined"
-                            color="error"
-                            onClick={() => removeQuestion(qIndex)}
-                            sx={{ float: "right", margin: 0, fontSize: "18px" }}
-                            disabled={questionPaper.questions.length <= 1}
-                          >
-                            <RemoveCircleRoundedIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <TextField
-                          label={`Question ${qIndex + 1}`}
-                          variant="outlined"
-                          fullWidth
-                          value={question.question}
-                          onChange={(e) =>
-                            handleQuestionChange(
-                              qIndex,
-                              "question",
-                              e.target.value
-                            )
-                          }
-                          margin="normal"
-                          error={!question.question.trim()}
-                          helperText={
-                            !question.question.trim()
-                              ? "Question is required"
-                              : ""
-                          }
-                        />
-                      </Grid>
-                      {question.options.map((option, oIndex) => (
-                        <Grid item xs={12} key={oIndex} display={"flex"}>
-                          <TextField
-                            label={`Option ${oIndex + 1}`}
-                            variant="outlined"
-                            fullWidth
-                            value={option}
-                            onChange={(e) =>
-                              handleOptionChange(qIndex, oIndex, e.target.value)
-                            }
-                            margin="normal"
-                            error={!option.trim()}
-                            helperText={
-                              !option.trim() ? "Option cannot be empty" : ""
-                            }
-                          />
-                          <Tooltip title="Delete Option">
-                            <IconButton
-                              onClick={() => removeOption(qIndex, oIndex)}
-                              disabled={question.options.length <= 1}
-                              sx={{ marginLeft: "10px" }}
-                            >
-                              <CloseRoundedIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </Grid>
-                      ))}
-                      <Grid item xs={12}>
-                        <IconButton
-                          variant="contained"
-                          onClick={() => addOption(qIndex)}
-                          sx={{
-                            backgroundColor: "#559dc2",
-                            color: "#fff",
-                            ":hover": {
-                              backgroundColor: "#0b70a3",
-                              color: "#fff",
-                            },
-                          }}
-                        >
-                          <Add />
-                        </IconButton>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <TextField
-                          label="Correct Option"
-                          type="number"
-                          variant="outlined"
-                          fullWidth
-                          value={question.correctOption}
-                          onChange={(e) =>
-                            handleQuestionChange(
-                              qIndex,
-                              "correctOption",
-                              parseInt(e.target.value) || 1
-                            )
-                          }
-                          margin="normal"
-                          InputProps={{ inputProps: { min: 1 } }}
-                          error={
-                            question.correctOption <= 0 ||
-                            question.correctOption > question.options.length
-                          }
-                          helperText={
-                            question.correctOption <= 0 ||
-                            question.correctOption > question.options.length
-                              ? "Correct option must be a valid option number"
-                              : ""
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <TextField
-                          label="Mark"
-                          type="number"
-                          variant="outlined"
-                          fullWidth
-                          value={question.mark}
-                          onChange={(e) =>
-                            handleQuestionChange(
-                              qIndex,
-                              "mark",
-                              parseInt(e.target.value) || 1
-                            )
-                          }
-                          margin="normal"
-                          InputProps={{ inputProps: { min: 1 } }}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <TextField
-                          label="Duration (seconds)"
-                          type="number"
-                          variant="outlined"
-                          fullWidth
-                          value={questionPaper.duration || 10}
-                          onChange={(e) => handleChange("duration", e.target.value)}
-                          margin="normal"
-                          InputProps={{ inputProps: { min: 10 } }}
-                          error={!!errors.duration}
-                          helperText={errors.duration}
-                        />
-                      </Grid>
-                    </Grid>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={addQuestion}
-                startIcon={<Add />}
-              >
-                Add Question
-              </Button>
-            </Grid>
-            <Grid item xs={12}>
-              <Button
-                variant="contained"
-                color="success"
-                onClick={handleSubmit}
-              >
-                Create Quiz
-              </Button>
-            </Grid>
+    <Card
+      sx={{
+        width: { xs: "100%", sm: "80%", md: "45%" },
+        margin: "auto",
+        marginBottom: 10,
+        padding: 2,
+      }}
+    >
+      <CardContent>
+        <Typography variant="h5" textAlign={"center"} mb={2}>
+          Create Quiz
+        </Typography>
+
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <TextField
+              label="Title"
+              value={questionPaper.title}
+              onChange={(e) => handleChange("title", e.target.value)}
+              fullWidth
+              error={!!errors.title}
+              helperText={errors.title}
+              required
+            />
           </Grid>
-        </CardContent>
-      </Card>
-      <Modal open={isModalOpen} onClose={handleCloseModal}>
+          <Grid item xs={12}>
+            <TextField
+              label="Open Time"
+              type="datetime-local"
+              value={questionPaper.openTime}
+              onChange={(e) => handleChange("openTime", e.target.value)}
+              fullWidth
+              error={!!errors.openTime}
+              helperText={errors.openTime}
+              required
+              InputLabelProps={{
+                shrink: true,
+              }}
+            />
+          </Grid>
+        </Grid>
+      </CardContent>
+
+      {questionPaper.questions.map((question, qIndex) => (
+        <Card key={qIndex}>
+          <CardContent>
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Tooltip title={`Remove Question ${qIndex + 1}`}>
+                  <IconButton
+                    onClick={() => removeQuestion(qIndex)}
+                    sx={{ float: "right" }}
+                    color="error"
+                  >
+                    <RemoveCircleRoundedIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid item xs={12} display={"flex"}>
+                <TextField
+                  label={`Question ${qIndex + 1}`}
+                  value={question.question}
+                  onChange={(e) =>
+                    handleQuestionChange(qIndex, "question", e.target.value)
+                  }
+                  fullWidth
+                  error={!!errors[`question_${qIndex}`]}
+                  helperText={errors[`question_${qIndex}`]}
+                  required
+                />
+              </Grid>
+              {question.options.map((option, oIndex) => (
+                <Grid item xs={12} key={oIndex} display={"flex"}>
+                  <TextField
+                    label={`Option ${oIndex + 1}`}
+                    value={option}
+                    onChange={(e) =>
+                      handleOptionChange(qIndex, oIndex, e.target.value)
+                    }
+                    fullWidth
+                    required
+                  />
+                  <IconButton onClick={() => removeOption(qIndex, oIndex)}>
+                    <CloseRoundedIcon />
+                  </IconButton>
+                </Grid>
+              ))}
+              {/* <Grid item xs={12}>
+                <center>
+                  <Button
+                    variant="outlined"
+                    startIcon={<Add />}
+                    onClick={() => addOption(qIndex)}
+                  >
+                    Add Option
+                  </Button>
+                </center>
+              </Grid> */}
+              <Grid item xs={12}>
+                <center>
+                  <Tooltip title="Add Option" placement="right-end">
+                    <IconButton
+                      variant="contained"
+                      onClick={() => addOption(qIndex)}
+                      sx={{
+                        backgroundColor: "#559dc2",
+                        color: "#fff",
+                        ":hover": {
+                          backgroundColor: "#0b70a3",
+                          color: "#fff",
+                        },
+                      }}
+                    >
+                      <Add />
+                    </IconButton>
+                  </Tooltip>
+                </center>
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Correct Option"
+                  type="number"
+                  value={question.correctOption}
+                  onChange={(e) =>
+                    handleQuestionChange(
+                      qIndex,
+                      "correctOption",
+                      e.target.value
+                    )
+                  }
+                  fullWidth
+                  InputProps={{
+                    inputProps: { min: 1, max: question.options.length },
+                  }}
+                  required
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Marks"
+                  type="number"
+                  value={question.mark}
+                  onChange={(e) =>
+                    handleQuestionChange(qIndex, "mark", e.target.value)
+                  }
+                  fullWidth
+                  InputProps={{ inputProps: { min: 1 } }}
+                  required
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <TextField
+                  label="Duration (seconds)"
+                  type="number"
+                  value={question.duration}
+                  onChange={(e) =>
+                    handleQuestionChange(qIndex, "duration", e.target.value)
+                  }
+                  fullWidth
+                  InputProps={{ inputProps: { min: 10 } }}
+                  error={!!errors[`duration_${qIndex}`]}
+                  helperText={errors[`duration_${qIndex}`]}
+                  required
+                />
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
+      ))}
+      <center>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={addQuestion}
+          sx={{ marginTop: 2, marginBottom: 2 }}
+        >
+          Add Question
+        </Button>
+      </center>
+      <center>
+        <Button
+          type="submit"
+          variant="contained"
+          color="success"
+          onClick={handleSubmit}
+        >
+          Create Quiz
+        </Button>
+      </center>
+
+      <Modal open={isModalOpen} onClose={handleModalClose}>
         <RoomPassKeyCopyModal
           roomPass={questionPaper.roomPass}
-          onClose={handleCloseModal}
+          handleClose={handleModalClose}
         />
       </Modal>
-    </center>
+    </Card>
   );
 };
 

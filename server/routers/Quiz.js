@@ -30,31 +30,28 @@ router.get("/:QuizId", async (req, res) => {
 
 // Create a quiz
 router.post("/create", async (req, res) => {
-  const {
-    QuizId,
-    CreatorMail,
-    title,
-    questions,
-    duration,
-    roomPass,
-    openTime,
-  } = req.body;
+  const { QuizId, CreatorMail, title, questions, roomPass, openTime } =
+    req.body;
 
   try {
+    const formattedQuestions = questions.map((question) => ({
+      ...question,
+      correctOption: question.correctOption - 1, // Convert to zero-based index
+    }));
+
     let quiz = new QuizPaper({
       QuizId,
       CreatorMail,
       title,
       noOfQuestions: questions.length,
-      questions,
-      duration,
+      questions: formattedQuestions,
       roomPass,
       openTime,
     });
 
-    const correctAnswers = questions.map((question, index) => ({
+    const correctAnswers = formattedQuestions.map((question, index) => ({
       questionNumber: index + 1,
-      correctOptionIndex: question.correctOption, // No need to subtract 1 here as it should be zero-based already
+      correctOptionIndex: question.correctOption,
     }));
 
     let responses = new Responses({
@@ -84,12 +81,17 @@ router.put("/:QuizId", async (req, res) => {
 
     quiz.title = title || quiz.title;
     if (questions) {
-      quiz.questions = questions;
-      quiz.noOfQuestions = questions.length;
+      const formattedQuestions = questions.map((question) => ({
+        ...question,
+        correctOption: question.correctOption - 1, // Convert to zero-based index
+      }));
 
-      const correctAnswers = questions.map((question, index) => ({
+      quiz.questions = formattedQuestions;
+      quiz.noOfQuestions = formattedQuestions.length;
+
+      const correctAnswers = formattedQuestions.map((question, index) => ({
         questionNumber: index + 1,
-        correctOptionIndex: question.correctOption, // Ensure this is correctly handled
+        correctOptionIndex: question.correctOption,
       }));
 
       await Responses.findOneAndUpdate(

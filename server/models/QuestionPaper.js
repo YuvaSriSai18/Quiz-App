@@ -6,6 +6,7 @@ const QuestionSchema = new Schema({
   options: { type: [String], required: true },
   correctOption: { type: Number, required: true },
   mark: { type: Number, default: 1 },
+  duration: { type: Number, required: true },
 });
 
 const QuestionPaperSchema = new Schema(
@@ -15,7 +16,6 @@ const QuestionPaperSchema = new Schema(
     title: { type: String, required: true },
     noOfQuestions: { type: Number },
     questions: { type: [QuestionSchema], required: true },
-    duration: { type: Number, required: true },
     roomPass: { type: Number, required: true },
     openTime: { type: Date },
   },

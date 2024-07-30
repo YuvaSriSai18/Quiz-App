@@ -6,15 +6,13 @@ import {
   FormControlLabel,
   FormControl,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 export default function QuestionCard({
   question,
   questionNumber,
   handleResponseChange,
-  nextPath,
+  onTimeUp,
 }) {
-  const navigate = useNavigate();
   const [timeLeft, setTimeLeft] = useState(question.time || 10); // Default time 10 seconds
 
   const handleOptionChange = (event) => {
@@ -23,7 +21,7 @@ export default function QuestionCard({
 
   useEffect(() => {
     if (timeLeft === 0) {
-      navigate(nextPath); // Navigate to the next path (e.g., leaderboard or next question)
+      onTimeUp();
       return; // Exit the effect
     }
 
@@ -32,7 +30,7 @@ export default function QuestionCard({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, navigate, nextPath]);
+  }, [timeLeft, onTimeUp]);
 
   return (
     <Box
@@ -93,7 +91,8 @@ export default function QuestionCard({
             fontWeight: "bold",
             padding: "10px",
             borderRadius: "12px",
-            background: "linear-gradient(135deg, #F0F4FD 0%, #D9EAF5 50%, #BFD4E6 100%)",
+            background:
+              "linear-gradient(135deg, #F0F4FD 0%, #D9EAF5 50%, #BFD4E6 100%)",
             boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
           }}
         >

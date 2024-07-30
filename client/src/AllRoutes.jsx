@@ -8,7 +8,6 @@ import QuizInstructions from "./components/Quizzes_Container/Quiz_QP_Write/QuizI
 import WriteQuiz from "./pages/Quiz/WriteQuiz";
 import Quiz_QP_Create from "./pages/Quiz/Quiz_QP_Create";
 import Quiz_Update from "./pages/Quiz/Quiz_Update";
-import LeaderboardAfterQuestion from "./components/Quizzes_Container/LeaderboardAfterQuestion.jsx";
 
 function AllRoutes() {
   return (
@@ -21,7 +20,6 @@ function AllRoutes() {
         <Route path="/create" element={<Quiz_QP_Create />} />
         <Route path="/update/:QuizId" element={<Quiz_Update />} />
         <Route path="/quizinstructions" element={<QuizInstructions />} />
-        <Route path="/leaderboard-after-question" element={<LeaderboardAfterQuestion />} />
       </Routes>
     </Box>
   );

@@ -3,6 +3,7 @@ import QuestionCard from "./QuestionCard";
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import LeaderBoard from "../../LeaderBoard/LeaderBoard";
 
 export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
   const userData = useSelector((state) => state.auth.userData);
@@ -17,6 +18,7 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
   });
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [showLeaderBoard, setShowLeaderBoard] = useState(false);
 
   const handleResponseChange = (questionIndex, answer) => {
     const updatedResponses = responses.answers.map((response, index) => {
@@ -51,69 +53,52 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
     }
   };
 
-  const isLastQuestion = currentQuestionIndex === QuizQuestionsData.questions.length - 1;
+  const isLastQuestion =
+    currentQuestionIndex === QuizQuestionsData.questions.length - 1;
+
+  const handleTimeUp = () => {
+    setShowLeaderBoard(true);
+    setTimeout(() => {
+      setShowLeaderBoard(false);
+      handleNextQuestion();
+    }, 15000); // Show LeaderBoard for 15 seconds
+  };
 
   return (
     <div>
-      {QuizQuestionsData.questions.length > 0 ? (
-        <div>
-          <QuestionCard
-            question={QuizQuestionsData.questions[currentQuestionIndex]}
-            questionNumber={currentQuestionIndex + 1}
-            handleResponseChange={handleResponseChange}
-          />
-          <div style={{ marginTop: "16px" }}>
-            <Button
-              variant="contained"
-              sx={{
-                width: "150px",
-                height: "50px",
-                fontSize: "16px",
-                marginRight: "8px",
-                borderRadius: "14px",
-              }}
-              onClick={handlePreviousQuestion}
-              disabled={currentQuestionIndex === 0}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="contained"
-              sx={{
-                width: "150px",
-                height: "50px",
-                fontSize: "16px",
-                borderRadius: "14px",
-              }}
-              onClick={handleNextQuestion}
-              disabled={currentQuestionIndex === QuizQuestionsData.questions.length - 1}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+      {showLeaderBoard ? (
+        <LeaderBoard />
       ) : (
-        <>
-          <h1>No Questions Found</h1>
-        </>
-      )}
-      {isLastQuestion && (
-        <center>
-          <Button
-            variant="contained"
-            sx={{
-              width: "200px",
-              height: "50px",
-              fontSize: "18px",
-              marginTop: "16px",
-              marginBottom: "16px",
-              borderRadius: "14px",
-            }}
-            onClick={postResponse}
-          >
-            Submit
-          </Button>
-        </center>
+        <div>
+          {QuizQuestionsData.questions.length > 0 ? (
+            <QuestionCard
+              question={QuizQuestionsData.questions[currentQuestionIndex]}
+              questionNumber={currentQuestionIndex + 1}
+              handleResponseChange={handleResponseChange}
+              onTimeUp={handleTimeUp}
+            />
+          ) : (
+            <h1>No Questions Found</h1>
+          )}
+          {isLastQuestion && (
+            <center>
+              <Button
+                variant="contained"
+                sx={{
+                  width: "200px",
+                  height: "50px",
+                  fontSize: "18px",
+                  marginTop: "16px",
+                  marginBottom: "16px",
+                  borderRadius: "14px",
+                }}
+                onClick={postResponse}
+              >
+                Submit
+              </Button>
+            </center>
+          )}
+        </div>
       )}
     </div>
   );
