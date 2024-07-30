@@ -12,12 +12,9 @@ function App() {
 
   const getUser = async () => {
     try {
-      const response = await axios.get(
-        `${process.env.SERVER_URI}/login/success`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`http://localhost:5500/login/success`, {
+        withCredentials: true,
+      });
       // console.log("res", response);
       dispatch(setUserData(response.data.user));
     } catch (error) {

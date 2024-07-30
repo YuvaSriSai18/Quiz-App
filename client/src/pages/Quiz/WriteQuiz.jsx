@@ -45,8 +45,10 @@ export default function WriteQuiz() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        minHeight: "100vh",
-        padding: 2,
+        minHeight: "85vh",
+        // padding: 2,
+        maxWidth:'70%',
+        margin:'auto'
         // No background color needed; uses global background from index.css
       }}
     >
@@ -55,11 +57,10 @@ export default function WriteQuiz() {
           marginTop: "-10%",
           padding: 3,
           borderRadius: 2,
-          boxShadow: 3,
+          boxShadow: '5px 2px 14px -7px rgba(235,230,230,1)',
           position: "relative",
-          width: "90%",
-          maxWidth: 800,
-          backgroundColor: "white",
+          width:'100%',
+          backgroundColor: "transparent",
           border: "none", // Ensure no border
           "& .MuiPaper-root": {
             border: "none", // Ensure no border for all child Paper components

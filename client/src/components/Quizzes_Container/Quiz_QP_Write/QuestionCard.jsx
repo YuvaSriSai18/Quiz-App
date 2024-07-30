@@ -34,7 +34,7 @@ export default function QuestionCard({
 
   return (
     <Box
-      sx={{ width: { xs: "70%", md: "50%" }, margin: "auto", padding: "10px" }}
+      sx={{ width: { xs: "100%", md: "50%" }, margin: "auto", padding: "10px" }}
     >
       <Box
         sx={{
@@ -50,6 +50,7 @@ export default function QuestionCard({
             borderRadius: "12px",
             display: "flex",
             justifyContent: "space-between",
+            border:'2.5px solid #ebe6e6'
           }}
         >
           <p style={{ margin: 0 }}>
@@ -63,6 +64,7 @@ export default function QuestionCard({
             padding: "10px",
             borderRadius: "12px",
             marginTop: "12px",
+            border:'2.5px solid #ebe6e6'
           }}
         >
           <FormControl component="fieldset">
