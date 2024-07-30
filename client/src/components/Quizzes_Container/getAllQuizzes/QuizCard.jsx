@@ -120,9 +120,6 @@ export default function QuizCard({ QuizObj, onDelete }) {
             <strong>Title :</strong> {QuizObj.title}
           </Typography>
           <Typography>
-            <strong>Duration :</strong> {QuizObj.duration} Min
-          </Typography>
-          <Typography>
             <strong>Questions :</strong> {QuizObj.noOfQuestions}
           </Typography>
           <Typography>

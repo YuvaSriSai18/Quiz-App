@@ -1,13 +1,13 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 
 const LeaderBoard = () => {
   const dummyParticipants = [
     { rollNumber: "S12345", name: "John Doe", points: 150 },
-    { rollNumber: "S12346", name: "Jane Smith", points: 140 },
+    { rollNumber: "AP22110010750", name: "Jane Smith", points: 140 },
     { rollNumber: "S12347", name: "Emily Johnson", points: 130 },
     { rollNumber: "S12348", name: "Michael Brown", points: 120 },
-    { rollNumber: "S12349", name: "Sarah Davis", points: 110 },
+    { rollNumber: "AP22110010750", name: "Sarah Davis", points: 110 },
     { rollNumber: "S12350", name: "David Wilson", points: 100 },
     { rollNumber: "S12351", name: "Laura Martinez", points: 90 },
     { rollNumber: "S12352", name: "James Anderson", points: 80 },
@@ -32,7 +32,7 @@ const LeaderBoard = () => {
       alignItems="center"
       minHeight="100vh"
       p={2}
-      bgcolor="#f5f5f5"
+      // bgcolor="#f5f5f5"
     >
       <Typography variant="h4" mb={4}>
         Leaderboard
@@ -45,21 +45,45 @@ const LeaderBoard = () => {
         p={3}
         bgcolor="white"
       >
+        <Grid container mb={1}>
+          <Grid item xs={3}>
+            <Typography textAlign={"left"} fontWeight={600}>
+              Position
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography textAlign={"left"} fontWeight={600}>
+              Roll Number
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography textAlign={"center"} fontWeight={600}>
+              Name
+            </Typography>
+          </Grid>
+          <Grid item xs={3}>
+            <Typography textAlign={"right"} fontWeight={600}>
+              Points
+            </Typography>
+          </Grid>
+        </Grid>
         {dummyParticipants.slice(0, 20).map((participant, index) => (
-          <Box
-            key={index}
-            display="flex"
-            justifyContent="space-between"
-            p={1}
-            mb={1}
-            borderBottom={1}
-            borderColor="grey.300"
-          >
-            <Typography>{index + 1}</Typography>
-            <Typography>{participant.rollNumber}</Typography>
-            <Typography>{participant.name}</Typography>
-            <Typography>{participant.points}</Typography>
-          </Box>
+          <Grid container key={index}>
+            <Grid item xs={3}>
+              <Typography textAlign={"left"}>{index + 1}</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography textAlign={"left"}>
+                {participant.rollNumber}
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography textAlign={"center"}>{participant.name}</Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Typography textAlign={"right"}>{participant.points}</Typography>
+            </Grid>
+          </Grid>
         ))}
       </Box>
     </Box>

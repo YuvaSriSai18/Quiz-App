@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import LeaderBoard from "../../LeaderBoard/LeaderBoard";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
   const userData = useSelector((state) => state.auth.userData);
@@ -50,7 +50,7 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
     try {
       await axios.post("http://localhost:5500/response/submit", responses);
       alert("Quiz Submitted Successfully");
-      navigate('/'); // Use navigate for redirection
+      navigate("/"); // Use navigate for redirection
     } catch (err) {
       alert(err.response.data.msg);
     }
@@ -83,13 +83,17 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
 
   useEffect(() => {
     if (quizCompleted) {
-      alert('Quiz Completed');
-      navigate('/'); // Use navigate for redirection
+      alert("Quiz Completed");
+      navigate("/"); // Use navigate for redirection
     }
   }, [quizCompleted, navigate]); // Ensure this effect runs when quizCompleted changes
 
   if (showLeaderBoard) {
-    return <LeaderBoard />;
+    return (
+      <div style={{ marginTop: "70px" }}>
+        <LeaderBoard />
+      </div>
+    );
   }
 
   return (
