@@ -116,7 +116,7 @@ Current important things need to be done by 4th:
     Example of how we calculate the quiz marks obtained to give the stars in the leaderboard as there is no score 
         Here is an example:
 
-            Quiz 1:
+            Quiz 1: 
 
                 Maximum score: 50
                 Student A's score: 40

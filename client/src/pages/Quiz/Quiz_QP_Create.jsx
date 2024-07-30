@@ -225,7 +225,7 @@ const Quiz_QP_Create = () => {
             <Grid item xs={12}>
               <TextField
                 label="Quiz Title"
-                variant="standard"
+                variant="outlined"
                 fullWidth
                 value={questionPaper.title}
                 onChange={(e) => handleChange("title", e.target.value)}
