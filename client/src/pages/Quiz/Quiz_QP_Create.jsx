@@ -225,7 +225,7 @@ const Quiz_QP_Create = () => {
             <Grid item xs={12}>
               <TextField
                 label="Quiz Title"
-                variant="outlined"
+                variant="standard"
                 fullWidth
                 value={questionPaper.title}
                 onChange={(e) => handleChange("title", e.target.value)}
@@ -248,7 +248,7 @@ const Quiz_QP_Create = () => {
                 helperText={errors.openTime}
               />
             </Grid>
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
               <TextField
                 label="Duration"
                 type="number"
@@ -261,7 +261,7 @@ const Quiz_QP_Create = () => {
                 error={!!errors.duration}
                 helperText={errors.duration}
               />
-            </Grid>
+            </Grid> */}
             {questionPaper.questions.map((question, qIndex) => (
               <Grid item xs={12} key={qIndex}>
                 <Card sx={{ margin: "20px 0" }}>
@@ -303,7 +303,7 @@ const Quiz_QP_Create = () => {
                         />
                       </Grid>
                       {question.options.map((option, oIndex) => (
-                        <Grid item xs={11} key={oIndex} display={"flex"}>
+                        <Grid item xs={12} key={oIndex} display={"flex"}>
                           <TextField
                             label={`Option ${oIndex + 1}`}
                             variant="outlined"
@@ -345,7 +345,7 @@ const Quiz_QP_Create = () => {
                           <Add />
                         </IconButton>
                       </Grid>
-                      <Grid item xs={6}>
+                      <Grid item xs={4}>
                         <TextField
                           label="Correct Option"
                           type="number"
@@ -373,7 +373,7 @@ const Quiz_QP_Create = () => {
                           }
                         />
                       </Grid>
-                      <Grid item xs={6}>
+                      <Grid item xs={4}>
                         <TextField
                           label="Mark"
                           type="number"
@@ -389,6 +389,20 @@ const Quiz_QP_Create = () => {
                           }
                           margin="normal"
                           InputProps={{ inputProps: { min: 1 } }}
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <TextField
+                          label="Duration (seconds)"
+                          type="number"
+                          variant="outlined"
+                          fullWidth
+                          value={questionPaper.duration || 10}
+                          onChange={(e) => handleChange("duration", e.target.value)}
+                          margin="normal"
+                          InputProps={{ inputProps: { min: 10 } }}
+                          error={!!errors.duration}
+                          helperText={errors.duration}
                         />
                       </Grid>
                     </Grid>
