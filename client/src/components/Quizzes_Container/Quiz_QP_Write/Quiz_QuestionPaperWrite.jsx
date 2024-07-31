@@ -69,7 +69,7 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
       } else {
         handleNextQuestion();
       }
-    }, 5000); // Show LeaderBoard for 5 seconds
+    }, 500000); // Show LeaderBoard for 5 seconds
   };
 
   useEffect(() => {
