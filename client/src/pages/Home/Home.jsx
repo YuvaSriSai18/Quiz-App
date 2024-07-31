@@ -8,7 +8,7 @@ import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { LineChart } from "@mui/x-charts/LineChart";
 
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
-import LottieFile from "../../components/animation/LottieFile";
+import LappyLottie from "../../components/animation/LappyLottie";
 import JoinRoomWithoutAuth from "../../components/Modals/JoinRoomWithoutAuth";
 import StartQuizCard from "../../components/StartQuizCard";
 
@@ -177,7 +177,7 @@ export default function Home() {
             </Box>
           </Box>
         </Box>
-        <LottieFile />
+        <LappyLottie />
       </Box>
 
       {/* Gauges and Line Chart */}

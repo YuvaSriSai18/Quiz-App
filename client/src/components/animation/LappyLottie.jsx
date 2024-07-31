@@ -1,14 +1,14 @@
 import React from "react";
 import { useMediaQuery } from "@mui/material";
 import Lottie from "react-lottie";
-import LappyLottie from "./LappyLottie.json";
-export default function LottieFile() {
+import Lappy from './Lappy.json'
+export default function LappyLottie() {
   const isMobile = useMediaQuery("(max-width:600px)");
 
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: LappyLottie,
+    animationData: Lappy,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
