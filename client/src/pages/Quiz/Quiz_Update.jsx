@@ -159,7 +159,7 @@ const Quiz_Update = () => {
             fullWidth
             margin="normal"
           />
-          <TextField
+          {/* <TextField
             label="Duration (in minutes)"
             type="number"
             value={questionPaper.duration}
@@ -171,8 +171,8 @@ const Quiz_Update = () => {
             }
             fullWidth
             margin="normal"
-          />
-          {/* <TextField
+          /> */}
+          <TextField
             label="Open Time (YYYY-MM-DD HH:MM)"
             value={questionPaper.openTime}
             type="datetime-local"
@@ -184,7 +184,7 @@ const Quiz_Update = () => {
             }
             fullWidth
             margin="normal"
-          /> */}
+          />
           {questionPaper.questions.map((question, index) => (
             <div key={index} style={{ marginBottom: "20px" }}>
               <Tooltip
