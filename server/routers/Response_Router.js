@@ -4,9 +4,14 @@ const Responses = require("../models/Responses");
 
 // Post a response
 router.post("/submit", async (req, res) => {
-  const { QuizId, StudentRoll, answers } = req.body;
+  const { QuizId, StudentRoll, StudentEmail, answers, StudentName } = req.body;
 
   try {
+    // Validate request data
+    if (!QuizId || !StudentRoll || !StudentEmail || !Array.isArray(answers)) {
+      return res.status(400).json({ msg: "Invalid request data" });
+    }
+
     // Find the quiz responses entry by QuizId
     let quizResponses = await Responses.findOne({ quizId: QuizId });
 
@@ -14,26 +19,44 @@ router.post("/submit", async (req, res) => {
       return res.status(404).json({ msg: "Quiz not found" });
     }
 
-    // Check if the student's response already exists
+    // Find or create the student's response
     let studentResponse = quizResponses.responses.find(
-      (response) => response.studentRoll === StudentRoll
+      (response) =>
+        response.studentRoll === StudentRoll &&
+        response.studentMail === StudentEmail
     );
 
-    if (studentResponse) {
-      // Send alert message if response already exists
-      return res.status(400).json({ msg: "Quiz Response already submitted" });
+    if (!studentResponse) {
+      studentResponse = {
+        studentMail: StudentEmail,
+        studentName: StudentName || "",
+        studentRoll: StudentRoll,
+        answersGivenByUser: [...answers],
+        createdAt: Date.now(),
+      };
+      quizResponses.responses.push(studentResponse);
     }
 
-    // Create a new student response
-    quizResponses.responses.push({
-      studentRoll: StudentRoll,
-      answersGivenByUser: answers,
-      createdAt: Date.now(),
+    // Update or add new answers
+    answers.forEach((answer) => {
+      const existingAnswerIndex = studentResponse.answersGivenByUser.findIndex(
+        (ans) => ans.questionNumber === answer.questionNumber
+      );
+
+      if (existingAnswerIndex > -1) {
+        studentResponse.answersGivenByUser[existingAnswerIndex] = {
+          questionNumber: answer.questionNumber,
+          givenAnswer: answer.givenAnswer, // Updated field name
+        };
+      } else {
+        studentResponse.answersGivenByUser.push({
+          questionNumber: answer.questionNumber,
+          givenAnswer: answer.givenAnswer, // Updated field name
+        });
+      }
     });
 
-    // Save the updated responses
     await quizResponses.save();
-
     res.json(quizResponses);
   } catch (error) {
     console.error(`Error: ${error}`);

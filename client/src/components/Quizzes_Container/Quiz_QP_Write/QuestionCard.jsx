@@ -5,24 +5,50 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
+  Button,
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function QuestionCard({
   question,
   questionNumber,
-  handleResponseChange,
   onTimeUp,
+  quizId,
+  isNewQuestion, // New prop to indicate if it's a new question
 }) {
-  const [timeLeft, setTimeLeft] = useState(question.time || 10); // Default time 10 seconds
+  const userData = useSelector((state) => state.auth.userData);
+  const navigate = useNavigate();
 
-  const handleOptionChange = (event) => {
-    handleResponseChange(questionNumber - 1, event.target.value);
-  };
+  const [timeLeft, setTimeLeft] = useState(question.duration || 10);
+  const [response, setResponse] = useState({
+    QuizId: quizId,
+    StudentRoll: userData.rollNo,
+    StudentEmail: userData.email,
+    StudentName: userData.displayName,
+    answers: [],
+  });
+  const [timeUp, setTimeUp] = useState(false);
 
   useEffect(() => {
-    if (timeLeft === 0) {
+    // Reset timeUp and timeLeft when a new question is presented
+    if (isNewQuestion) {
+      setTimeUp(false);
+      setTimeLeft(question.duration || 10); // Reset timeLeft
+    }
+  }, [isNewQuestion, question.duration]);
+
+  useEffect(() => {
+    if (timeUp) {
+      postResponse();
       onTimeUp();
-      return; // Exit the effect
+      return;
+    }
+
+    if (timeLeft <= 1) {
+      setTimeUp(true);
+      return;
     }
 
     const timer = setInterval(() => {
@@ -30,7 +56,47 @@ export default function QuestionCard({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, onTimeUp]);
+  }, [timeLeft, timeUp, onTimeUp]);
+
+  const handleOptionChange = (event) => {
+    const selectedOptionIndex = parseInt(event.target.value, 10);
+    setResponse((prevResponse) => {
+      // Check if answer for the current question already exists, if not add it
+      const existingAnswer = prevResponse.answers.find(
+        (ans) => ans.questionNumber === questionNumber
+      );
+      if (existingAnswer) {
+        return {
+          ...prevResponse,
+          answers: prevResponse.answers.map((ans) =>
+            ans.questionNumber === questionNumber
+              ? { ...ans, givenAnswer: selectedOptionIndex.toString() }
+              : ans
+          ),
+        };
+      } else {
+        return {
+          ...prevResponse,
+          answers: [
+            ...prevResponse.answers,
+            { questionNumber, givenAnswer: selectedOptionIndex.toString() },
+          ],
+        };
+      }
+    });
+  };
+
+  const postResponse = async () => {
+    try {
+      console.log("Posting response:", response);
+      await axios.post("http://localhost:5500/response/submit", response);
+      // alert("Quiz Submitted Successfully");
+      // navigate("/"); // Adjust this navigation if needed
+    } catch (err) {
+      console.error("Error posting response:", err);
+      alert(err.response ? err.response.data.msg : "Submission failed");
+    }
+  };
 
   return (
     <Box
@@ -50,13 +116,13 @@ export default function QuestionCard({
             borderRadius: "12px",
             display: "flex",
             justifyContent: "space-between",
-            border:'2.5px solid #ebe6e6'
+            border: "2.5px solid #ebe6e6",
           }}
         >
           <p style={{ margin: 0 }}>
             <strong>{questionNumber} . </strong> {question.question}
           </p>
-          <p style={{ margin: 0, fontWeight: "600" }}>{question.mark} M </p>
+          <p style={{ margin: 0, fontWeight: "600" }}>{question.mark} M</p>
         </Box>
 
         <Box
@@ -64,12 +130,17 @@ export default function QuestionCard({
             padding: "10px",
             borderRadius: "12px",
             marginTop: "12px",
-            border:'2.5px solid #ebe6e6'
+            border: "2.5px solid #ebe6e6",
           }}
         >
           <FormControl component="fieldset">
             <RadioGroup
               name={`question-${questionNumber}`}
+              value={
+                response.answers.find(
+                  (ans) => ans.questionNumber === questionNumber
+                )?.givenAnswer || ""
+              }
               onChange={handleOptionChange}
             >
               {question.options.map((option, index) => (
@@ -84,7 +155,6 @@ export default function QuestionCard({
           </FormControl>
         </Box>
 
-        {/* Timer Box with Gradient Background and Rounded Edges */}
         <Box
           sx={{
             display: "flex",
@@ -100,6 +170,8 @@ export default function QuestionCard({
         >
           <p style={{ margin: 0 }}>Time left: {timeLeft}s</p>
         </Box>
+        {/* Optionally include a manual submit button */}
+        {/* <Button onClick={postResponse}>Submit</Button> */}
       </Box>
     </Box>
   );

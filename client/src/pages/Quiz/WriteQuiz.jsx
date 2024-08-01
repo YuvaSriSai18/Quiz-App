@@ -1,43 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Typography, Button, Box, Paper } from "@mui/material";
-import { useTimer } from "react-timer-hook";
+import { Typography, Box, Paper } from "@mui/material";
 import Quiz_QuestionPaperWrite from "../../components/Quizzes_Container/Quiz_QP_Write/Quiz_QuestionPaperWrite";
 
 export default function WriteQuiz() {
-  const [quizzes, setQuizzes] = useState([]);
+  const [quiz, setQuiz] = useState(null);
   const { QuizId } = useParams(); // Get the quiz ID from the URL parameters
 
-  const getQuizzes = async () => {
+  const getQuiz = async () => {
     try {
-      const response = await axios.get("http://localhost:5500/quiz");
-      setQuizzes(response.data);
+      const response = await axios.get(`http://localhost:5500/quiz/${QuizId}`);
+      setQuiz(response.data);
     } catch (error) {
-      console.error("Error fetching quizzes:", error);
+      console.error("Error fetching quiz:", error);
     }
   };
+  // console.log(quiz)
 
   useEffect(() => {
-    getQuizzes();
+    getQuiz();
   }, [QuizId]);
-
-  const quiz = quizzes.find((quiz) => quiz.QuizId === QuizId);
-
-  // Timer configuration based on quiz duration
-  // const { seconds, minutes, hours } = useTimer({
-  //   expiryTimestamp: new Date().getTime() + (quiz?.duration || 30) * 60 * 1000, // Duration in minutes
-  //   autoStart: true,
-  //   onExpire: () => console.warn('Timer expired'),
-  // });
 
   if (!quiz) {
     return <Typography>Not Found</Typography>;
   }
-
-  // const isLastQuestion = quiz.questions && quiz.questions.length > 0
-  //   ? quiz.questions[quiz.questions.length - 1].id === quiz.currentQuestionId
-  //   : false;
 
   return (
     <Box
@@ -46,10 +33,8 @@ export default function WriteQuiz() {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "85vh",
-        // padding: 2,
-        maxWidth:'70%',
-        margin:'auto'
-        // No background color needed; uses global background from index.css
+        maxWidth: "70%",
+        margin: "auto",
       }}
     >
       <Paper
@@ -57,59 +42,17 @@ export default function WriteQuiz() {
           marginTop: "-10%",
           padding: 3,
           borderRadius: 2,
-          boxShadow: '5px 2px 14px -7px rgba(235,230,230,1)',
+          boxShadow: "5px 2px 14px -7px rgba(235,230,230,1)",
           position: "relative",
-          width:'100%',
+          width: "100%",
           backgroundColor: "transparent",
-          border: "none", // Ensure no border
+          border: "none",
           "& .MuiPaper-root": {
-            border: "none", // Ensure no border for all child Paper components
+            border: "none",
           },
         }}
       >
-        {/* <Typography 
-          sx={{
-            position: 'absolute',
-            top: 15,
-            right: 15,
-            fontSize: '16px',
-            color: '#333',
-            backgroundColor: '#fff',
-            padding: '4px 8px',
-            borderRadius: '4px',
-            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-            border: 'none', // Ensure no border
-          }}//master timer
-        >
-          {`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`}
-        </Typography> */}
-
         <Quiz_QuestionPaperWrite QuizQuestionsData={quiz} />
-
-        {/* {isLastQuestion && (
-          <Box 
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginTop: 3,
-            }}
-          >
-            <Button 
-              variant="contained"
-              color="primary"
-              sx={{
-                width: '70%',
-                padding: '10px 0',
-                border: 'none', // Ensure no border
-                '&:focus': {
-                  outline: 'none', // Remove focus outline
-                },
-              }}
-            >
-              Submit Quiz
-            </Button>
-          </Box>
-        )} */}
       </Paper>
     </Box>
   );
