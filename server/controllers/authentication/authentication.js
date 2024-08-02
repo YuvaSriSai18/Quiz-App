@@ -1,7 +1,10 @@
 const passport = require("passport");
 const OAuth2Strategy = require("passport-google-oauth20").Strategy;
 const User = require("../../models/User");
+const LeaderBoard = require('../../models/LeaderBoard');
+
 require("dotenv").config();
+
 passport.use(
   new OAuth2Strategy(
     {
@@ -12,7 +15,6 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        // console.log(profile)
         const email = profile.emails[0].value;
         const domain = email.split("@")[1];
 
@@ -50,6 +52,21 @@ passport.use(
           { new: true, upsert: true } // `upsert: true` will create a new document if no match is found
         );
 
+        // Check if the user exists in the LeaderBoard collection
+        const leaderBoardUser = await LeaderBoard.findOne({ email });
+        if (!leaderBoardUser) {
+          // Create a new LeaderBoard entry
+          await LeaderBoard.create({
+            email,
+            rollNo,
+            name: displayName,
+            successRate: 0,
+            attemptedQuizzes: [],
+            points: 0,
+            totalQuizzesAttempted: 0,
+          });
+        }
+
         return done(null, user);
       } catch (error) {
         return done(error, null);
@@ -81,10 +98,12 @@ const assignRole = (email) => {
     return "Unknown";
   }
 };
+
 function capitalizeFirstLetterOfEachWord(str) {
   return str
     .split(" ")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }
+
 module.exports = passport;
