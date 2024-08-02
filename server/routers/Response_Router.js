@@ -46,12 +46,12 @@ router.post("/submit", async (req, res) => {
       if (existingAnswerIndex > -1) {
         studentResponse.answersGivenByUser[existingAnswerIndex] = {
           questionNumber: answer.questionNumber,
-          givenAnswer: answer.givenAnswer, // Updated field name
+          givenAnswer: Number(answer.givenAnswer), // Ensure givenAnswer is a number
         };
       } else {
         studentResponse.answersGivenByUser.push({
           questionNumber: answer.questionNumber,
-          givenAnswer: answer.givenAnswer, // Updated field name
+          givenAnswer: Number(answer.givenAnswer), // Ensure givenAnswer is a number
         });
       }
     });

@@ -5,7 +5,6 @@ import {
   RadioGroup,
   FormControlLabel,
   FormControl,
-  Button,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -70,7 +69,7 @@ export default function QuestionCard({
           ...prevResponse,
           answers: prevResponse.answers.map((ans) =>
             ans.questionNumber === questionNumber
-              ? { ...ans, givenAnswer: selectedOptionIndex.toString() }
+              ? { ...ans, givenAnswer: selectedOptionIndex }
               : ans
           ),
         };
@@ -79,7 +78,7 @@ export default function QuestionCard({
           ...prevResponse,
           answers: [
             ...prevResponse.answers,
-            { questionNumber, givenAnswer: selectedOptionIndex.toString() },
+            { questionNumber, givenAnswer: selectedOptionIndex },
           ],
         };
       }
@@ -88,8 +87,17 @@ export default function QuestionCard({
 
   const postResponse = async () => {
     try {
-      console.log("Posting response:", response);
-      await axios.post("http://localhost:5500/response/submit", response);
+      // Ensure givenAnswer is a number
+      const modifiedResponse = {
+        ...response,
+        answers: response.answers.map((answer) => ({
+          ...answer,
+          givenAnswer: Number(answer.givenAnswer),
+        })),
+      };
+
+      console.log("Posting response:", modifiedResponse);
+      await axios.post("http://localhost:5500/response/submit", modifiedResponse);
       // alert("Quiz Submitted Successfully");
       // navigate("/"); // Adjust this navigation if needed
     } catch (err) {
@@ -139,14 +147,14 @@ export default function QuestionCard({
               value={
                 response.answers.find(
                   (ans) => ans.questionNumber === questionNumber
-                )?.givenAnswer || ""
+                )?.givenAnswer ?? ""
               }
               onChange={handleOptionChange}
             >
               {question.options.map((option, index) => (
                 <FormControlLabel
                   key={index}
-                  value={index}
+                  value={index} // Use string value for Radio input
                   control={<Radio />}
                   label={option}
                 />

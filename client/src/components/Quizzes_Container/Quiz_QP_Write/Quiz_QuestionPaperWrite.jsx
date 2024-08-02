@@ -35,7 +35,7 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
       } else {
         handleNextQuestion();
       }
-    }, 5000000); // Show LeaderBoard for 3 seconds
+    }, 3000); // Show LeaderBoard for 3 seconds
   };
 
   useEffect(() => {

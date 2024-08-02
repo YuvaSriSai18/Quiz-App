@@ -17,7 +17,7 @@ const ResponsesSchema = new Schema({
       answersGivenByUser: [
         {
           questionNumber: { type: Number, required: true },
-          givenAnswer: { type: String, required: true },
+          givenAnswer: { type: Number, required: true },
         },
       ],
       createdAt: { type: Date, default: Date.now },
