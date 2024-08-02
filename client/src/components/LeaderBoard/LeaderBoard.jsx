@@ -1,7 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
+import ConfettiSparks from "../animation/ConfettieSparks";
+import WrongOption from "../animation/WrongOption"
 
 const LeaderBoard = () => {
+  const [animationType, setAnimationType] = useState(null);
+
+  useEffect(() => {
+    const answerStatus = sessionStorage.getItem("answerStatus");
+    if (answerStatus === "correct") {
+      setAnimationType("correct");
+    } else if (answerStatus === "wrong") {
+      setAnimationType("wrong");
+    }
+    sessionStorage.removeItem("answerStatus");
+  }, []);
+
   const dummyParticipants = [
     { rollNumber: "S12345", name: "John Doe", points: 150 },
     { rollNumber: "AP22110010750", name: "Jane Smith", points: 140 },
@@ -25,63 +39,204 @@ const LeaderBoard = () => {
     { rollNumber: "S12364", name: "Noah Nelson", points: 0 },
   ];
 
+  const getBackgroundColor = (index) => {
+    switch (index) {
+      case 0:
+        return "linear-gradient(135deg, #f5efd0, #f5e295)"; // Gold gradient
+      case 1:
+        return "linear-gradient(135deg, #ebe6e6, #d3d3d3)"; // Silver gradient
+      case 2:
+        return "linear-gradient(135deg, #d9b089, #e3cfbf)"; // Bronze gradient
+      default:
+        return "white";
+    }
+  };
+
+  const barHeights = [300, 250, 200]; // Manual control over the bar heights
+  const barWidths = [80, 70, 60]; // Manual control over the bar widths
+
   return (
     <Box
       display="flex"
       flexDirection="column"
       alignItems="center"
-      minHeight="100vh"
       p={2}
-      // bgcolor="#f5f5f5"
+      sx={{
+        background: "#f9f9f9",
+        minHeight: "100vh",
+        overflowY: "hidden",
+        width: "100%",
+      }}
     >
-      <Typography variant="h4" mb={4}>
+      <Typography variant="h5" mb={2} sx={{ color: "#333", fontWeight: "bold" }}>
         Leaderboard
       </Typography>
+
+      {animationType === "correct" && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10,
+            background: "rgba(255, 255, 255, 0.8)",
+          }}
+        >
+          <ConfettiSparks />
+        </Box>
+      )}
+
+      {animationType === "wrong" && (
+        <Box
+          sx={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 10,
+            background: "rgba(255, 255, 255, 0.8)",
+          }}
+        >
+          <WrongOption />
+        </Box>
+      )}
+
+      {/* Top Three Positions */}
       <Box
-        width="100%"
-        maxWidth="600px"
-        borderRadius={1}
-        boxShadow={3}
-        p={3}
-        bgcolor="white"
+        display="flex"
+        justifyContent="center"
+        mb={2}
+        sx={{
+          width: "100%",
+          maxWidth: "1000px",
+          position: "relative",
+          overflowX: "auto",
+          whiteSpace: "nowrap",
+        }}
       >
-        <Grid container mb={1}>
-          <Grid item xs={3}>
-            <Typography textAlign={"left"} fontWeight={600}>
-              Position
+        {dummyParticipants.slice(0, 3).map((participant, index) => (
+          <Box
+            key={index}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            sx={{
+              background: getBackgroundColor(index),
+              height: barHeights[index],
+              width: barWidths[index],
+              borderRadius: 2,
+              boxShadow: 2,
+              mx: 1,
+              position: "relative",
+            }}
+          >
+            <Typography
+              sx={{
+                position: "absolute",
+                top: "-1.5rem",
+                background: "#fff",
+                borderRadius: "50%",
+                width: 32,
+                height: 32,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontWeight: 600,
+              }}
+            >
+              {index + 1}
             </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography textAlign={"left"} fontWeight={600}>
-              Roll Number
+            <Typography
+              variant="body2"
+              sx={{
+                writingMode: "vertical-rl",
+                mt: "auto",
+                mb: 1,
+                fontWeight: 500,
+              }}
+            >
+              {participant.name}
             </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography textAlign={"center"} fontWeight={600}>
-              Name
-            </Typography>
-          </Grid>
-          <Grid item xs={3}>
-            <Typography textAlign={"right"} fontWeight={600}>
-              Points
-            </Typography>
-          </Grid>
-        </Grid>
-        {dummyParticipants.slice(0, 20).map((participant, index) => (
-          <Grid container key={index}>
-            <Grid item xs={3}>
-              <Typography textAlign={"left"}>{index + 1}</Typography>
+          </Box>
+        ))}
+      </Box>
+
+      {/* User's Position */}
+      <Box
+        display="flex"
+        justifyContent="center"
+        mb={2}
+        sx={{
+          width: "100%",
+          maxWidth: "1000px",
+        }}
+      >
+        <Box
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          sx={{
+            background: "#dcdcdc",
+            height: 100,
+            width: 100,
+            borderRadius: 2,
+            boxShadow: 1,
+            p: 2,
+          }}
+        >
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Your Position
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            {/* Example position, replace with the actual user's position */}
+            {dummyParticipants.length > 3 ? dummyParticipants[3].name : "N/A"}
+          </Typography>
+        </Box>
+      </Box>
+
+      {/* Remaining Positions */}
+      <Box
+        sx={{
+          width: "100%",
+          maxWidth: "1000px",
+          overflowY: "auto",
+          maxHeight: "400px",
+        }}
+      >
+        {dummyParticipants.slice(3, 20).map((participant, index) => (
+          <Grid
+            container
+            key={index}
+            spacing={1}
+            sx={{
+              background: "#fff",
+              borderRadius: 2,
+              p: 1,
+              mb: 1,
+              alignItems: "center",
+              boxShadow: 1,
+            }}
+          >
+            <Grid item xs={1}>
+              <Typography sx={{ fontWeight: 500 }}>{index + 4}</Typography>
+            </Grid>
+            <Grid item xs={4}>
+              <Typography sx={{ fontWeight: 500, fontSize: '0.9rem' }}>{participant.name}</Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography textAlign={"left"}>
-                {participant.rollNumber}
-              </Typography>
+              <Typography sx={{ textAlign: "right", fontSize: '0.9rem' }}>{participant.rollNumber}</Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography textAlign={"center"}>{participant.name}</Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography textAlign={"right"}>{participant.points}</Typography>
+              <Typography sx={{ textAlign: "right", fontSize: '0.9rem' }}>{participant.points} Points</Typography>
             </Grid>
           </Grid>
         ))}

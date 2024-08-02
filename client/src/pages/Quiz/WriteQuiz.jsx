@@ -3,10 +3,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Typography, Box, Paper } from "@mui/material";
 import Quiz_QuestionPaperWrite from "../../components/Quizzes_Container/Quiz_QP_Write/Quiz_QuestionPaperWrite";
+import { useNavigate } from "react-router-dom";
 
 export default function WriteQuiz() {
   const [quiz, setQuiz] = useState(null);
   const { QuizId } = useParams(); // Get the quiz ID from the URL parameters
+  const navigate = useNavigate(); // Hook to navigate to the leaderboard
+  const [answerStatus, setAnswerStatus] = useState(null); // To store the status of the answer
 
   const getQuiz = async () => {
     try {
@@ -16,11 +19,17 @@ export default function WriteQuiz() {
       console.error("Error fetching quiz:", error);
     }
   };
-  // console.log(quiz)
 
   useEffect(() => {
     getQuiz();
   }, [QuizId]);
+
+  // Handle answer selection
+  const handleAnswerSelection = (isCorrect) => {
+    setAnswerStatus(isCorrect ? "correct" : "wrong");
+    // Navigate to leaderboard after showing animation
+    setTimeout(() => navigate("/leaderboard"), 3000); // Adjust timing as needed
+  };
 
   if (!quiz) {
     return <Typography>Not Found</Typography>;
@@ -52,7 +61,7 @@ export default function WriteQuiz() {
           },
         }}
       >
-        <Quiz_QuestionPaperWrite QuizQuestionsData={quiz} />
+        <Quiz_QuestionPaperWrite QuizQuestionsData={quiz} onAnswerSelection={handleAnswerSelection} />
       </Paper>
     </Box>
   );
