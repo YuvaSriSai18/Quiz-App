@@ -14,8 +14,9 @@ router.post("/submit", async (req, res) => {
       return res.status(400).json({ msg: "Invalid request data" });
     }
 
-    // Find or create the quiz responses entry by QuizId
+    // Find the quiz responses entry by QuizId
     let quizResponses = await Responses.findOne({ quizId: QuizId });
+
     if (!quizResponses) {
       quizResponses = new Responses({ quizId: QuizId, responses: [] });
     }
@@ -26,6 +27,7 @@ router.post("/submit", async (req, res) => {
         response.studentRoll === StudentRoll &&
         response.studentMail === StudentEmail
     );
+
     if (!studentResponse) {
       studentResponse = {
         studentMail: StudentEmail,
@@ -35,26 +37,26 @@ router.post("/submit", async (req, res) => {
         createdAt: Date.now(),
       };
       quizResponses.responses.push(studentResponse);
-    } else {
-      // Update or add new answers
-      answers.forEach((answer) => {
-        const existingAnswerIndex =
-          studentResponse.answersGivenByUser.findIndex(
-            (ans) => ans.questionNumber === answer.questionNumber
-          );
-        if (existingAnswerIndex > -1) {
-          studentResponse.answersGivenByUser[existingAnswerIndex] = {
-            questionNumber: answer.questionNumber,
-            givenAnswer: Number(answer.givenAnswer),
-          };
-        } else {
-          studentResponse.answersGivenByUser.push({
-            questionNumber: answer.questionNumber,
-            givenAnswer: Number(answer.givenAnswer),
-          });
-        }
-      });
     }
+
+    // Update or add new answers
+    answers.forEach((answer) => {
+      const existingAnswerIndex = studentResponse.answersGivenByUser.findIndex(
+        (ans) => ans.questionNumber === answer.questionNumber
+      );
+
+      if (existingAnswerIndex > -1) {
+        studentResponse.answersGivenByUser[existingAnswerIndex] = {
+          questionNumber: answer.questionNumber,
+          givenAnswer: Number(answer.givenAnswer), // Ensure givenAnswer is a number
+        };
+      } else {
+        studentResponse.answersGivenByUser.push({
+          questionNumber: answer.questionNumber,
+          givenAnswer: Number(answer.givenAnswer), // Ensure givenAnswer is a number
+        });
+      }
+    });
 
     // Fetch the quiz details
     const quiz = await QuizPaper.findOne({ QuizId });
@@ -70,13 +72,21 @@ router.post("/submit", async (req, res) => {
     // Check each answer
     answers.forEach((answer) => {
       const questionNumberZeroBased = answer.questionNumber - 1;
+      console.log(questionNumberZeroBased)
       const question = quiz.questions[questionNumberZeroBased];
+
       if (question) {
-        maxScore += question.mark;
+        maxScore += question.mark; // Add mark to QuizMaximumScore
+        console.log(maxScore)
         const isCorrect = question.correctOption === answer.givenAnswer;
         if (isCorrect) {
-          totalPoints += question.mark;
+          totalPoints += question.mark; // Award points for correct answer
+          totalPoints
         }
+        console.log({
+          questionNumber: answer.questionNumber,
+          givenAnswer: answer.givenAnswer,
+        })
         optedOptions.push({
           questionNumber: answer.questionNumber,
           givenAnswer: answer.givenAnswer,
@@ -86,6 +96,7 @@ router.post("/submit", async (req, res) => {
 
     // Update the student's response with calculated points
     studentResponse.pointsEarned = totalPoints;
+    console.log(studentResponse.pointsEarned)
     await quizResponses.save();
 
     // Find or create the student's LeaderBoard entry
@@ -105,7 +116,9 @@ router.post("/submit", async (req, res) => {
     let quizEntry = leaderBoardEntry.attemptedQuizzes.find(
       (q) => q.QuizId === QuizId
     );
+
     if (quizEntry) {
+      // Update existing quiz entry
       optedOptions.forEach((newOption) => {
         const existingOption = quizEntry.optedOptions.find(
           (o) => o.questionNumber === newOption.questionNumber
@@ -116,15 +129,17 @@ router.post("/submit", async (req, res) => {
           quizEntry.optedOptions.push(newOption);
         }
       });
-      quizEntry.pointsEarned = totalPoints;
-      quizEntry.QuizMaximumScore = maxScore;
+
+      quizEntry.pointsEarned += totalPoints;
+      quizEntry.QuizMaximumScore += maxScore; // Update maximum score
     } else {
+      // Add new quiz entry
       leaderBoardEntry.attemptedQuizzes.push({
         QuizId,
         quizTitle: quiz.title,
         optedOptions,
         pointsEarned: totalPoints,
-        QuizMaximumScore: maxScore,
+        QuizMaximumScore: maxScore, // Set maximum score
       });
     }
 
@@ -133,14 +148,11 @@ router.post("/submit", async (req, res) => {
       (acc, quiz) => acc + quiz.pointsEarned,
       0
     );
-    leaderBoardEntry.MaximumScoreForQuizzes =
-      leaderBoardEntry.attemptedQuizzes.reduce(
-        (acc, quiz) => acc + quiz.QuizMaximumScore,
-        0
-      );
-    leaderBoardEntry.totalQuizzesAttempted =
-      leaderBoardEntry.attemptedQuizzes.length;
-
+    leaderBoardEntry.MaximumScoreForQuizzes = leaderBoardEntry.attemptedQuizzes.reduce(
+      (acc, quiz) => acc + quiz.QuizMaximumScore,
+      0
+    );
+    leaderBoardEntry.totalQuizzesAttempted = leaderBoardEntry.attemptedQuizzes.length
     // Calculate success rate
     leaderBoardEntry.successRate = (
       (leaderBoardEntry.points / leaderBoardEntry.MaximumScoreForQuizzes) *
