@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Card, CardContent, Typography, Avatar } from "@mui/material";
 
-const StudentDashboard = ({ userData, isMobile }) => {
+const StudentDashboard = ({ userData, isMobile , LeaderBoardData }) => {
   // Calculate studentName
   const studentName = userData ? userData.displayName : "";
 
@@ -86,7 +86,7 @@ const StudentDashboard = ({ userData, isMobile }) => {
                   >
                     User Details
                   </Typography>
-                  <Typography variant="body1" noWrap mb={1}>
+                  {/* <Typography variant="body1" noWrap mb={1}>
                     Full Name : {userData.displayName}
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
@@ -100,8 +100,8 @@ const StudentDashboard = ({ userData, isMobile }) => {
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
                     Batch: {userData.batch}
-                  </Typography>
-                  {/* <table>
+                  </Typography> */}
+                  <table>
                     <tr>
                       <th>Full Name</th>
                       <td>{userData.displayName}</td>
@@ -122,7 +122,7 @@ const StudentDashboard = ({ userData, isMobile }) => {
                       <th>Batch</th>
                       <td>{userData.batch}</td>
                     </tr>
-                  </table> */}
+                  </table>
                 </CardContent>
               </Card>
             )}
@@ -144,37 +144,37 @@ const StudentDashboard = ({ userData, isMobile }) => {
             elevation={8}
           >
             <CardContent>
-              <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                Attempted:
+              {/* <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
+                Attempted: {LeaderBoardData.totalQuizzesAttempted}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                Score:
+                Score: {LeaderBoardData.points}
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                Performance: %
+                Performance:  {LeaderBoardData.successRate} %
               </Typography>
               <Typography variant="body1" noWrap>
                 Position🏆:{" "}
-              </Typography>
+              </Typography> */}
 
-              {/* <table>
+              <table>
                 <tr>
                   <th>Attempted</th>
-                  <td>7</td>
+                  <td>{LeaderBoardData.totalQuizzesAttempted}</td>
                 </tr>
                 <tr>
                   <th>Score</th>
-                  <td></td>
+                  <td>{LeaderBoardData.points}</td>
                 </tr>
                 <tr>
                   <th>Performance</th>
-                  <td> % </td>
+                  <td>{LeaderBoardData.successRate} % </td>
                 </tr>
                 <tr>
                   <th>Position</th>
                   <td> 7 🏆 </td>
                 </tr>
-              </table> */}
+              </table>
             </CardContent>
           </Card>
         </Grid>

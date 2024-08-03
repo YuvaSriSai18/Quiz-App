@@ -17,6 +17,10 @@ import {
   setUserData,
   clearUserData,
 } from "../../reducers/authentication/authSlice";
+import {
+  setLeaderBoardUserData,
+  clearLeaderBoardUserData,
+} from "../../reducers/LeaderBoard/LeaderBoardSlice";
 import axios from "axios";
 
 const settings = [
@@ -28,6 +32,8 @@ const settings = [
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
+  const leaderBoard = useSelector((state) => state.LeaderBoard.LeaderBoardUserData );
+  
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const getUser = async () => {
@@ -39,13 +45,31 @@ function ResponsiveAppBar() {
         dispatch(setUserData(response.data.user));
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching user data:", error);
+    }
+  };
+
+  const fetchLeaderBoard = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5500/leaderboard/${userData.rollNo}`
+      );
+      console.log("LeaderBoard Data:", response.data);
+      dispatch(setLeaderBoardUserData(response.data));
+    } catch (error) {
+      console.log("Error fetching LeaderBoard data:", error);
     }
   };
 
   useEffect(() => {
     getUser();
   }, []);
+
+  useEffect(() => {
+    if (userData && userData.rollNo) {
+      fetchLeaderBoard();
+    }
+  }, [userData]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -62,6 +86,7 @@ function ResponsiveAppBar() {
   const handleLogout = () => {
     window.open(`http://localhost:5500/logout`, "_self");
     dispatch(clearUserData());
+    dispatch(clearLeaderBoardUserData());
   };
 
   const handleMenuItemClick = (setting) => {
@@ -95,7 +120,7 @@ function ResponsiveAppBar() {
                 fontSize: "22px",
                 color: "#fff",
                 fontWeight: "600",
-                mr: "20px", // Adjust spacing between icon and text
+                mr: "20px",
               }}
             >
               Quiz App

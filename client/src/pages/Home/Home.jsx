@@ -34,6 +34,8 @@ const style = {
 
 export default function Home() {
   const userData = useSelector((state) => state.auth.userData);
+  const leaderBoard = useSelector((state) => state.LeaderBoard.LeaderBoardUserData )
+
   const [name, setName] = useState("User");
   const [averageScore, setAverageScore] = useState(75); // Dummy data
   const [quizScores, setQuizScores] = useState([0.2, 0.8, 0.5, 0.9, 0.6, 0.7]); // Dummy data
@@ -115,7 +117,7 @@ export default function Home() {
                 🎯
               </Typography>
               <Typography m="auto" textAlign="center">
-                Success Rate <br /> {userData?.successRate || "N/A "}%
+                Success Rate <br /> {leaderBoard.successRate ? leaderBoard.successRate  : 'N/A'} %
               </Typography>
             </Box>
 
@@ -190,7 +192,7 @@ export default function Home() {
       >
         <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
           <Gauge
-            value={averageScore}
+            value={leaderBoard.points / leaderBoard.totalQuizzesAttempted === NaN ? 0 : (leaderBoard.points / leaderBoard.totalQuizzesAttempted).toFixed(2)}
             min={0}
             max={100}
             valueFormat={(value) => `${value.toFixed(1)}%`}
@@ -211,7 +213,7 @@ export default function Home() {
         </Box>
         <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
           <Gauge
-            value={totalQuizzes}
+            value={leaderBoard.totalQuizzesAttempted}
             min={0}
             max={50}
             valueFormat={(value) => `${value}`}
