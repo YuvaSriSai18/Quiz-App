@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Card, CardContent, Typography, Avatar } from "@mui/material";
 
-const StudentDashboard = ({ userData, isMobile , LeaderBoardData }) => {
+const StudentDashboard = ({ userData, isMobile, LeaderBoardData }) => {
   // Calculate studentName
   const studentName = userData ? userData.displayName : "";
 

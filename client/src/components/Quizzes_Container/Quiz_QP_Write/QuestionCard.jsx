@@ -97,7 +97,10 @@ export default function QuestionCard({
       };
 
       console.log("Posting response:", modifiedResponse);
-      await axios.post("http://localhost:5500/response/submit", modifiedResponse);
+      await axios.post(
+        "http://localhost:5500/response/submit",
+        modifiedResponse
+      );
       // alert("Quiz Submitted Successfully");
       // navigate("/"); // Adjust this navigation if needed
     } catch (err) {

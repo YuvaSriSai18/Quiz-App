@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import ConfettiSparks from "../animation/ConfettieSparks";
-import WrongOption from "../animation/WrongOption"
+import WrongOption from "../animation/WrongOption";
 
 const LeaderBoard = () => {
   const [animationType, setAnimationType] = useState(null);
@@ -68,7 +68,11 @@ const LeaderBoard = () => {
         width: "100%",
       }}
     >
-      <Typography variant="h5" mb={2} sx={{ color: "#333", fontWeight: "bold" }}>
+      <Typography
+        variant="h5"
+        mb={2}
+        sx={{ color: "#333", fontWeight: "bold" }}
+      >
         Leaderboard
       </Typography>
 
@@ -230,13 +234,19 @@ const LeaderBoard = () => {
               <Typography sx={{ fontWeight: 500 }}>{index + 4}</Typography>
             </Grid>
             <Grid item xs={4}>
-              <Typography sx={{ fontWeight: 500, fontSize: '0.9rem' }}>{participant.name}</Typography>
+              <Typography sx={{ fontWeight: 500, fontSize: "0.9rem" }}>
+                {participant.name}
+              </Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography sx={{ textAlign: "right", fontSize: '0.9rem' }}>{participant.rollNumber}</Typography>
+              <Typography sx={{ textAlign: "right", fontSize: "0.9rem" }}>
+                {participant.rollNumber}
+              </Typography>
             </Grid>
             <Grid item xs={3}>
-              <Typography sx={{ textAlign: "right", fontSize: '0.9rem' }}>{participant.points} Points</Typography>
+              <Typography sx={{ textAlign: "right", fontSize: "0.9rem" }}>
+                {participant.points} Points
+              </Typography>
             </Grid>
           </Grid>
         ))}

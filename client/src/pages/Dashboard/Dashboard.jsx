@@ -13,7 +13,9 @@ const Dashboard = () => {
   // const leaderBoardUser = useSelector(
   //   (state) => state.leaderBoard.LeaderBoardUserData
   // );
-  const leaderBoard = useSelector((state) => state.LeaderBoard.LeaderBoardUserData )
+  const leaderBoard = useSelector(
+    (state) => state.LeaderBoard.LeaderBoardUserData
+  );
   return (
     <div className="dashboard">
       {/* {userData.role === "Faculty" ? (
@@ -23,7 +25,11 @@ const Dashboard = () => {
         <FacultyDashboard isMobile={isMobile} />
       )} */}
 
-      <StudentDashboard userData={userData} LeaderBoardData={leaderBoard} isMobile={isMobile} />
+      <StudentDashboard
+        userData={userData}
+        LeaderBoardData={leaderBoard}
+        isMobile={isMobile}
+      />
       <FacultyDashboard isMobile={isMobile} />
     </div>
   );

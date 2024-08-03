@@ -32,8 +32,10 @@ const settings = [
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
-  const leaderBoard = useSelector((state) => state.LeaderBoard.LeaderBoardUserData );
-  
+  const leaderBoard = useSelector(
+    (state) => state.LeaderBoard.LeaderBoardUserData
+  );
+
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const getUser = async () => {

@@ -113,7 +113,9 @@ const Leaderboard = () => {
                 flexDirection: "column",
                 justifyContent: "flex-end", // Ensure elements are aligned at the bottom
                 border: `4px solid transparent`, // Transparent border
-                borderImage: `linear-gradient(135deg, ${getBorderStyle(index)}) 1`, // Metallic gradient border
+                borderImage: `linear-gradient(135deg, ${getBorderStyle(
+                  index
+                )}) 1`, // Metallic gradient border
                 boxShadow: "20px 20px 60px #bebebe, -20px -20px 60px #ffffff", // Existing shadow
               }}
             >
@@ -125,7 +127,11 @@ const Leaderboard = () => {
                   fontSize: "1.3rem",
                 }}
               >
-                {row.position === 1 ? "1st" : row.position === 2 ? "2nd" : "3rd"}
+                {row.position === 1
+                  ? "1st"
+                  : row.position === 2
+                  ? "2nd"
+                  : "3rd"}
               </Typography>
               <Typography
                 variant="h6"
@@ -187,10 +193,18 @@ const Leaderboard = () => {
                       backgroundColor: "#f0f0f0", // Light gray background for rows
                     }}
                   >
-                    <TableCell align="center" sx={{ color: "#333333" }}>{row.position}</TableCell>
-                    <TableCell align="center" sx={{ color: "#333333" }}>{row.rollNumber}</TableCell>
-                    <TableCell align="center" sx={{ color: "#333333" }}>{row.fullName}</TableCell>
-                    <TableCell align="center" sx={{ color: "#333333" }}>{row.score}</TableCell>
+                    <TableCell align="center" sx={{ color: "#333333" }}>
+                      {row.position}
+                    </TableCell>
+                    <TableCell align="center" sx={{ color: "#333333" }}>
+                      {row.rollNumber}
+                    </TableCell>
+                    <TableCell align="center" sx={{ color: "#333333" }}>
+                      {row.fullName}
+                    </TableCell>
+                    <TableCell align="center" sx={{ color: "#333333" }}>
+                      {row.score}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

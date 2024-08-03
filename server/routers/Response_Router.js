@@ -72,21 +72,21 @@ router.post("/submit", async (req, res) => {
     // Check each answer
     answers.forEach((answer) => {
       const questionNumberZeroBased = answer.questionNumber - 1;
-      console.log(questionNumberZeroBased)
+      console.log(questionNumberZeroBased);
       const question = quiz.questions[questionNumberZeroBased];
 
       if (question) {
         maxScore += question.mark; // Add mark to QuizMaximumScore
-        console.log(maxScore)
+        console.log(maxScore);
         const isCorrect = question.correctOption === answer.givenAnswer;
         if (isCorrect) {
           totalPoints += question.mark; // Award points for correct answer
-          totalPoints
+          totalPoints;
         }
         console.log({
           questionNumber: answer.questionNumber,
           givenAnswer: answer.givenAnswer,
-        })
+        });
         optedOptions.push({
           questionNumber: answer.questionNumber,
           givenAnswer: answer.givenAnswer,
@@ -96,7 +96,7 @@ router.post("/submit", async (req, res) => {
 
     // Update the student's response with calculated points
     studentResponse.pointsEarned = totalPoints;
-    console.log(studentResponse.pointsEarned)
+    console.log(studentResponse.pointsEarned);
     await quizResponses.save();
 
     // Find or create the student's LeaderBoard entry
@@ -148,11 +148,13 @@ router.post("/submit", async (req, res) => {
       (acc, quiz) => acc + quiz.pointsEarned,
       0
     );
-    leaderBoardEntry.MaximumScoreForQuizzes = leaderBoardEntry.attemptedQuizzes.reduce(
-      (acc, quiz) => acc + quiz.QuizMaximumScore,
-      0
-    );
-    leaderBoardEntry.totalQuizzesAttempted = leaderBoardEntry.attemptedQuizzes.length
+    leaderBoardEntry.MaximumScoreForQuizzes =
+      leaderBoardEntry.attemptedQuizzes.reduce(
+        (acc, quiz) => acc + quiz.QuizMaximumScore,
+        0
+      );
+    leaderBoardEntry.totalQuizzesAttempted =
+      leaderBoardEntry.attemptedQuizzes.length;
     // Calculate success rate
     leaderBoardEntry.successRate = (
       (leaderBoardEntry.points / leaderBoardEntry.MaximumScoreForQuizzes) *

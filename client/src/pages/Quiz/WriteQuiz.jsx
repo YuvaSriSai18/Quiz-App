@@ -61,7 +61,10 @@ export default function WriteQuiz() {
           },
         }}
       >
-        <Quiz_QuestionPaperWrite QuizQuestionsData={quiz} onAnswerSelection={handleAnswerSelection} />
+        <Quiz_QuestionPaperWrite
+          QuizQuestionsData={quiz}
+          onAnswerSelection={handleAnswerSelection}
+        />
       </Paper>
     </Box>
   );

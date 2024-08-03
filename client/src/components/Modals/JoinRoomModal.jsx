@@ -3,7 +3,7 @@ import { Box, TextField, InputAdornment, Button } from "@mui/material";
 import HttpsIcon from "@mui/icons-material/Https";
 import LockIcon from "@mui/icons-material/Lock";
 import { useSelector } from "react-redux";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 
 export default function JoinRoomModal() {
   const userData = useSelector((state) => state.auth.userData);
@@ -18,7 +18,9 @@ export default function JoinRoomModal() {
     // Validation logic
     const roomNumberPattern = /^\d{6}$/;
     if (value && !roomNumberPattern.test(value)) {
-      setError("Room Number should be exactly 6 digits and contain no letters.");
+      setError(
+        "Room Number should be exactly 6 digits and contain no letters."
+      );
     } else {
       setError("");
     }
