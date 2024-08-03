@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("./controllers/authentication/authentication");
 const User = require("./models/User");
-
 dotenv.config();
 app.use(cors());
 
@@ -54,7 +53,7 @@ app.get(
 );
 
 app.get(
-  '/auth/google/callback',
+  "/auth/google/callback",
   passport.authenticate("google", {
     successRedirect: "http://localhost:5173/dashboard",
     failureRedirect: "http://localhost:5173/failure",
@@ -88,6 +87,11 @@ app.use("/quiz", QuizRouter);
 
 const responseRouter = require("./routers/Response_Router");
 app.use("/response", responseRouter);
+
+//LeaderBoard Router
+
+const LeaderBoardRouter = require("./routers/LeaderBoard");
+app.use("/leaderboard", LeaderBoardRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
