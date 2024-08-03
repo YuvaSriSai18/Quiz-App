@@ -195,13 +195,7 @@ export default function Home() {
       >
         <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
           <Gauge
-            value={
-              leaderBoard.points / leaderBoard.totalQuizzesAttempted === NaN
-                ? 0
-                : (
-                    leaderBoard.points / leaderBoard.totalQuizzesAttempted
-                  ).toFixed(2)
-            }
+            value={leaderBoard.points / leaderBoard.totalQuizzesAttempted}
             min={0}
             max={100}
             valueFormat={(value) => `${value.toFixed(1)}%`}
