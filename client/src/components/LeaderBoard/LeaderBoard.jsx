@@ -52,7 +52,7 @@ const LeaderBoard = () => {
     }
   };
 
-  const barHeights = [300, 250, 200]; // Manual control over the bar heights
+  const barHeights = [300, 250, 200]; // Gold (middle) is the tallest
   const barWidths = [80, 70, 60]; // Manual control over the bar widths
 
   return (
@@ -62,15 +62,14 @@ const LeaderBoard = () => {
       alignItems="center"
       p={2}
       sx={{
-        background: "#f9f9f9",
+        background: "transparent", // Set background to transparent
         minHeight: "100vh",
-        overflowY: "hidden",
         width: "100%",
       }}
     >
       <Typography
         variant="h5"
-        mb={2}
+        mb={4} // Add more margin to separate heading from content
         sx={{ color: "#333", fontWeight: "bold" }}
       >
         Leaderboard
@@ -114,143 +113,143 @@ const LeaderBoard = () => {
         </Box>
       )}
 
-      {/* Top Three Positions */}
-      <Box
-        display="flex"
+      <Grid
+        container
         justifyContent="center"
-        mb={2}
-        sx={{
-          width: "100%",
-          maxWidth: "1000px",
-          position: "relative",
-          overflowX: "auto",
-          whiteSpace: "nowrap",
-        }}
+        spacing={2}
+        sx={{ width: "100%", maxWidth: "1000px" }}
       >
-        {dummyParticipants.slice(0, 3).map((participant, index) => (
-          <Box
-            key={index}
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            sx={{
-              background: getBackgroundColor(index),
-              height: barHeights[index],
-              width: barWidths[index],
-              borderRadius: 2,
-              boxShadow: 2,
-              mx: 1,
-              position: "relative",
-            }}
-          >
-            <Typography
-              sx={{
-                position: "absolute",
-                top: "-1.5rem",
-                background: "#fff",
-                borderRadius: "50%",
-                width: 32,
-                height: 32,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontWeight: 600,
-              }}
-            >
-              {index + 1}
-            </Typography>
-            <Typography
-              variant="body2"
-              sx={{
-                writingMode: "vertical-rl",
-                mt: "auto",
-                mb: 1,
-                fontWeight: 500,
-              }}
-            >
-              {participant.name}
-            </Typography>
+        <Grid item xs={12} md={6} lg={4}>
+          <Box display="flex" justifyContent="space-around" mb={2}>
+            {dummyParticipants.slice(0, 3).map((participant, index) => (
+              <Box
+                key={index}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                sx={{
+                  background: getBackgroundColor(index),
+                  height: barHeights[index],
+                  width: barWidths[index],
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  mx: 1,
+                  mb: 2,
+                  position: "relative",
+                }}
+              >
+                <Typography
+                  sx={{
+                    position: "absolute",
+                    top: "-1.5rem",
+                    background: "#fff",
+                    borderRadius: "50%",
+                    width: 32,
+                    height: 32,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontWeight: 600,
+                  }}
+                >
+                  {index + 1}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    writingMode: "vertical-rl",
+                    mt: "auto",
+                    mb: 1,
+                    fontWeight: 500,
+                  }}
+                >
+                  {participant.name}
+                </Typography>
+              </Box>
+            ))}
           </Box>
-        ))}
-      </Box>
+          <Box display="flex" justifyContent="space-around" mb={4}>
+            {dummyParticipants.slice(0, 3).map((participant, index) => (
+              <Box
+                key={index}
+                display="flex"
+                flexDirection="column"
+                alignItems="center"
+                sx={{
+                  mx: 1,
+                  textAlign: "center",
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 500,
+                  }}
+                >
+                  {participant.rollNumber}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 500,
+                  }}
+                >
+                  {participant.points} Points
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        </Grid>
 
-      {/* User's Position */}
-      <Box
-        display="flex"
-        justifyContent="center"
-        mb={2}
-        sx={{
-          width: "100%",
-          maxWidth: "1000px",
-        }}
-      >
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          sx={{
-            background: "#dcdcdc",
-            height: 100,
-            width: 100,
-            borderRadius: 2,
-            boxShadow: 1,
-            p: 2,
-          }}
-        >
-          <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Your Position
-          </Typography>
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            {/* Example position, replace with the actual user's position */}
-            {dummyParticipants.length > 3 ? dummyParticipants[3].name : "N/A"}
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* Remaining Positions */}
-      <Box
-        sx={{
-          width: "100%",
-          maxWidth: "1000px",
-          overflowY: "auto",
-          maxHeight: "400px",
-        }}
-      >
-        {dummyParticipants.slice(3, 20).map((participant, index) => (
-          <Grid
-            container
-            key={index}
-            spacing={1}
+        <Grid item xs={12} md={6} lg={8}>
+          <Box
             sx={{
-              background: "#fff",
+              width: "100%",
+              overflowY: "auto",
+              height: "600px",
+              p: 2,
+              background: "transparent",
+              paddingRight: "10px",
               borderRadius: 2,
-              p: 1,
-              mb: 1,
-              alignItems: "center",
-              boxShadow: 1,
             }}
           >
-            <Grid item xs={1}>
-              <Typography sx={{ fontWeight: 500 }}>{index + 4}</Typography>
-            </Grid>
-            <Grid item xs={4}>
-              <Typography sx={{ fontWeight: 500, fontSize: "0.9rem" }}>
-                {participant.name}
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography sx={{ textAlign: "right", fontSize: "0.9rem" }}>
-                {participant.rollNumber}
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              <Typography sx={{ textAlign: "right", fontSize: "0.9rem" }}>
-                {participant.points} Points
-              </Typography>
-            </Grid>
-          </Grid>
-        ))}
-      </Box>
+            {dummyParticipants.slice(3, 20).map((participant, index) => (
+              <Grid
+                container
+                key={index}
+                spacing={1}
+                sx={{
+                  background: "#f5f5f5",
+                  borderRadius: 2,
+                  p: 1,
+                  mb: 1.2,
+                  alignItems: "center",
+                  boxShadow: 1,
+                }}
+              >
+                <Grid item xs={1}>
+                  <Typography sx={{ fontWeight: 500 }}>{index + 4}</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography sx={{ fontWeight: 500, fontSize: "0.9rem" }}>
+                    {participant.name}
+                  </Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography sx={{ textAlign: "right", fontSize: "0.9rem" }}>
+                    {participant.rollNumber}
+                  </Typography>
+                </Grid>
+                <Grid item xs={3}>
+                  <Typography sx={{ textAlign: "right", fontSize: "0.9rem" }}>
+                    {participant.points} Points
+                  </Typography>
+                </Grid>
+              </Grid>
+            ))}
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
