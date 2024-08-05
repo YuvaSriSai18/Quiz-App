@@ -1,19 +1,19 @@
 Backend Part
 
     1. Authentication
-        |_Firebase  (Email and Password Sign In)
+        |_Passwordless SignIn (Stores users in Mongo)
     2. Database Storage
         |__Mongo DB
 
         DB Collections
-            2.1 Question Schema
+            2.1 Question Schema  ✅
                 2.1.1.{
                     question:string,
                     options:["","","",""],
                     correctOption:"",
                     mark:double default 1
                 }
-            2.2 Question Papers Schema
+            2.2 Question Papers Schema  ✅
                 2.2.1. {
                     QuizId:string,
                     CreaterMail:string,
@@ -27,7 +27,7 @@ Backend Part
                     openTime:time,
                     closeTime:time
                 }
-            2.3 StudentUser Schema
+            2.3 StudentUser Schema   ✅
                 2.3.1. {
                     mail:string, // here we retrieve the mail from the authenticated part 
                     rollNo:string
@@ -47,7 +47,7 @@ Backend Part
                     }
 
                 }
-            2.4 Responses Schema 
+            2.4 Responses Schema  ✅
                 2.4.1. [
                         {
                             quizId: string,
@@ -76,10 +76,10 @@ Backend Part
 
 
 Features to be implemented
-    1. LeaderBoard    ✅
-        1.1 Position
-        1.2 Name
-        1.3 Points
+    1. LeaderBoard    
+        1.1 Position  ❌
+        1.2 Name  ✅
+        1.3 Points ✅
     2. Creating Quiz Forms  (CRUD)   ✅
     3. disable screenshot // optional
     4. blocking navigation //optional
@@ -91,12 +91,12 @@ Features to be implemented
             5.1.4 Year
             5.1.5 Section
             5.1.6 Email
-        5.2 Lecturer Dashboard   //  If possible we retrieve the data from college Database
+        5.2 Lecturer Dashboard    //  If possible we retrieve the data from college Database
             5.2.1 Name
             5.2.2 Branch
             5.2.3 Mail 
             5.2.4 Regd No
-    6. Join Room  // Process
+    6. Join Room ❌ // Process
         6.1 join room (user will enter room number) => { Here we keep a middleware that checks the room number , if True next() else return}
         6.2 quiz name (ensure that quiz details are correct) =>
         6.3 instructions and details (quiz instructions) =>
@@ -105,13 +105,13 @@ Features to be implemented
 
 
 Current important things need to be done by 4th:
-1. Quiz questions Card
-2. Handle Responses   -- Here we have to handle each question answer given by user 
-3. Evaluate Given Responses and allocate points.   -- Evaluate the given answer with the actual answer if yes, increament 1 mark else increament by 0
-4. LeaderBoard after each Question -- have to show leaderboard after that question for the students within that room who has answered
-5. leaderboard after the quiz -- At last we have to show leaderboard for whole quiz ,like who will be the toppest (Top 20 only)
-6. creating logic for the leaderboard calculation
-7. Join Room Feature
+1. Quiz questions Card ✅
+2. Handle Responses   -- Here we have to handle each question answer given by user  ✅
+3. Evaluate Given Responses and allocate points.   -- Evaluate the given answer with the actual answer if yes, increament 1 mark else increament by 0  ✅
+4. LeaderBoard after each Question -- have to show leaderboard after that question for the students within that room who has answered  ✅
+5. leaderboard after the quiz -- At last we have to show leaderboard for whole quiz ,like who will be the toppest (Top 20 only)  ✅
+6. creating logic for the leaderboard calculation ✅
+7. Join Room Feature ❌
 
     Example of how we calculate the quiz marks obtained to give the stars in the leaderboard as there is no score 
         Here is an example:

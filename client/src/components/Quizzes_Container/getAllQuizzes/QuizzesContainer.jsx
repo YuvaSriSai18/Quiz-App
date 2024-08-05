@@ -16,7 +16,8 @@ export default function QuizzesContainer() {
         (quiz) => quiz.CreatorMail === userData.email
       );
       // console.log(filteredQuizzes); // Log the filtered quizzes
-      setQuizzes(filteredQuizzes);
+      // setQuizzes(filteredQuizzes);
+      setQuizzes(response.data);
     } catch (error) {
       console.error("Error fetching quizzes:", error);
     }
