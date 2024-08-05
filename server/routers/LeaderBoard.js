@@ -2,6 +2,16 @@ const express = require("express");
 const router = express.Router();
 const LeaderBoard = require("../models/LeaderBoard");
 
+router.get("/", async (req, res) => {
+  try {
+    const leaderBoard_Users = await LeaderBoard.find();
+    res.json(leaderBoard_Users);
+  } catch (error) {
+    console.log(`Error occurred in getting leaderBoard users ${error}`);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 router.get("/:userId", async (req, res) => {
   const rollNo = req.params.userId;
 
