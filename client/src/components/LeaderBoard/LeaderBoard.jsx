@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import ConfettiSparks from "../animation/ConfettieSparks";
-import WrongOption from "../animation/WrongOption";
+import axios from 'axios'; // Don't forget to import axios
+import ConfettiSparks from '../animation/ConfettieSparks'
+import WrongOption from '../animation/WrongOption'
 
 const LeaderBoard = () => {
   const [animationType, setAnimationType] = useState(null);
+  const [leaderBoardUsers, setLeaderBoardUsers] = useState([]);
 
   useEffect(() => {
     const answerStatus = sessionStorage.getItem("answerStatus");
@@ -16,28 +18,19 @@ const LeaderBoard = () => {
     sessionStorage.removeItem("answerStatus");
   }, []);
 
-  const dummyParticipants = [
-    { rollNumber: "S12345", name: "John Doe", points: 150 },
-    { rollNumber: "AP22110010750", name: "Jane Smith", points: 140 },
-    { rollNumber: "S12347", name: "Emily Johnson", points: 130 },
-    { rollNumber: "S12348", name: "Michael Brown", points: 120 },
-    { rollNumber: "AP22110010750", name: "Sarah Davis", points: 110 },
-    { rollNumber: "S12350", name: "David Wilson", points: 100 },
-    { rollNumber: "S12351", name: "Laura Martinez", points: 90 },
-    { rollNumber: "S12352", name: "James Anderson", points: 80 },
-    { rollNumber: "S12353", name: "Olivia Thomas", points: 70 },
-    { rollNumber: "S12354", name: "William Garcia", points: 60 },
-    { rollNumber: "S12355", name: "Sophia Miller", points: 50 },
-    { rollNumber: "S12356", name: "Daniel Rodriguez", points: 40 },
-    { rollNumber: "S12357", name: "Isabella Martinez", points: 30 },
-    { rollNumber: "S12358", name: "Ethan Lee", points: 20 },
-    { rollNumber: "S12359", name: "Mia Walker", points: 10 },
-    { rollNumber: "S12360", name: "Alexander Hall", points: 5 },
-    { rollNumber: "S12361", name: "Ava Young", points: 3 },
-    { rollNumber: "S12362", name: "Liam Scott", points: 2 },
-    { rollNumber: "S12363", name: "Emma Harris", points: 1 },
-    { rollNumber: "S12364", name: "Noah Nelson", points: 0 },
-  ];
+  useEffect(() => {
+    const getLeaderBoardUsers = async () => {
+      try {
+        const response = await axios.get('http://localhost:5500/leaderboard');
+        setLeaderBoardUsers(sortByPointsDescending(response.data));
+      } catch (error) {
+        console.error("Error fetching leaderboard users:", error);
+      }
+    };
+    getLeaderBoardUsers();
+  }, []);
+
+  const sortByPointsDescending = (arr) => arr.sort((a, b) => b.points - a.points);
 
   const getBackgroundColor = (index) => {
     switch (index) {
@@ -62,14 +55,14 @@ const LeaderBoard = () => {
       alignItems="center"
       p={2}
       sx={{
-        background: "transparent", // Set background to transparent
+        background: "transparent",
         minHeight: "100vh",
         width: "100%",
       }}
     >
       <Typography
         variant="h5"
-        mb={4} // Add more margin to separate heading from content
+        mb={4}
         sx={{ color: "#333", fontWeight: "bold" }}
       >
         Leaderboard
@@ -121,9 +114,9 @@ const LeaderBoard = () => {
       >
         <Grid item xs={12} md={6} lg={4}>
           <Box display="flex" justifyContent="space-around" mb={2}>
-            {dummyParticipants.slice(0, 3).map((participant, index) => (
+            {leaderBoardUsers.slice(0, 3).map((participant, index) => (
               <Box
-                key={index}
+                key={participant.rollNumber} // Use unique key based on rollNumber
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
@@ -169,9 +162,9 @@ const LeaderBoard = () => {
             ))}
           </Box>
           <Box display="flex" justifyContent="space-around" mb={4}>
-            {dummyParticipants.slice(0, 3).map((participant, index) => (
+            {leaderBoardUsers.slice(0, 3).map((participant, index) => (
               <Box
-                key={index}
+                key={participant.rollNumber} // Use unique key based on rollNumber
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
@@ -213,10 +206,10 @@ const LeaderBoard = () => {
               borderRadius: 2,
             }}
           >
-            {dummyParticipants.slice(3, 20).map((participant, index) => (
+            {leaderBoardUsers.slice(3).map((participant, index) => (
               <Grid
                 container
-                key={index}
+                key={participant.rollNumber} // Use unique key based on rollNumber
                 spacing={1}
                 sx={{
                   background: "#f5f5f5",
