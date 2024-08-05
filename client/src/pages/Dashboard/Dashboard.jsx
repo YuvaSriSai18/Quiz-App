@@ -18,19 +18,22 @@ const Dashboard = () => {
   );
   return (
     <div className="dashboard">
-      {/* {userData.role === "Faculty" ? (
-        <StudentDashboard userData={userData} isMobile={isMobile} />
-        
-      ) : (
+      {userData.role === "Faculty" ? (
         <FacultyDashboard isMobile={isMobile} />
-      )} */}
+      ) : (
+        <StudentDashboard
+          userData={userData}
+          LeaderBoardData={leaderBoard}
+          isMobile={isMobile}
+        />
+      )}
 
-      <StudentDashboard
+      {/* <StudentDashboard
         userData={userData}
         LeaderBoardData={leaderBoard}
         isMobile={isMobile}
       />
-      <FacultyDashboard isMobile={isMobile} />
+      <FacultyDashboard isMobile={isMobile} /> */}
     </div>
   );
 };

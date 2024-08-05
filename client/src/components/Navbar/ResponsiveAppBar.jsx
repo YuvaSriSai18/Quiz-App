@@ -56,7 +56,7 @@ function ResponsiveAppBar() {
       const response = await axios.get(
         `http://localhost:5500/leaderboard/${userData.rollNo}`
       );
-      console.log("LeaderBoard Data:", response.data);
+      // console.log("LeaderBoard Data:", response.data);
       dispatch(setLeaderBoardUserData(response.data));
     } catch (error) {
       console.log("Error fetching LeaderBoard data:", error);

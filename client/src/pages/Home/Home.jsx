@@ -191,9 +191,9 @@ export default function Home() {
         flexDirection={{ xs: "column", md: "row" }}
         alignItems="center"
         justifyContent="center"
-        mt={4}
+        // mt={1}
       >
-        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
+        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }} >
           <Gauge
             value={leaderBoard.points / leaderBoard.totalQuizzesAttempted}
             min={0}
@@ -214,7 +214,7 @@ export default function Home() {
             Average Score
           </Typography>
         </Box>
-        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
+        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }} >
           <Gauge
             value={leaderBoard.totalQuizzesAttempted}
             min={0}
@@ -235,7 +235,7 @@ export default function Home() {
             Total Quizzes
           </Typography>
         </Box>
-        <Box sx={{ border: "1px solid black", p: 2 }}>
+        <Box sx={{ border: "1px solid #BFD4E6",borderRadius:1, p: 2,maxWidth:{xs:'100%',md:500},width:'100%',overflowX:'scroll'}} mb={5}>
           {quizScores.length > 0 && quizLabels.length > 0 ? (
             <LineChart
               width={500}
@@ -258,15 +258,15 @@ export default function Home() {
           ) : (
             <Typography>No quiz data available</Typography>
           )}
-          <Typography variant="h6" align="center" mt={2}>
+          {/* <Typography variant="h6" align="center" mt={2}>
             Quiz Performance
-          </Typography>
+          </Typography> */}
         </Box>
       </Box>
 
       {/* <QuizzesContainer /> */}
 
-      <StartQuizCard />
+      {/* <StartQuizCard /> */}
 
       {/* Modals */}
       <Modal
@@ -277,6 +277,7 @@ export default function Home() {
         sx={{
           margin: {
             xs: "0px 8px",
+            sm:'0px 8px',
             md: "0px",
           },
         }}

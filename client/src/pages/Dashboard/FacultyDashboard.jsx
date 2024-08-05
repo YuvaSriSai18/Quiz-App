@@ -89,7 +89,7 @@ const FacultyDashboard = ({ isMobile }) => {
                 elevation={8}
               >
                 <CardContent>
-                  <Typography variant="h6" mb={2} mt={2}>
+                  {/* <Typography variant="h6" mb={2} mt={2}>
                     Faculty Details
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
@@ -100,8 +100,8 @@ const FacultyDashboard = ({ isMobile }) => {
                   </Typography>
                   <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
                     Registration Number : AP46519165
-                  </Typography>
-                  {/* <table>
+                  </Typography> */}
+                  <table>
                     <tr>
                       <th>Department</th>
                       <td>Computer Science and Engineering</td>
@@ -114,7 +114,7 @@ const FacultyDashboard = ({ isMobile }) => {
                       <th>Registration Number : </th>
                       <td>AP46519165</td>
                     </tr>
-                  </table> */}
+                  </table>
                 </CardContent>
               </Card>
             )}
@@ -134,7 +134,10 @@ const FacultyDashboard = ({ isMobile }) => {
             elevation={8}
           >
             <CardContent>
-              <Typography variant="h6" sx={{ marginBottom: 2 }}>
+              <Typography variant="h6" ml={1} mt={1} mb={2} fontWeight={700}>
+                Hosted Quizzes <br />
+              </Typography>
+              {/* <Typography variant="h6" sx={{ marginBottom: 2 }}>
                 Faculty Details
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
@@ -145,7 +148,7 @@ const FacultyDashboard = ({ isMobile }) => {
               </Typography>
               <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
                 Projects:
-              </Typography>
+              </Typography> */}
               {/* <table>
                 <tr>
                   <th>Quizzes Created:</th>

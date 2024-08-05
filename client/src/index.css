@@ -5,7 +5,15 @@
 }
 
 body {
-  background: linear-gradient(135deg, #F0F4FD 0%, #D9EAF5 50%, #BFD4E6 100%);
+  background: linear-gradient(
+    135deg,
+    #f0f4fd 0%,
+    #d9eaf5 50%,
+    #bfd4e6 100%,
+    #f0f4fd 30%,
+    #d9eaf5 50%,
+    #bfd4e6 100%
+  );
   margin: 0;
   padding: 0;
   overflow-x: hidden;

@@ -28,9 +28,6 @@ export default function QuizzesContainer() {
 
   return (
     <div style={{ border: "2px solid #c9c3c3", borderRadius: "12px" }}>
-      <Typography variant="h6" ml={5} mt={2} fontWeight={700}>
-        Hosted Quizzes <br />
-      </Typography>
       <div className="cardsContainer">
         {quizzes.map((quiz, index) => (
           <QuizCard key={index} QuizObj={quiz} />
