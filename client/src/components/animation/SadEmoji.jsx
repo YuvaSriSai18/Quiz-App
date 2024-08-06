@@ -1,12 +1,12 @@
 import React from "react";
-import Confetti from './Confetti.json'
 import Lottie from "react-lottie";
 
-export default function ConfettieSparks() {
+import SadEmoji from "./SadEmoji.json";
+export default function Loading() {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    animationData: Confetti,
+    animationData: SadEmoji,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },

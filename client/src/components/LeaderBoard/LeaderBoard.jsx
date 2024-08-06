@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
-import axios from 'axios'; // Don't forget to import axios
-import ConfettiSparks from '../animation/ConfettieSparks'
-import WrongOption from '../animation/WrongOption'
+import axios from "axios"; // Don't forget to import axios
 
 const LeaderBoard = () => {
   const [animationType, setAnimationType] = useState(null);
@@ -21,7 +19,7 @@ const LeaderBoard = () => {
   useEffect(() => {
     const getLeaderBoardUsers = async () => {
       try {
-        const response = await axios.get('http://localhost:5500/leaderboard');
+        const response = await axios.get("http://localhost:5500/leaderboard");
         setLeaderBoardUsers(sortByPointsDescending(response.data));
       } catch (error) {
         console.error("Error fetching leaderboard users:", error);
@@ -30,7 +28,8 @@ const LeaderBoard = () => {
     getLeaderBoardUsers();
   }, []);
 
-  const sortByPointsDescending = (arr) => arr.sort((a, b) => b.points - a.points);
+  const sortByPointsDescending = (arr) =>
+    arr.sort((a, b) => b.points - a.points);
 
   const getBackgroundColor = (index) => {
     switch (index) {
@@ -82,9 +81,7 @@ const LeaderBoard = () => {
             zIndex: 10,
             background: "rgba(255, 255, 255, 0.8)",
           }}
-        >
-          <ConfettiSparks />
-        </Box>
+        ></Box>
       )}
 
       {animationType === "wrong" && (
@@ -101,9 +98,7 @@ const LeaderBoard = () => {
             zIndex: 10,
             background: "rgba(255, 255, 255, 0.8)",
           }}
-        >
-          <WrongOption />
-        </Box>
+        ></Box>
       )}
 
       <Grid

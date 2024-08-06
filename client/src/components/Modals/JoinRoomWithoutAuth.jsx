@@ -74,7 +74,7 @@ export default function JoinRoomModal() {
         value={email}
         onChange={handleEmailChange}
         variant="outlined"
-        sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        sx={{ color: "black", mb: 2, width: "100%" }}
         error={!!errors.email}
         helperText={errors.email}
       />
@@ -84,7 +84,7 @@ export default function JoinRoomModal() {
         value={regdNo}
         onChange={handleRegdNoChange}
         variant="outlined"
-        sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        sx={{ color: "black", mb: 2, width: "100%" }}
         error={!!errors.regdNo}
         helperText={errors.regdNo}
       />
@@ -93,7 +93,7 @@ export default function JoinRoomModal() {
         label="Room Number"
         value={roomNumber}
         onChange={handleRoomNumberChange}
-        sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        sx={{ color: "black", mb: 2, width: "100%" }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

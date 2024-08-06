@@ -14,7 +14,9 @@ import {
 } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal, faStar, faTrophy } from "@fortawesome/free-solid-svg-icons";
-
+import { showConfetti } from "../../components/Utils/ShowConfetti";
+import { SadConfetti } from "../../components/Utils/SadConfetti";
+import SadEmoji from "../../components/animation/SadEmoji";
 // Generate leaderboard data with random scores
 const leaderboardData = Array.from({ length: 100 }, (_, index) => ({
   position: index + 1,
@@ -87,7 +89,9 @@ const Leaderboard = () => {
         <Typography variant="h4" component="h1" gutterBottom>
           Leaderboard
         </Typography>
-
+        {/* {
+          true && <SadEmoji/>
+        } */}
         {/* Top 3 positions */}
         <Box
           sx={{

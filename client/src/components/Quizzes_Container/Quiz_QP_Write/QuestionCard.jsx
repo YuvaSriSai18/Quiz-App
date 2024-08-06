@@ -9,6 +9,10 @@ import {
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import io from "socket.io-client";
+
+// Initialize Socket.IO client
+const socket = io("http://localhost:8080");
 
 export default function QuestionCard({
   question,
@@ -101,6 +105,11 @@ export default function QuestionCard({
         "http://localhost:5500/response/submit",
         modifiedResponse
       );
+      // Emit message to Socket.IO server
+      socket.emit("send_message", {
+        room: quizId,
+        message: `${userData.displayName} answered question ${questionNumber}`,
+      });
       // alert("Quiz Submitted Successfully");
       // navigate("/"); // Adjust this navigation if needed
     } catch (err) {

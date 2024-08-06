@@ -1,21 +1,35 @@
-import React, { useState } from "react";
-import { Box, TextField, InputAdornment, Button } from "@mui/material";
-import HttpsIcon from "@mui/icons-material/Https";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  TextField,
+  InputAdornment,
+  Button,
+  Typography,
+} from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { useSelector } from "react-redux";
-import EditIcon from "@mui/icons-material/Edit";
+import io from "socket.io-client";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function JoinRoomModal() {
   const userData = useSelector((state) => state.auth.userData);
-
   const [roomNumber, setRoomNumber] = useState("");
   const [error, setError] = useState("");
+  const [quiz, setQuiz] = useState();
+  const navigate = useNavigate();
+  const socket = io("http://localhost:8080");
+
+  useEffect(() => {
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
   const handleRoomNumberChange = (event) => {
     const value = event.target.value;
     setRoomNumber(value);
 
-    // Validation logic
     const roomNumberPattern = /^\d{6}$/;
     if (value && !roomNumberPattern.test(value)) {
       setError(
@@ -26,15 +40,36 @@ export default function JoinRoomModal() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (error || !roomNumber) {
-      // Show an error if there's an error or roomNumber is empty
       setError("Please enter a valid Room Number.");
       return;
     }
-    // Handle the form submission logic here
-    console.log({ roomNumber });
-    // You can add your API call or other logic here
+    try {
+      const response = await axios.get(
+        `http://localhost:5500/room/${roomNumber}`
+      );
+      setQuiz(response.data.quiz);
+      if (response.data.exists) {
+        const currentTime = new Date();
+        const openTime = new Date(response.data.quiz.openTime);
+        const entryDeadline = new Date(openTime.getTime() + 3 * 60 * 1000);
+        if (currentTime < entryDeadline) {
+          // alert("Room exists");
+          socket.emit("join_room", roomNumber);
+          navigate("/wr", {
+            state: { roomNumber, quiz: response.data.quiz, userData },
+          });
+        } else {
+          setError("Entry time has been completed.");
+        }
+      } else {
+        setError("Room number does not exist.");
+      }
+    } catch (err) {
+      console.error("Error checking room number:", err);
+      setError("Failed to check room number.");
+    }
   };
 
   return (
@@ -45,17 +80,7 @@ export default function JoinRoomModal() {
         value={userData?.displayName || "No Name"}
         readOnly
         variant="outlined"
-        sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
-        // InputProps={{
-        //   readOnly: true,
-        //   startAdornment: (
-        //     <InputAdornment position="start">
-        //       <LockIcon />
-        //     </InputAdornment>
-        //   ),
-        //   disableUnderline: true,
-        //   style: { cursor: 'not-allowed' },
-        // }}
+        sx={{ color: "black", mb: 2, width: "100%" }}
       />
       <TextField
         label="Regd No"
@@ -63,28 +88,17 @@ export default function JoinRoomModal() {
         value={userData?.rollNo || "No ID"}
         readOnly
         variant="outlined"
-        sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
-        // InputProps={{
-        //   readOnly: true,
-        //   startAdornment: (
-        //     <InputAdornment position="start">
-        //       <LockIcon />
-        //     </InputAdornment>
-        //   ),
-        //   disableUnderline: true,
-        //   style: { cursor: 'not-allowed' },
-        // }}
+        sx={{ color: "black", mb: 2, width: "100%" }}
       />
       <TextField
         id="room-number"
         label="Room Number"
         value={roomNumber}
         onChange={handleRoomNumberChange}
-        sx={{ color: "black", mb: 2, width: { xs: "90%", md: "100%" } }}
+        sx={{ color: "black", mb: 2, width: "100%" }}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">
-              {/* <HttpsIcon /> */}
               <LockIcon />
             </InputAdornment>
           ),

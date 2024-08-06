@@ -24,6 +24,9 @@ body {
   --sb-track-color: #ffffff;
   --sb-thumb-color: #146c99;
   --sb-size: 5px;
+  /* background-image: url('https://gamethinking.io/wp-content/uploads/sites/5/2018/12/quiz-background.png');
+  background-size: contain;
+  background-repeat: repeat; */
 }
 
 body::-webkit-scrollbar {

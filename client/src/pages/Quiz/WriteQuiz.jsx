@@ -42,7 +42,10 @@ export default function WriteQuiz() {
         justifyContent: "center",
         alignItems: "center",
         minHeight: "85vh",
-        maxWidth: "70%",
+        maxWidth: {
+          xs: "100%",
+          md: "80%",
+        },
         margin: "auto",
       }}
     >

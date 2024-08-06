@@ -8,7 +8,7 @@ import QuizInstructions from "./components/Quizzes_Container/Quiz_QP_Write/QuizI
 import WriteQuiz from "./pages/Quiz/WriteQuiz";
 import Quiz_QP_Create from "./pages/Quiz/Quiz_QP_Create";
 import Quiz_Update from "./pages/Quiz/Quiz_Update";
-
+import WaitingRoom from "./pages/WaitingRoom/WaitingRoom";
 function AllRoutes() {
   return (
     <Box mt="70px">
@@ -20,6 +20,7 @@ function AllRoutes() {
         <Route path="/create" element={<Quiz_QP_Create />} />
         <Route path="/update/:QuizId" element={<Quiz_Update />} />
         <Route path="/quizinstructions" element={<QuizInstructions />} />
+        <Route path="/wr" element={<WaitingRoom />} />
       </Routes>
     </Box>
   );

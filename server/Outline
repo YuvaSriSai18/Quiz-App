@@ -158,3 +158,10 @@ New features need to be implemented after website goes live:
 2 Room creation
 3 Lock Room
 4 Class wise LeaderBoard
+
+
+On 7 Aug
+1. Have to implement join room and socket capability to leaderboard functionality because Dur to latency in DB 
+2. Have to modify the leaderBoard page i.e have to add confetti and sadConfetti
+3. Have to add LeaderBoard Ranking by indexing in the DB
+4. Have to add the data set for the score Graphs in Home Page

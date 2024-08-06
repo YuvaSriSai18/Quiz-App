@@ -22,10 +22,11 @@ const style = {
     xs: "100%",
     md: 400,
   },
-  margin: {
-    xs: "0px 10px",
-    md: "0px",
-  },
+  // margin: {
+  //   xs: "0px 10px",
+  //   sm:'0px 100px 0px 100px',
+  //   md: "0px",
+  // },
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 5,
@@ -195,7 +196,7 @@ export default function Home() {
       >
         <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
           <Gauge
-            value={leaderBoard.points / leaderBoard.totalQuizzesAttempted}
+            value={leaderBoard.points / leaderBoard.totalQuizzesAttempted || 0}
             min={0}
             max={100}
             valueFormat={(value) => `${value.toFixed(1)}%`}
@@ -285,11 +286,7 @@ export default function Home() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         sx={{
-          margin: {
-            xs: "0px 8px",
-            sm: "0px 8px",
-            md: "0px",
-          },
+          margin: "60px",
         }}
       >
         <Box sx={style}>

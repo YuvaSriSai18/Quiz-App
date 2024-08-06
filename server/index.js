@@ -6,6 +6,7 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("./controllers/authentication/authentication");
 const User = require("./models/User");
+
 dotenv.config();
 app.use(cors());
 
@@ -62,7 +63,6 @@ app.get(
 
 app.get("/login/success", (req, res) => {
   if (req.user) {
-    // console.log(req.user)
     res.status(200).json({ authenticated: true, user: req.user });
   } else {
     res.status(401).json({ authenticated: false, message: "Not Authorized" });
@@ -79,19 +79,20 @@ app.get("/logout", (req, res, next) => {
 });
 
 // Quiz Router
-
 const QuizRouter = require("./routers/Quiz");
 app.use("/quiz", QuizRouter);
 
 // Response Router
-
 const responseRouter = require("./routers/Response_Router");
 app.use("/response", responseRouter);
 
-//LeaderBoard Router
-
+// LeaderBoard Router
 const LeaderBoardRouter = require("./routers/LeaderBoard");
 app.use("/leaderboard", LeaderBoardRouter);
+
+// Join Room Router
+const JoinRoomRouter = require("./routers/JoinRoom");
+app.use("/room", JoinRoomRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
