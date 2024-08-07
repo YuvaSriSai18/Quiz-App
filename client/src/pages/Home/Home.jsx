@@ -217,7 +217,7 @@ export default function Home() {
         </Box>
         <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
           <Gauge
-            value={leaderBoard.totalQuizzesAttempted}
+            value={leaderBoard.totalQuizzesAttempted || 0}
             min={0}
             max={50}
             valueFormat={(value) => `${value}`}
