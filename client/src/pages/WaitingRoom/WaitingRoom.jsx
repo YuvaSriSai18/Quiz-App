@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Box, Typography, Card, CardContent } from "@mui/material";
 import { parseISO, differenceInSeconds } from "date-fns";
 
 export default function WaitingRoom() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { roomNumber, quiz, userData } = location.state || {};
   const [timeRemaining, setTimeRemaining] = useState("");
+  const [isOnWaitingRoom, setIsOnWaitingRoom] = useState(true);
 
   useEffect(() => {
     if (!roomNumber || !quiz || !userData) {
@@ -19,6 +21,22 @@ export default function WaitingRoom() {
       const openTime = parseISO(quiz.openTime);
       const now = new Date();
       const totalSeconds = differenceInSeconds(openTime, now);
+
+      // Redirect if the current time is more than 5 minutes past openTime and user is on the WaitingRoom page
+      if (isOnWaitingRoom) {
+        const currentTime = new Date();
+        const openTime = parseISO(quiz.openTime);
+        const fiveMinutesAfterOpenTime = new Date(
+          openTime.getTime() + 5 * 60 * 1000
+        ); // 5 minutes in milliseconds
+
+        if (currentTime >= fiveMinutesAfterOpenTime) {
+          // More than or equal to 5 minutes after quiz open time
+          navigate(`/writequiz/${quiz.QuizId}`);
+          setIsOnWaitingRoom(false); // Set to false to avoid further navigation
+          return;
+        }
+      }
 
       if (totalSeconds > 0) {
         const days = Math.floor(totalSeconds / (3600 * 24));
@@ -37,8 +55,11 @@ export default function WaitingRoom() {
     calculateTimeRemaining();
     const timerId = setInterval(calculateTimeRemaining, 1000);
 
-    return () => clearInterval(timerId);
-  }, [quiz]);
+    return () => {
+      clearInterval(timerId);
+      setIsOnWaitingRoom(false); // Ensure we set it to false on component unmount
+    };
+  }, [quiz, navigate, roomNumber, userData, isOnWaitingRoom]);
 
   return (
     <Box
@@ -49,7 +70,18 @@ export default function WaitingRoom() {
       height="90vh"
       // bgcolor="#f0f0f0"
     >
-      <Card sx={{ maxWidth: 800, width: "100%", p: 3, maxHeight: "85vh", overflowY: "auto", bgcolor: "#ffffff", boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.2)", borderRadius: "12px" }}>
+      <Card
+        sx={{
+          maxWidth: 800,
+          width: "100%",
+          p: 3,
+          maxHeight: "85vh",
+          overflowY: "auto",
+          bgcolor: "#ffffff",
+          boxShadow: "0px 3px 15px rgba(0, 0, 0, 0.2)",
+          borderRadius: "12px",
+        }}
+      >
         <CardContent>
           <Typography
             variant="h5"
@@ -65,14 +97,24 @@ export default function WaitingRoom() {
               fontSize={{ xs: 18, md: 25 }}
               textAlign="left"
               mb={1}
-              color="black"  // Subtle text color for details
+              color="black" // Subtle text color for details
             >
               𝙌𝙪𝙞𝙯 𝘿𝙚𝙩𝙖𝙞𝙡𝙨 :
             </Typography>
-            <Typography fontWeight={500} fontSize={{ xs: 16, md: 20 }} mb={1} color="#424242">
+            <Typography
+              fontWeight={500}
+              fontSize={{ xs: 16, md: 20 }}
+              mb={1}
+              color="#424242"
+            >
               <b>Title:</b> {quiz.title}
             </Typography>
-            <Typography fontWeight={500} fontSize={{ xs: 16, md: 20 }} mb={1} color="#424242">
+            <Typography
+              fontWeight={500}
+              fontSize={{ xs: 16, md: 20 }}
+              mb={1}
+              color="#424242"
+            >
               <b>Number of Questions:</b> {quiz.noOfQuestions}
             </Typography>
           </Box>

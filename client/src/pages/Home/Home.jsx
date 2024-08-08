@@ -4,13 +4,11 @@ import Typography from "@mui/material/Typography";
 import { Box, Modal, Card, CardContent } from "@mui/material";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
-import { LineChart } from "@mui/x-charts/LineChart";
-
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
 import LappyLottie from "../../components/animation/LappyLottie";
 import JoinRoomWithoutAuth from "../../components/Modals/JoinRoomWithoutAuth";
 import StartQuizCard from "../../components/StartQuizCard";
-
+import LineGraph from "../../components/Home/LineGraph";
 const style = {
   position: "absolute",
   top: "50%",
@@ -76,18 +74,35 @@ export default function Home() {
     (state) => state.LeaderBoard.LeaderBoardUserData
   );
 
+  const processQuizData = (attemptedQuizzes) => {
+    // Extract pointsEarned and quizTitle from attemptedQuizzes
+    const quizScores = attemptedQuizzes.map((quiz) => quiz.pointsEarned);
+    const quizLabels = attemptedQuizzes.map(
+      (quiz, index) => `Quiz ${index + 1}`
+    );
+
+    return { quizScores, quizLabels };
+  };
+
   const [name, setName] = useState("User");
-  const [averageScore, setAverageScore] = useState(75); // Dummy data
-  const [quizScores, setQuizScores] = useState([0.2, 0.8, 0.5, 0.9, 0.6, 0.7]); // Dummy data
-  const [quizLabels, setQuizLabels] = useState([
-    "Quiz 1",
-    "Quiz 2",
-    "Quiz 3",
-    "Quiz 4",
-    "Quiz 5",
-    "Quiz 6",
-  ]); // Dummy data
-  const [totalQuizzes, setTotalQuizzes] = useState(10); // Dummy data
+  const [averageScore, setAverageScore] = useState(75);
+  const [quizScores, setQuizScores] = useState([]);
+  const [quizLabels, setQuizLabels] = useState([]);
+  const [totalQuizzes, setTotalQuizzes] = useState(10);
+
+  useEffect(() => {
+    if (leaderBoard && leaderBoard.attemptedQuizzes) {
+      const { quizScores, quizLabels } = processQuizData(
+        leaderBoard.attemptedQuizzes
+      );
+      setQuizScores(quizScores);
+      setQuizLabels(quizLabels);
+      setTotalQuizzes(leaderBoard.totalQuizzesAttempted);
+      setAverageScore(
+        (leaderBoard.points / leaderBoard.totalQuizzesAttempted).toFixed(2)
+      );
+    }
+  }, [leaderBoard]);
 
   useEffect(() => {
     if (userData) {
@@ -108,15 +123,20 @@ export default function Home() {
 
   return (
     <div>
-      <Box display="flex" justifyContent="space-around">
+      <Box
+        display="flex"
+        justifyContent={{ md: "space-between", lg: "space-around" }}
+      >
         <Card
           sx={{
             mt: { xs: 3, md: 10 },
             ml: { xs: 3, md: 10 },
-            p: 6,
+            p: 1,
             borderRadius: 3,
             boxShadow: 3,
             maxWidth: { xs: "100%", md: "350px" },
+            height: { xs: "fit-content" },
+            width: { xs: "fit-content" },
           }}
         >
           <CardContent>
@@ -167,7 +187,8 @@ export default function Home() {
                   </Typography>
                   <Typography m="auto" textAlign="center">
                     Success Rate <br />{" "}
-                    {leaderBoard.successRate ? leaderBoard.successRate : "N/A"} %
+                    {leaderBoard.successRate ? leaderBoard.successRate : "N/A"}{" "}
+                    %
                   </Typography>
                 </Box>
 
@@ -198,11 +219,7 @@ export default function Home() {
                   </Typography>
                 </Box>
 
-                <Box
-                  component="button"
-                  sx={buttonStyle}
-                  onClick={handleOpen}
-                >
+                <Box component="button" sx={buttonStyle} onClick={handleOpen}>
                   Join Room
                 </Box>
               </Box>
@@ -261,40 +278,7 @@ export default function Home() {
             Total Quizzes
           </Typography>
         </Box>
-        <Box
-          sx={{
-            border: "1px solid #BFD4E6",
-            borderRadius: 1,
-            p: 2,
-            maxWidth: { xs: "100%", md: 500 },
-            width: "100%",
-            overflowX: "scroll",
-          }}
-          mb={5}
-        >
-          {quizScores.length > 0 && quizLabels.length > 0 ? (
-            <LineChart
-              width={500}
-              height={300}
-              series={[{ data: quizScores, label: "Score", curve: "linear" }]}
-              xAxis={[{ scaleType: "point", data: quizLabels }]}
-              yAxis={[{ min: 0, max: 1 }]}
-              sx={{
-                ".MuiLineElement-root": {
-                  stroke: "#8884d8",
-                  strokeWidth: 2,
-                },
-                ".MuiMarkElement-root": {
-                  stroke: "#8884d8",
-                  scale: "0.6",
-                  fill: "#fff",
-                },
-              }}
-            />
-          ) : (
-            <Typography>No quiz data available</Typography>
-          )}
-        </Box>
+        <LineGraph />
       </Box>
 
       <StartQuizCard />

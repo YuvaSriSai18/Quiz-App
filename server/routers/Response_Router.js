@@ -9,12 +9,12 @@ const { io } = require("../socket");
 router.post("/submit", async (req, res) => {
   const { QuizId, StudentRoll, StudentEmail, answers, StudentName } = req.body;
 
-  try {
-    // Validate request data
-    if (!QuizId || !StudentRoll || !StudentEmail || !Array.isArray(answers)) {
-      return res.status(400).json({ msg: "Invalid request data" });
-    }
+  // Validate request data
+  if (!QuizId || !StudentRoll || !StudentEmail || !Array.isArray(answers)) {
+    return res.status(400).json({ msg: "Invalid request data" });
+  }
 
+  try {
     // Find the quiz responses entry by QuizId
     let quizResponses = await Responses.findOne({ quizId: QuizId });
 
@@ -34,7 +34,7 @@ router.post("/submit", async (req, res) => {
         studentMail: StudentEmail,
         studentName: StudentName || "",
         studentRoll: StudentRoll,
-        answersGivenByUser: [...answers],
+        answersGivenByUser: [],
         createdAt: Date.now(),
       };
       quizResponses.responses.push(studentResponse);
@@ -152,13 +152,12 @@ router.post("/submit", async (req, res) => {
     await leaderBoardEntry.save();
 
     // Emit leaderboard update
-    const LeaderBoardUsers = await LeaderBoard.find().lean();
-    console.log(LeaderBoardUsers);
+    const LeaderBoardUsers = await LeaderBoard.find().sort({ points: -1 });
+
     io.emit("leaderBoard_update", {
       message: "LeaderBoard Users Data",
-      data: LeaderBoardUsers,
+      data: LeaderBoardUsers, // without ranking
     });
-
     // Respond with updated data
     res.json({ quizResponses, leaderBoardEntry });
   } catch (error) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -12,26 +12,10 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal, faStar, faTrophy } from "@fortawesome/free-solid-svg-icons";
-import { showConfetti } from "../../components/Utils/ShowConfetti";
-import { SadConfetti } from "../../components/Utils/SadConfetti";
-import SadEmoji from "../../components/animation/SadEmoji";
-// Generate leaderboard data with random scores
-const leaderboardData = Array.from({ length: 100 }, (_, index) => ({
-  position: index + 1,
-  rollNumber: `Roll-${index + 1}`,
-  fullName: `Member ${index + 1}`,
-  score: Math.floor(Math.random() * 100) + 1, // Random score between 1 and 100
-}));
-
-// Sort data by score in decreasing order
-leaderboardData.sort((a, b) => b.score - a.score);
-
-// Update position based on sorted data
-leaderboardData.forEach((item, index) => {
-  item.position = index + 1;
-});
+import io from "socket.io-client";
 
 const getBackgroundColor = (index) => {
   switch (index) {
@@ -76,6 +60,28 @@ const Leaderboard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const [leaderBoardUsers, setLeaderBoardUsers] = useState([]);
+
+  useEffect(() => {
+    const getLeaderBoardUsers = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5500/leaderboard`);
+        setLeaderBoardUsers(response.data);
+      } catch (error) {
+        console.log(`Error occurred in getting leaderboard users : ${err}`);
+      }
+    };
+    getLeaderBoardUsers();
+  }, []);
+
+  // const socket = io("http://localhost:8080");
+  // socket.connect();
+
+  // socket.on("setAllLeaderBoardUsersRanking", (response) => {
+  //   console.log(response.message);
+  //   setLeaderBoardUsers(response.data);
+  // });
+
   return (
     <Container>
       <Box
@@ -102,9 +108,9 @@ const Leaderboard = () => {
             mb: 4,
           }}
         >
-          {leaderboardData.slice(0, 3).map((row, index) => (
+          {leaderBoardUsers.slice(0, 3).map((row, index) => (
             <Paper
-              key={row.position}
+              key={row.rank}
               sx={{
                 padding: 2,
                 borderRadius: 2,
@@ -131,21 +137,17 @@ const Leaderboard = () => {
                   fontSize: "1.3rem",
                 }}
               >
-                {row.position === 1
-                  ? "1st"
-                  : row.position === 2
-                  ? "2nd"
-                  : "3rd"}
+                {row.rank === 1 ? "1st" : row.rank === 2 ? "2nd" : "3rd"}
               </Typography>
               <Typography
                 variant="h6"
                 sx={{
                   mt: 1,
-                  fontWeight: "bold",
+                  fontWeight: "600",
                   fontSize: "1.25rem",
                 }}
               >
-                {row.fullName}
+                {row.name}
               </Typography>
               <Typography
                 variant="body1"
@@ -169,52 +171,57 @@ const Leaderboard = () => {
                   margin: 0,
                 }}
               >
-                Score: {row.score}
+                Score: {row.points}
               </Typography>
             </Paper>
           ))}
         </Box>
 
         {/* Remaining positions */}
-        <Box sx={{ width: "100%" }}>
-          <TableContainer
-            component={Paper}
-            sx={{
-              backgroundColor: "#f0f0f0", // Light gray background
-              boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", // Floating effect
-              borderRadius: 2,
-              border: "4px solid #a8a8a8", // Dark gray border
-              mt: 4, // Margin top to separate from the leaderboard
-            }}
-          >
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableBody>
-                {leaderboardData.slice(3).map((row) => (
-                  <TableRow
-                    key={row.position}
-                    sx={{
-                      "&:last-child td, &:last-child th": { border: 0 },
-                      backgroundColor: "#f0f0f0", // Light gray background for rows
-                    }}
-                  >
-                    <TableCell align="center" sx={{ color: "#333333" }}>
-                      {row.position}
-                    </TableCell>
-                    <TableCell align="center" sx={{ color: "#333333" }}>
-                      {row.rollNumber}
-                    </TableCell>
-                    <TableCell align="center" sx={{ color: "#333333" }}>
-                      {row.fullName}
-                    </TableCell>
-                    <TableCell align="center" sx={{ color: "#333333" }}>
-                      {row.score}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
+
+        {leaderBoardUsers[3] ? (
+          <Box sx={{ width: "100%" }}>
+            <TableContainer
+              component={Paper}
+              sx={{
+                backgroundColor: "#f0f0f0", // Light gray background
+                boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.3)", // Floating effect
+                borderRadius: 2,
+                border: "4px solid #a8a8a8", // Dark gray border
+                mt: 4, // Margin top to separate from the leaderboard
+              }}
+            >
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableBody>
+                  {leaderBoardUsers.slice(3).map((row) => (
+                    <TableRow
+                      key={row.rank}
+                      sx={{
+                        "&:last-child td, &:last-child th": { border: 0 },
+                        backgroundColor: "#f0f0f0", // Light gray background for rows
+                      }}
+                    >
+                      <TableCell align="center" sx={{ color: "#333333" }}>
+                        {row.rank}
+                      </TableCell>
+                      <TableCell align="center" sx={{ color: "#333333" }}>
+                        {row.rollNumber}
+                      </TableCell>
+                      <TableCell align="center" sx={{ color: "#333333" }}>
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="center" sx={{ color: "#333333" }}>
+                        {row.points}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        ) : (
+          <></>
+        )}
       </Box>
     </Container>
   );

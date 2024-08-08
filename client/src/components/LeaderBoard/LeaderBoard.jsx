@@ -19,6 +19,7 @@ const LeaderBoard = () => {
 
   const socket = io("http://localhost:8080");
   socket.connect();
+
   socket.on("leaderBoard_update", (response) => {
     console.log(response.message);
     setLeaderBoardUsers(sortByPointsDescending(response.data));

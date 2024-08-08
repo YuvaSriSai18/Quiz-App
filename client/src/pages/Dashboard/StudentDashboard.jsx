@@ -5,6 +5,17 @@ const StudentDashboard = ({ userData, isMobile, LeaderBoardData }) => {
   // Calculate studentName
   const studentName = userData ? userData.displayName : "";
 
+  function studentRank(num) {
+    if (num === 1) {
+      return "st";
+    } else if (num === 2) {
+      return "nd";
+    } else if (num === 3) {
+      return "rd";
+    } else {
+      return "th";
+    }
+  }
   return (
     <Grid
       container
@@ -66,11 +77,7 @@ const StudentDashboard = ({ userData, isMobile, LeaderBoardData }) => {
               <Card
                 sx={{
                   borderRadius: 2,
-                  // boxShadow: 3,
                   height: "100%",
-                  // display: "flex",
-                  // flexDirection: "column",
-                  // justifyContent: "center",
                 }}
                 elevation={8}
               >
@@ -86,21 +93,6 @@ const StudentDashboard = ({ userData, isMobile, LeaderBoardData }) => {
                   >
                     User Details
                   </Typography>
-                  {/* <Typography variant="body1" noWrap mb={1}>
-                    Full Name : {userData.displayName}
-                  </Typography>
-                  <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                    Reg. No: {userData.rollNo}
-                  </Typography>
-                  <Typography variant="body1" sx={{ marginBottom: 1 }}>
-                    Email: {userData.email}
-                  </Typography>
-                  <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                    Course: {userData.course}
-                  </Typography>
-                  <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                    Batch: {userData.batch}
-                  </Typography> */}
                   <table>
                     <tr>
                       <th>Full Name</th>
@@ -135,28 +127,11 @@ const StudentDashboard = ({ userData, isMobile, LeaderBoardData }) => {
             sx={{
               borderRadius: 2,
               boxShadow: 3,
-              // display: "flex",
-              // flexDirection: "column",
-              // justifyContent: "center",
-              // mt: 2,
               padding: "12px",
             }}
             elevation={8}
           >
             <CardContent>
-              {/* <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                Attempted: {LeaderBoardData.totalQuizzesAttempted}
-              </Typography>
-              <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                Score: {LeaderBoardData.points}
-              </Typography>
-              <Typography variant="body1" sx={{ marginBottom: 1 }} noWrap>
-                Performance:  {LeaderBoardData.successRate} %
-              </Typography>
-              <Typography variant="body1" noWrap>
-                Position🏆:{" "}
-              </Typography> */}
-
               <table>
                 <tr>
                   <th>Attempted</th>
@@ -172,7 +147,13 @@ const StudentDashboard = ({ userData, isMobile, LeaderBoardData }) => {
                 </tr>
                 <tr>
                   <th>Position</th>
-                  <td> 7 🏆 </td>
+                  <td>
+                    {" "}
+                    {`${LeaderBoardData.rank} ${studentRank(
+                      LeaderBoardData.rank
+                    )}`}{" "}
+                    🏆{" "}
+                  </td>
                 </tr>
               </table>
             </CardContent>

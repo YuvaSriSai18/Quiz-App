@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  Box,
-  TextField,
-  InputAdornment,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, TextField, InputAdornment, Button } from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import { useSelector } from "react-redux";
 import io from "socket.io-client";
@@ -54,12 +48,18 @@ export default function JoinRoomModal() {
         const currentTime = new Date();
         const openTime = new Date(response.data.quiz.openTime);
         const entryDeadline = new Date(openTime.getTime() + 3 * 60 * 1000);
+
         if (currentTime < entryDeadline) {
-          // alert("Room exists");
-          socket.emit("join_room", roomNumber);
-          navigate("/wr", {
-            state: { roomNumber, quiz: response.data.quiz, userData },
-          });
+          if (currentTime >= openTime) {
+            // User is joining exactly at or after the quiz open time
+            navigate(`/writequiz/${response.data.quiz.QuizId}`);
+          } else {
+            // User joins the waiting room if it's before the quiz open time
+            socket.emit("join_room", roomNumber);
+            navigate("/wr", {
+              state: { roomNumber, quiz: response.data.quiz, userData },
+            });
+          }
         } else {
           setError("Entry time has been completed.");
         }
