@@ -3,6 +3,7 @@ import axios from "axios";
 import Tooltip from "@mui/material/Tooltip";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import RemoveCircleRoundedIcon from "@mui/icons-material/RemoveCircleRounded";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   Card,
   CardContent,
@@ -140,12 +141,29 @@ const Quiz_Update = () => {
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
+  const handleBack = () => {
+    navigate(-1); // Go back to the previous page
+  };
+
   return (
     <Card sx={{ width: { xs: "100%", md: "50%" }, margin: "30px auto" }}>
       <CardContent>
-        <Typography variant="h5" fontWeight={600} textAlign={"center"}>
-          Update Quiz
-        </Typography>
+        {/* Back Button */}
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>
+  <IconButton
+    onClick={handleBack}
+    sx={{
+      margin: "10px",
+    }}
+  >
+    <ArrowBackIcon />
+  </IconButton>
+  <Typography variant="h5" fontWeight={600} sx={{ flexGrow: 1, textAlign: "center" }}>
+    Update Quiz
+  </Typography>
+  <Box sx={{ width: 48 }} /> {/* Empty Box to balance the layout */}
+</Box>
+
         <form onSubmit={handleSubmit}>
           <TextField
             label="Title"
@@ -154,32 +172,6 @@ const Quiz_Update = () => {
               setQuestionPaper((prevState) => ({
                 ...prevState,
                 title: e.target.value,
-              }))
-            }
-            fullWidth
-            margin="normal"
-          />
-          {/* <TextField
-            label="Duration (in minutes)"
-            type="number"
-            value={questionPaper.duration}
-            onChange={(e) =>
-              setQuestionPaper((prevState) => ({
-                ...prevState,
-                duration: e.target.value,
-              }))
-            }
-            fullWidth
-            margin="normal"
-          /> */}
-          <TextField
-            label="Open Time (YYYY-MM-DD HH:MM)"
-            value={questionPaper.openTime}
-            type="datetime-local"
-            onChange={(e) =>
-              setQuestionPaper((prevState) => ({
-                ...prevState,
-                openTime: e.target.value,
               }))
             }
             fullWidth

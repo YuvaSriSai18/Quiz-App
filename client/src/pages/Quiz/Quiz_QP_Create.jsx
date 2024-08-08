@@ -12,8 +12,9 @@ import {
   Typography,
   Grid,
   Modal,
+  Box,
 } from "@mui/material";
-import { Add } from "@mui/icons-material";
+import { Add, ArrowBack } from "@mui/icons-material";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import RoomPassKeyCopyModal from "../../components/Modals/RoomPassKeyModal";
@@ -170,6 +171,10 @@ const Quiz_QP_Create = () => {
     window.location.href = "/"; // Redirect to home after successful quiz creation
   };
 
+  const handleBack = () => {
+    window.history.back();
+  };
+
   return (
     <Card
       sx={{
@@ -180,9 +185,19 @@ const Quiz_QP_Create = () => {
       }}
     >
       <CardContent>
-        <Typography variant="h5" textAlign={"center"} mb={2}>
-          Create Quiz
-        </Typography>
+        <Box sx={{ display: "flex", alignItems: "center", marginBottom:"15px" }}>
+          <IconButton onClick={handleBack} sx={{ marginRight: "auto" }}>
+            <ArrowBack />
+          </IconButton>
+          <Typography
+            variant="h5"
+            fontWeight={600}
+            textAlign="center"
+            sx={{ flexGrow: 1 }}
+          >
+            Create Quiz
+          </Typography>
+        </Box>
 
         <Grid container spacing={2}>
           <Grid item xs={12}>
@@ -215,7 +230,7 @@ const Quiz_QP_Create = () => {
       </CardContent>
 
       {questionPaper.questions.map((question, qIndex) => (
-        <Card key={qIndex}>
+        <Card key={qIndex} sx={{ marginBottom: 2 }}>
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -258,17 +273,6 @@ const Quiz_QP_Create = () => {
                   </IconButton>
                 </Grid>
               ))}
-              {/* <Grid item xs={12}>
-                <center>
-                  <Button
-                    variant="outlined"
-                    startIcon={<Add />}
-                    onClick={() => addOption(qIndex)}
-                  >
-                    Add Option
-                  </Button>
-                </center>
-              </Grid> */}
               <Grid item xs={12}>
                 <center>
                   <Tooltip title="Add Option" placement="right-end">

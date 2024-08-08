@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-
 import Typography from "@mui/material/Typography";
-import { Box, Modal } from "@mui/material";
+import { Box, Modal, Card, CardContent } from "@mui/material";
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import { LineChart } from "@mui/x-charts/LineChart";
@@ -22,15 +21,53 @@ const style = {
     xs: "100%",
     md: 400,
   },
-  // margin: {
-  //   xs: "0px 10px",
-  //   sm:'0px 100px 0px 100px',
-  //   md: "0px",
-  // },
   bgcolor: "background.paper",
   boxShadow: 24,
   p: 5,
   borderRadius: "5px",
+};
+
+const buttonStyle = {
+  "--color": "#146c99",
+  fontFamily: "inherit",
+  display: "inline-block",
+  width: "170px",
+  height: "60px",
+  lineHeight: "2.5em",
+  marginTop: "2px",
+  position: "relative",
+  cursor: "pointer",
+  overflow: "hidden",
+  border: "2px solid var(--color)",
+  transition: "color 0.5s",
+  zIndex: 1,
+  fontSize: "17px",
+  borderRadius: "6px",
+  fontWeight: 500,
+  color: "var(--color)",
+  "&:hover": {
+    color: "#fff",
+  },
+  "&:before": {
+    content: '""',
+    position: "absolute",
+    zIndex: -1,
+    background: "var(--color)",
+    height: "150px",
+    width: "200px",
+    borderRadius: "50%",
+    top: "100%",
+    left: "100%",
+    transition: "all 0.7s",
+  },
+  "&:hover:before": {
+    top: "-30px",
+    left: "-30px",
+  },
+  "&:active:before": {
+    background: "#3a0ca3",
+    transition: "background 0s",
+  },
 };
 
 export default function Home() {
@@ -71,118 +108,107 @@ export default function Home() {
 
   return (
     <div>
-      <Box display="flex" justifyContent="space-between">
-        <Box>
-          <Typography
-            fontSize={30}
-            variant="h1"
-            sx={{
-              mt: { xs: 3, md: 10 },
-              ml: { xs: 3, md: 10 },
-              fontSize: { xs: "23px", md: "30px" },
-              fontWeight: "600",
-            }}
-          >
-            Hi, {name} 👋
-            <br />
-            <Typography
-              fontWeight={300}
-              mt={0.5}
-              sx={{
-                fontSize: { xs: 10, md: 16 },
-              }}
-            >
-              Let's make this day productive
-            </Typography>
-          </Typography>
+      <Box display="flex" justifyContent="space-around">
+        <Card
+          sx={{
+            mt: { xs: 3, md: 10 },
+            ml: { xs: 3, md: 10 },
+            p: 6,
+            borderRadius: 3,
+            boxShadow: 3,
+            maxWidth: { xs: "100%", md: "350px" },
+          }}
+        >
+          <CardContent>
+            <Box>
+              <Typography
+                fontSize={30}
+                variant="h1"
+                sx={{
+                  fontSize: { xs: "23px", md: "30px" },
+                  fontWeight: "600",
+                }}
+              >
+                Hi, {name} 👋
+                <br />
+                <Typography
+                  fontWeight={300}
+                  mt={0.5}
+                  sx={{
+                    fontSize: { xs: 10, md: 16 },
+                  }}
+                >
+                  Let's make this day productive
+                </Typography>
+              </Typography>
 
-          <Box m={{ md: "2rem 0px 0px 5rem", xs: "8px 0px 12px 1.2rem" }}>
-            <Box
-              component="div"
-              sx={{
-                width: {
-                  md: "250px",
-                  xs: "200px",
-                },
-                height: {
-                  md: "70px",
-                  xs: "60px",
-                },
-                backgroundColor: "#fff",
-                borderRadius: "8px",
-                border: "2px solid #eeeeee",
-                boxShadow: "2px 2px #eeeeee",
-                display: "flex",
-              }}
-              mb={1}
-            >
-              <Typography fontSize={35} m="auto" fontWeight={800}>
-                🎯
-              </Typography>
-              <Typography m="auto" textAlign="center">
-                Success Rate <br />{" "}
-                {leaderBoard.successRate ? leaderBoard.successRate : "N/A"} %
-              </Typography>
-            </Box>
+              <Box>
+                <Box
+                  component="div"
+                  sx={{
+                    width: {
+                      md: "250px",
+                      xs: "200px",
+                    },
+                    height: {
+                      md: "70px",
+                      xs: "60px",
+                    },
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                    border: "2px solid #eeeeee",
+                    boxShadow: "2px 2px #eeeeee",
+                    display: "flex",
+                  }}
+                  mb={1}
+                >
+                  <Typography fontSize={35} m="auto" fontWeight={800}>
+                    🎯
+                  </Typography>
+                  <Typography m="auto" textAlign="center">
+                    Success Rate <br />{" "}
+                    {leaderBoard.successRate ? leaderBoard.successRate : "N/A"} %
+                  </Typography>
+                </Box>
 
-            <Box
-              component="div"
-              sx={{
-                width: {
-                  md: "225px",
-                  xs: "180px",
-                },
-                height: {
-                  md: "70px",
-                  xs: "60px",
-                },
-                backgroundColor: "#fff",
-                borderRadius: "8px",
-                border: "2px solid #eeeeee",
-                boxShadow: "2px 2px #eeeeee",
-                display: "flex",
-              }}
-              mb={1}
-            >
-              <Typography fontSize={35} m="auto" fontWeight={800}>
-                🏆
-              </Typography>
-              <Typography m="auto" textAlign="center">
-                Ranking <br /> {userData?.ranking || "N/A "}
-              </Typography>
-            </Box>
+                <Box
+                  component="div"
+                  sx={{
+                    width: {
+                      md: "225px",
+                      xs: "180px",
+                    },
+                    height: {
+                      md: "70px",
+                      xs: "60px",
+                    },
+                    backgroundColor: "#fff",
+                    borderRadius: "8px",
+                    border: "2px solid #eeeeee",
+                    boxShadow: "2px 2px #eeeeee",
+                    display: "flex",
+                  }}
+                  mb={1}
+                >
+                  <Typography fontSize={35} m="auto" fontWeight={800}>
+                    🏆
+                  </Typography>
+                  <Typography m="auto" textAlign="center">
+                    Ranking <br /> {userData?.ranking || "N/A "}
+                  </Typography>
+                </Box>
 
-            <Box
-              component="button"
-              sx={{
-                width: {
-                  md: "200px",
-                  xs: "160px",
-                },
-                height: {
-                  md: "70px",
-                  xs: "60px",
-                },
-                backgroundColor: "#fff",
-                borderRadius: "8px",
-                border: "2px solid #eeeeee",
-                boxShadow: "2px 2px #eeeeee",
-                display: "flex",
-                cursor: "pointer",
-              }}
-              onClick={handleOpen}
-            >
-              <Typography fontSize={35} m="auto" fontWeight={800}>
-                <AddCircleOutlineRoundedIcon
-                  sx={{ fontSize: "35px", fontWeight: 800 }}
-                />
-              </Typography>
-              <Typography m="auto" textAlign="center">
-                Join Room
-              </Typography>
+                <Box
+                  component="button"
+                  sx={buttonStyle}
+                  onClick={handleOpen}
+                >
+                  Join Room
+                </Box>
+              </Box>
             </Box>
-          </Box>
-        </Box>
+          </CardContent>
+        </Card>
         <LappyLottie />
       </Box>
 
@@ -192,7 +218,6 @@ export default function Home() {
         flexDirection={{ xs: "column", md: "row" }}
         alignItems="center"
         justifyContent="center"
-        // mt={1}
       >
         <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
           <Gauge
@@ -269,13 +294,8 @@ export default function Home() {
           ) : (
             <Typography>No quiz data available</Typography>
           )}
-          {/* <Typography variant="h6" align="center" mt={2}>
-            Quiz Performance
-          </Typography> */}
         </Box>
       </Box>
-
-      {/* <QuizzesContainer /> */}
 
       <StartQuizCard />
 
