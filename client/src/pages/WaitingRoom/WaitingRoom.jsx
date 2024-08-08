@@ -40,9 +40,9 @@ export default function WaitingRoom() {
     return () => clearInterval(timerId);
   }, [quiz]);
 
-  console.log(roomNumber);
-  console.log(quiz);
-  console.log(userData);
+  // console.log(roomNumber);
+  // console.log(quiz);
+  // console.log(userData);
 
   return (
     <center>

@@ -51,6 +51,7 @@ export default function Quiz_QuestionPaperWrite({ QuizQuestionsData }) {
     if (quizCompleted) {
       alert("Quiz Completed");
       navigate("/"); // Use navigate for redirection
+      location.reload()
     }
   }, [quizCompleted, navigate]); // Ensure this effect runs when quizCompleted changes
 

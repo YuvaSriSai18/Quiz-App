@@ -3,6 +3,7 @@ const router = express.Router();
 const Responses = require("../models/Responses");
 const LeaderBoard = require("../models/LeaderBoard");
 const QuizPaper = require("../models/QuestionPaper");
+const { io } = require("../socket");
 
 // Post a response
 router.post("/submit", async (req, res) => {
@@ -72,21 +73,14 @@ router.post("/submit", async (req, res) => {
     // Check each answer
     answers.forEach((answer) => {
       const questionNumberZeroBased = answer.questionNumber - 1;
-      // console.log(questionNumberZeroBased);
       const question = quiz.questions[questionNumberZeroBased];
 
       if (question) {
         maxScore += question.mark; // Add mark to QuizMaximumScore
-        // console.log(maxScore);
         const isCorrect = question.correctOption === answer.givenAnswer;
         if (isCorrect) {
           totalPoints += question.mark; // Award points for correct answer
-          totalPoints;
         }
-        // console.log({
-        //   questionNumber: answer.questionNumber,
-        //   givenAnswer: answer.givenAnswer,
-        // });
         optedOptions.push({
           questionNumber: answer.questionNumber,
           givenAnswer: answer.givenAnswer,
@@ -94,12 +88,7 @@ router.post("/submit", async (req, res) => {
       }
     });
 
-    // Update the student's response with calculated points
-    studentResponse.pointsEarned = totalPoints;
-    // console.log(studentResponse.pointsEarned);
-    await quizResponses.save();
-
-    // Find or create the student's LeaderBoard entry
+    // Update or create leaderboard entry
     let leaderBoardEntry = await LeaderBoard.findOne({ email: StudentEmail });
     if (!leaderBoardEntry) {
       leaderBoardEntry = new LeaderBoard({
@@ -112,13 +101,12 @@ router.post("/submit", async (req, res) => {
       });
     }
 
-    // Update LeaderBoard entry with quiz data
+    // Find the quiz entry in the leaderboard
     let quizEntry = leaderBoardEntry.attemptedQuizzes.find(
       (q) => q.QuizId === QuizId
     );
 
     if (quizEntry) {
-      // Update existing quiz entry
       optedOptions.forEach((newOption) => {
         const existingOption = quizEntry.optedOptions.find(
           (o) => o.questionNumber === newOption.questionNumber
@@ -131,19 +119,18 @@ router.post("/submit", async (req, res) => {
       });
 
       quizEntry.pointsEarned += totalPoints;
-      quizEntry.QuizMaximumScore += maxScore; // Update maximum score
+      quizEntry.QuizMaximumScore += maxScore;
     } else {
-      // Add new quiz entry
       leaderBoardEntry.attemptedQuizzes.push({
         QuizId,
         quizTitle: quiz.title,
         optedOptions,
         pointsEarned: totalPoints,
-        QuizMaximumScore: maxScore, // Set maximum score
+        QuizMaximumScore: maxScore,
       });
     }
 
-    // Update overall points and maximum score
+    // Update total points and max score
     leaderBoardEntry.points = leaderBoardEntry.attemptedQuizzes.reduce(
       (acc, quiz) => acc + quiz.pointsEarned,
       0
@@ -155,17 +142,28 @@ router.post("/submit", async (req, res) => {
       );
     leaderBoardEntry.totalQuizzesAttempted =
       leaderBoardEntry.attemptedQuizzes.length;
-    // Calculate success rate
     leaderBoardEntry.successRate = (
       (leaderBoardEntry.points / leaderBoardEntry.MaximumScoreForQuizzes) *
       100
     ).toFixed(2);
 
+    // Save responses and leaderboard
+    await quizResponses.save();
     await leaderBoardEntry.save();
 
+    // Emit leaderboard update
+    const LeaderBoardUsers = await LeaderBoard.find().lean();
+    console.log(LeaderBoardUsers);
+    io.emit("leaderBoard_update", {
+      message: "LeaderBoard Users Data",
+      data: LeaderBoardUsers,
+    });
+
+    // Respond with updated data
     res.json({ quizResponses, leaderBoardEntry });
   } catch (error) {
-    console.error(`Error: ${error}`);
+    console.error("Error details:", error.message);
+    console.error("Error stack:", error.stack);
     res.status(500).send("Server error");
   }
 });

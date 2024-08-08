@@ -13,13 +13,14 @@ import io from "socket.io-client";
 
 // Initialize Socket.IO client
 const socket = io("http://localhost:8080");
+socket.connect();
 
 export default function QuestionCard({
   question,
   questionNumber,
   onTimeUp,
   quizId,
-  isNewQuestion, // New prop to indicate if it's a new question
+  isNewQuestion,
 }) {
   const userData = useSelector((state) => state.auth.userData);
   const navigate = useNavigate();
@@ -100,18 +101,17 @@ export default function QuestionCard({
         })),
       };
 
-      console.log("Posting response:", modifiedResponse);
       await axios.post(
         "http://localhost:5500/response/submit",
         modifiedResponse
       );
+      console.log("Posting response:", modifiedResponse);
+
       // Emit message to Socket.IO server
       socket.emit("send_message", {
         room: quizId,
         message: `${userData.displayName} answered question ${questionNumber}`,
       });
-      // alert("Quiz Submitted Successfully");
-      // navigate("/"); // Adjust this navigation if needed
     } catch (err) {
       console.error("Error posting response:", err);
       alert(err.response ? err.response.data.msg : "Submission failed");
@@ -190,8 +190,6 @@ export default function QuestionCard({
         >
           <p style={{ margin: 0 }}>Time left: {timeLeft}s</p>
         </Box>
-        {/* Optionally include a manual submit button */}
-        {/* <Button onClick={postResponse}>Submit</Button> */}
       </Box>
     </Box>
   );

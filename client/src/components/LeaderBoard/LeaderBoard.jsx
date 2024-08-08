@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import axios from "axios"; // Don't forget to import axios
+import io from "socket.io-client";
 
 const LeaderBoard = () => {
   const [animationType, setAnimationType] = useState(null);
@@ -16,17 +17,12 @@ const LeaderBoard = () => {
     sessionStorage.removeItem("answerStatus");
   }, []);
 
-  useEffect(() => {
-    const getLeaderBoardUsers = async () => {
-      try {
-        const response = await axios.get("http://localhost:5500/leaderboard");
-        setLeaderBoardUsers(sortByPointsDescending(response.data));
-      } catch (error) {
-        console.error("Error fetching leaderboard users:", error);
-      }
-    };
-    getLeaderBoardUsers();
-  }, []);
+  const socket = io("http://localhost:8080");
+  socket.connect();
+  socket.on("leaderBoard_update", (response) => {
+    console.log(response.message);
+    setLeaderBoardUsers(sortByPointsDescending(response.data));
+  });
 
   const sortByPointsDescending = (arr) =>
     arr.sort((a, b) => b.points - a.points);
