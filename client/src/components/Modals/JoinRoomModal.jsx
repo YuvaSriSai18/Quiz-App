@@ -41,7 +41,7 @@ export default function JoinRoomModal() {
     }
     try {
       const response = await axios.get(
-        `https://quiz-app-aqqo.onrender.com/room/${roomNumber}`
+        `http://localhost:5500/room/${roomNumber}`
       );
       setQuiz(response.data.quiz);
       if (response.data.exists) {

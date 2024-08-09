@@ -40,7 +40,7 @@ function ResponsiveAppBar() {
 
   const getUser = async () => {
     try {
-      const response = await axios.get(`https://quiz-app-aqqo.onrender.com/login/success`, {
+      const response = await axios.get(`http://localhost:5500/login/success`, {
         withCredentials: true,
       });
       if (response.data.authenticated) {
@@ -54,7 +54,7 @@ function ResponsiveAppBar() {
   const fetchLeaderBoard = async () => {
     try {
       const response = await axios.get(
-        `https://quiz-app-aqqo.onrender.com/leaderboard/${userData.rollNo}`
+        `http://localhost:5500/leaderboard/${userData.rollNo}`
       );
       // console.log("LeaderBoard Data:", response.data);
       dispatch(setLeaderBoardUserData(response.data));
@@ -82,11 +82,11 @@ function ResponsiveAppBar() {
   };
 
   const handleLogin = () => {
-    window.open(`https://quiz-app-aqqo.onrender.com/auth/google`, "_self");
+    window.open(`http://localhost:5500/auth/google`, "_self");
   };
 
   const handleLogout = () => {
-    window.open(`https://quiz-app-aqqo.onrender.com/logout`, "_self");
+    window.open(`http://localhost:5500/logout`, "_self");
     dispatch(clearUserData());
     dispatch(clearLeaderBoardUserData());
   };
