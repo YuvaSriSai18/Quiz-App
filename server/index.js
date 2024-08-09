@@ -56,8 +56,8 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "https://quiz-app-srmap.vercel.app/dashboard",
-    failureRedirect: "https://quiz-app-srmap.vercel.app/failure",
+    successRedirect: "http://localhost:5173/dashboard",
+    failureRedirect: "http://localhost:5173/failure",
   })
 );
 
