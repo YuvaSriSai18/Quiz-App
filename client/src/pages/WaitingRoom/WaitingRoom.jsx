@@ -45,7 +45,7 @@ export default function WaitingRoom() {
         const seconds = totalSeconds % 60;
 
         setTimeRemaining(
-          `${days} Days ${hours} Hours ${minutes} Min ${seconds} Sec`
+          `${hours} Hours ${minutes} Min ${seconds} Sec`
         );
       } else {
         setTimeRemaining("Quiz has started");

@@ -67,7 +67,17 @@ const buttonStyle = {
     transition: "background 0s",
   },
 };
-
+function studentRank(num) {
+  if (num === 1) {
+    return "st";
+  } else if (num === 2) {
+    return "nd";
+  } else if (num === 3) {
+    return "rd";
+  } else {
+    return "th";
+  }
+}
 export default function Home() {
   const userData = useSelector((state) => state.auth.userData);
   const leaderBoard = useSelector(
@@ -215,7 +225,8 @@ export default function Home() {
                     🏆
                   </Typography>
                   <Typography m="auto" textAlign="center">
-                    Ranking <br /> {userData?.ranking || "N/A "}
+                    Ranking <br />{" "}
+                    {leaderBoard.rank ? `${leaderBoard.rank}${studentRank(leaderBoard.rank)}` : "N/A "} 
                   </Typography>
                 </Box>
 

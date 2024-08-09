@@ -149,7 +149,7 @@ const StudentDashboard = ({ userData, isMobile, LeaderBoardData }) => {
                   <th>Position</th>
                   <td>
                     {" "}
-                    {`${LeaderBoardData.rank} ${studentRank(
+                    {`${LeaderBoardData.rank}${studentRank(
                       LeaderBoardData.rank
                     )}`}{" "}
                     🏆{" "}
