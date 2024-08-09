@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://quiz-app-srmap.vercel.app/",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -74,7 +74,7 @@ app.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("http://localhost:5173");
+    res.redirect("https://quiz-app-srmap.vercel.app/");
   });
 });
 

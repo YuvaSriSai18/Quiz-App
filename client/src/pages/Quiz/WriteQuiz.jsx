@@ -13,7 +13,7 @@ export default function WriteQuiz() {
 
   const getQuiz = async () => {
     try {
-      const response = await axios.get(`http://localhost:5500/quiz/${QuizId}`);
+      const response = await axios.get(`https://quiz-app-aqqo.onrender.com/quiz/${QuizId}`);
       setQuiz(response.data);
     } catch (error) {
       console.error("Error fetching quiz:", error);
