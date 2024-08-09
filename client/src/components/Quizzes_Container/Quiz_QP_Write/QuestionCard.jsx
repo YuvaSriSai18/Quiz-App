@@ -102,7 +102,7 @@ export default function QuestionCard({
       };
 
       await axios.post(
-        "http://localhost:5500/response/submit",
+        "https://quiz-app-aqqo.onrender.com/response/submit",
         modifiedResponse
       );
       console.log("Posting response:", modifiedResponse);
