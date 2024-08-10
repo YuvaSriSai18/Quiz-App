@@ -11,7 +11,9 @@ export default function QuizzesContainer() {
 
   const getQuizzes = async () => {
     try {
-      const response = await axios.get("http://localhost:5500/quiz");
+      const response = await axios.get(
+        "https://quiz-app-dummy.onrender.com/quiz"
+      );
       const filteredQuizzes = response.data.filter(
         (quiz) => quiz.CreatorMail === userData.email
       );
@@ -28,13 +30,11 @@ export default function QuizzesContainer() {
   }, [quizzes]);
 
   return (
-    <div style={{ border: "2px solid #c9c3c3", borderRadius: "12px" }}>
-      <div className="cardsContainer">
-        {quizzes.map((quiz, index) => (
-          <QuizCard key={index} QuizObj={quiz} />
-        ))}
-        <CreateQuiz />
-      </div>
+    <div className="cardsContainer">
+      {quizzes.map((quiz, index) => (
+        <QuizCard key={index} QuizObj={quiz} />
+      ))}
+      <CreateQuiz />
     </div>
   );
 }

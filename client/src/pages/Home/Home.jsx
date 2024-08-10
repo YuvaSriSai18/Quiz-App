@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
-import { Box, Modal, Card, CardContent } from "@mui/material";
-import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
+import { Box, Modal, Card, CardContent ,useMediaQuery } from "@mui/material";
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
 import LappyLottie from "../../components/animation/LappyLottie";
 import JoinRoomWithoutAuth from "../../components/Modals/JoinRoomWithoutAuth";
 import StartQuizCard from "../../components/StartQuizCard";
-import LineGraph from "../../components/Home/LineGraph";
-import useMediaQuery from "@mui/material";
+import ScoreCharts from "../../components/Home/ScoreCharts";
+
+import './Home.css'
 const style = {
   position: "absolute",
   top: "50%",
@@ -26,7 +26,7 @@ const style = {
 };
 
 const buttonStyle = {
-  "--color": "#146c99",
+  "--color": "#1679ab",
   fontFamily: "inherit",
   display: "inline-block",
   width: "170px",
@@ -80,42 +80,14 @@ function studentRank(num) {
 }
 export default function Home() {
 
-  const isMobile = useMediaQuery("(max-width:600px)");
-
   const userData = useSelector((state) => state.auth.userData);
   const leaderBoard = useSelector(
     (state) => state.LeaderBoard.LeaderBoardUserData
   );
 
-  const processQuizData = (attemptedQuizzes) => {
-    // Extract pointsEarned and quizTitle from attemptedQuizzes
-    const quizScores = attemptedQuizzes.map((quiz) => quiz.pointsEarned);
-    const quizLabels = attemptedQuizzes.map(
-      (quiz, index) => `Quiz ${index + 1}`
-    );
-
-    return { quizScores, quizLabels };
-  };
+  const isMobile = useMediaQuery("(max-width:600px)");
 
   const [name, setName] = useState("User");
-  const [averageScore, setAverageScore] = useState(75);
-  const [quizScores, setQuizScores] = useState([]);
-  const [quizLabels, setQuizLabels] = useState([]);
-  const [totalQuizzes, setTotalQuizzes] = useState(10);
-
-  useEffect(() => {
-    if (leaderBoard && leaderBoard.attemptedQuizzes) {
-      const { quizScores, quizLabels } = processQuizData(
-        leaderBoard.attemptedQuizzes
-      );
-      setQuizScores(quizScores);
-      setQuizLabels(quizLabels);
-      setTotalQuizzes(leaderBoard.totalQuizzesAttempted);
-      setAverageScore(
-        (leaderBoard.points / leaderBoard.totalQuizzesAttempted).toFixed(2)
-      );
-    }
-  }, [leaderBoard]);
 
   useEffect(() => {
     if (userData) {
@@ -123,10 +95,6 @@ export default function Home() {
         ? userData.displayName.split(" ")[0]
         : "User";
       setName(userName);
-      // setAverageScore(userData.averageScore || 0);
-      // setQuizScores(userData.quizScores || []);
-      // setQuizLabels(userData.quizLabels || []);
-      // setTotalQuizzes(userData.totalQuizzes || 0);
     }
   }, [userData]);
 
@@ -135,10 +103,12 @@ export default function Home() {
   const handleClose = () => setOpen(false);
 
   return (
-    <div>
+    <>
       <Box
         display="flex"
-        justifyContent={{ md: "space-between", lg: "space-around" }}
+        justifyContent={{xs:'start', md: "space-between", lg: "space-around" }}
+        height={{xs:"60vh",md:'fit-content'}}
+        // width={'100vw'}
       >
         <Card
           sx={{
@@ -165,10 +135,10 @@ export default function Home() {
                 Hi, {name} 👋
                 <br />
                 <Typography
-                  fontWeight={300}
+                  fontWeight={400}
                   mt={0.5}
                   sx={{
-                    fontSize: { xs: 13, md: 16 },
+                    fontSize: { xs: 14, md: 16 },
                   }}
                   mb={0.5}
                 >
@@ -230,7 +200,9 @@ export default function Home() {
                   </Typography>
                   <Typography m="auto" textAlign="center">
                     Ranking <br />{" "}
-                    {leaderBoard.rank ? `${leaderBoard.rank}${studentRank(leaderBoard.rank)}` : "N/A "} 
+                    {leaderBoard.rank
+                      ? `${leaderBoard.rank}${studentRank(leaderBoard.rank)}`
+                      : "N/A "}
                   </Typography>
                 </Box>
 
@@ -241,62 +213,13 @@ export default function Home() {
             </Box>
           </CardContent>
         </Card>
-        <LappyLottie />
+       {!isMobile && <LappyLottie />}
       </Box>
 
       {/* Gauges and Line Chart */}
-      <Box
-        display="flex"
-        flexDirection={{ xs: "column", md: "row" }}
-        alignItems="center"
-        justifyContent="center"
-      >
-        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
-          <Gauge
-            value={leaderBoard.points / leaderBoard.totalQuizzesAttempted || 0}
-            min={0}
-            max={100}
-            valueFormat={(value) => `${value.toFixed(1)}%`}
-            startAngle={-110}
-            endAngle={110}
-            sx={{
-              width: 200,
-              height: 200,
-              [`& .${gaugeClasses.valueText}`]: {
-                fontSize: 30,
-                fontWeight: "bold",
-              },
-            }}
-          />
-          <Typography variant="h6" align="center" mt={2}>
-            Average Score
-          </Typography>
-        </Box>
-        <Box mt={{ xs: 4, md: 0 }} mr={{ md: 4 }}>
-          <Gauge
-            value={leaderBoard.totalQuizzesAttempted || 0}
-            min={0}
-            max={50}
-            valueFormat={(value) => `${value}`}
-            startAngle={-110}
-            endAngle={110}
-            sx={{
-              width: 200,
-              height: 200,
-              [`& .${gaugeClasses.valueText}`]: {
-                fontSize: 30,
-                fontWeight: "bold",
-              },
-            }}
-          />
-          <Typography variant="h6" align="center" mt={2}>
-            Total Quizzes
-          </Typography>
-        </Box>
-        {/* {!isMobile && <LineGraph />} */}
-      </Box>
-      {/* {isMobile && <LineGraph />} */}
-      <StartQuizCard />
+      <ScoreCharts />
+
+      {userData.role === "Student" && <StartQuizCard />}
 
       {/* Modals */}
       <Modal
@@ -312,6 +235,6 @@ export default function Home() {
           {userData.email ? <JoinRoomModal /> : <JoinRoomWithoutAuth />}
         </Box>
       </Modal>
-    </div>
+    </>
   );
 }

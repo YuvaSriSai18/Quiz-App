@@ -3,8 +3,6 @@ import { useMediaQuery } from "@mui/material";
 import Lottie from "react-lottie";
 import Lappy from './Lappy.json'
 export default function LappyLottie() {
-  const isMobile = useMediaQuery("(max-width:600px)");
-
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -14,10 +12,8 @@ export default function LappyLottie() {
     },
   };
   return (
-    <div style={{ marginRight: "50px" }}>
-      {!isMobile && (
-        <Lottie options={defaultOptions} height={500} width={500} />
-      )}
+    <div style={{ marginRight: {xs:0,md:"50px"} }}>
+      <Lottie options={defaultOptions} height={500} width={500} />
     </div>
   );
 }

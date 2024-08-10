@@ -148,7 +148,8 @@ const LeaderBoard = () => {
                     fontWeight: 500,
                   }}
                 >
-                  {participant.name}
+                  {participant.rollNo}
+                  
                 </Typography>
               </Box>
             ))}
@@ -156,7 +157,7 @@ const LeaderBoard = () => {
           <Box display="flex" justifyContent="space-around" mb={4}>
             {leaderBoardUsers.slice(0, 3).map((participant, index) => (
               <Box
-                key={participant.rollNumber} // Use unique key based on rollNumber
+                key={participant.rollNo} // Use unique key based on rollNumber
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
@@ -168,10 +169,11 @@ const LeaderBoard = () => {
                 <Typography
                   variant="body2"
                   sx={{
-                    fontWeight: 500,
+                    fontWeight: 600,
                   }}
+                  mb={1}
                 >
-                  {participant.rollNumber}
+                  {participant.name.split(' ')[0].toUpperCase()}
                 </Typography>
                 <Typography
                   variant="body2"

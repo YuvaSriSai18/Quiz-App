@@ -40,7 +40,7 @@ function ResponsiveAppBar() {
   const fetchLeaderBoard = async (email) => {
     try {
       const response = await axios.get(
-        `http://localhost:5500/leaderboard/${email}`
+        `https://quiz-app-dummy.onrender.com/leaderboard/${email}`
       );
       dispatch(setLeaderBoardUserData(response.data));
     } catch (error) {
@@ -51,7 +51,7 @@ function ResponsiveAppBar() {
   const fetchDatabaseUsers = async (email) => {
     try {
       const response = await axios.get(
-        `http://localhost:5500/profiledata/${email}`
+        `https://quiz-app-dummy.onrender.com/profiledata/${email}`
       );
       if (response.data) {
         dispatch(setUserData(response.data));
@@ -92,7 +92,7 @@ function ResponsiveAppBar() {
         );
         dispatch(setUserData(response.data));
         await axios
-          .post(`http://localhost:5500/profiledata/post`, response.data)
+          .post(`https://quiz-app-dummy.onrender.com/profiledata/post`, response.data)
           .then(() => {
             console.log(`User Data Posted !!`);
           })

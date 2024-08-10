@@ -44,6 +44,7 @@ export default function LineGraph() {
         maxWidth: { xs: "100%", md: 500 },
         width: "100%",
         overflowX: "scroll",
+        margin:'10px'
       }}
       mb={5}
     >

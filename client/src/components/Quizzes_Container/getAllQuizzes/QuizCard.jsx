@@ -38,7 +38,7 @@ export default function QuizCard({ QuizObj, onDelete }) {
 
   const deleteQuiz = () => {
     axios
-      .delete(`http://localhost:5500/quiz/${QuizObj.QuizId}`)
+      .delete(`https://quiz-app-dummy.onrender.com/quiz/${QuizObj.QuizId}`)
       .then((response) => {
         window.alert(response.data.msg);
         location.reload();
@@ -57,7 +57,7 @@ export default function QuizCard({ QuizObj, onDelete }) {
       className="outer_card"
       style={{
         width: "100%",
-        maxWidth: "200px",
+        maxWidth: '200px',
         height: "250px",
         border: "2px solid #bbbbbb",
         borderRadius: "12px",

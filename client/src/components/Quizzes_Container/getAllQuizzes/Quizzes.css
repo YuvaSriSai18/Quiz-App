@@ -49,18 +49,22 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 425px) {
-  .outer_card {
-    width: 90%;
-    padding: 0px 30px;
-  }
-}
-
 .cardsContainer {
   display: flex;
   flex-wrap: wrap;
   gap: 18px;
-  /* border: 1px solid #c6c6c6; */
+  border: 2px solid #c9c3c3;
   padding: 20px 20px 20px 30px;
-  border-radius: 18px;
+  border-radius: 12px;
+
 }
+@media screen and (max-width: 600px) {
+  .outer_card {
+    width: 100%;
+    padding: 0px 30px;
+  }
+  .cardsContainer{
+    margin: 0;
+  }
+}
+

@@ -65,7 +65,9 @@ const Leaderboard = () => {
   useEffect(() => {
     const getLeaderBoardUsers = async () => {
       try {
-        const response = await axios.get(`http://localhost:5500/leaderboard`);
+        const response = await axios.get(
+          `https://quiz-app-dummy.onrender.com/leaderboard`
+        );
         setLeaderBoardUsers(response.data);
       } catch (error) {
         console.log(`Error occurred in getting leaderboard users : ${err}`);
@@ -193,6 +195,48 @@ const Leaderboard = () => {
             >
               <Table sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableBody>
+                  <TableRow>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: "#333333",
+                        fontWeight: 600,
+                        fontSize: "14px",
+                      }}
+                    >
+                      Rank
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: "#333333",
+                        fontWeight: 600,
+                        fontSize: "14px",
+                      }}
+                    >
+                      Roll No
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: "#333333",
+                        fontWeight: 600,
+                        fontSize: "14px",
+                      }}
+                    >
+                      Name
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      sx={{
+                        color: "#333333",
+                        fontWeight: 600,
+                        fontSize: "14px",
+                      }}
+                    >
+                      Score
+                    </TableCell>
+                  </TableRow>
                   {leaderBoardUsers.slice(3).map((row) => (
                     <TableRow
                       key={row.rank}
@@ -205,7 +249,7 @@ const Leaderboard = () => {
                         {row.rank}
                       </TableCell>
                       <TableCell align="center" sx={{ color: "#333333" }}>
-                        {row.rollNumber}
+                        {row.rollNo}
                       </TableCell>
                       <TableCell align="center" sx={{ color: "#333333" }}>
                         {row.name}
