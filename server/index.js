@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "https://2c56bww0-5173.inc1.devtunnels.ms",
+    origin: "https://quiz-app-dummy.vercel.app",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -74,7 +74,7 @@ app.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("https://2c56bww0-5173.inc1.devtunnels.ms");
+    res.redirect("https://quiz-app-dummy.vercel.app");
   });
 });
 
