@@ -32,7 +32,7 @@ router.get("/:userId", async (req, res) => {
     }));
 
     // Find the specific user from the ranked list
-    const leaderBoardUser = rankedUsers.find((user) => user.rollNo === rollNo);
+    const leaderBoardUser = rankedUsers.find((user) => user.email === rollNo);
 
     if (leaderBoardUser) {
       res.json(leaderBoardUser).status(200);

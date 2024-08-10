@@ -5,6 +5,7 @@ import "./index.css";
 
 import { store } from "./reducers/store.js";
 import { Provider } from "react-redux";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import "@fontsource/poppins";
@@ -28,9 +29,11 @@ const theme = createTheme({
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Provider store={store}>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
-  </Provider>
+  <GoogleOAuthProvider clientId="887297308007-i4sa5e591pm8lnor6l5jf6lupgnhb1ti.apps.googleusercontent.com">
+    <Provider store={store}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </Provider>
+  </GoogleOAuthProvider>
 );

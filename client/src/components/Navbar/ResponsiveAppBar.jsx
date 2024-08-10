@@ -22,6 +22,8 @@ import {
   clearLeaderBoardUserData,
 } from "../../reducers/LeaderBoard/LeaderBoardSlice";
 import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
+import { googleLogout } from "@react-oauth/google";
 
 const settings = [
   { name: "Dashboard", path: "/dashboard" },
@@ -32,46 +34,42 @@ const settings = [
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
-  const leaderBoard = useSelector(
-    (state) => state.LeaderBoard.LeaderBoardUserData
-  );
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const getUser = async () => {
-    try {
-      const response = await axios.get(`http://localhost:5500/login/success`, {
-        withCredentials: true,
-      });
-      if (response.data.authenticated) {
-        dispatch(setUserData(response.data.user));
-      }
-    } catch (error) {
-      console.log("Error fetching user data:", error);
-    }
-  };
-
-  const fetchLeaderBoard = async () => {
+  const fetchLeaderBoard = async (email) => {
     try {
       const response = await axios.get(
-        `http://localhost:5500/leaderboard/${userData.rollNo}`
+        `http://localhost:5500/leaderboard/${email}`
       );
-      // console.log("LeaderBoard Data:", response.data);
       dispatch(setLeaderBoardUserData(response.data));
     } catch (error) {
       console.log("Error fetching LeaderBoard data:", error);
     }
   };
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  const fetchDatabaseUsers = async (email) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5500/profiledata/${email}`
+      );
+      if (response.data) {
+        dispatch(setUserData(response.data));
+      } else {
+        console.log(`User with email ${email} not found.`);
+      }
+    } catch (error) {
+      console.log("Error fetching database users:", error);
+    }
+  };
 
   useEffect(() => {
-    if (userData && userData.rollNo) {
-      fetchLeaderBoard();
+    if (userData && userData.email) {
+      const email = encodeURIComponent(userData.email);
+      fetchDatabaseUsers(email);
+      fetchLeaderBoard(email);
     }
-  }, [userData]);
+  }, [userData, dispatch]); // Added `dispatch` to dependencies to ensure proper handling
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -81,14 +79,35 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const handleLogin = () => {
-    window.open(`http://localhost:5500/auth/google`, "_self");
-  };
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        const response = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+        dispatch(setUserData(response.data));
+        await axios
+          .post(`http://localhost:5500/profiledata/post`, response.data)
+          .then(() => {
+            console.log(`User Data Posted !!`);
+          })
+          .catch((err) => console.log(err));
+      } catch (error) {
+        console.log("Error during login process:", error);
+      }
+    },
+  });
 
   const handleLogout = () => {
-    window.open(`http://localhost:5500/logout`, "_self");
+    googleLogout();
     dispatch(clearUserData());
     dispatch(clearLeaderBoardUserData());
+    window.location.href = "/";
   };
 
   const handleMenuItemClick = (setting) => {
@@ -179,7 +198,7 @@ function ResponsiveAppBar() {
             <IconButton
               color="inherit"
               fontSize={{ xs: 15, md: 20 }}
-              onClick={handleLogin}
+              onClick={() => login()}
             >
               <Typography variant="h6" mr={1}>
                 Login

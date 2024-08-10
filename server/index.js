@@ -94,6 +94,9 @@ app.use("/leaderboard", LeaderBoardRouter);
 const JoinRoomRouter = require("./routers/JoinRoom");
 app.use("/room", JoinRoomRouter);
 
+const userRouter = require('./routers/Auth')
+app.use( '/profiledata', userRouter)
+
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
