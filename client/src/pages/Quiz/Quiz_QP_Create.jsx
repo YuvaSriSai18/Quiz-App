@@ -151,7 +151,7 @@ const Quiz_QP_Create = () => {
     if (validate()) {
       try {
         const response = await axios.post(
-          "https://quiz-app-dummy.onrender.com/quiz/create",
+          "http://localhost:5500/quiz/create",
           questionPaper
         );
         console.log(response.data);

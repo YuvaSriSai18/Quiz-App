@@ -9,7 +9,7 @@ const server = http.createServer(app);
 
 const io = new Server(server, {
   cors: {
-    origin: "https://quiz-app-dummy.vercel.app",
+    origin: process.env.ORIGIN_URI,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   },
 });

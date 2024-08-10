@@ -66,7 +66,7 @@ const Leaderboard = () => {
     const getLeaderBoardUsers = async () => {
       try {
         const response = await axios.get(
-          `https://quiz-app-dummy.onrender.com/leaderboard`
+          `http://localhost:5500/leaderboard`
         );
         setLeaderBoardUsers(response.data);
       } catch (error) {

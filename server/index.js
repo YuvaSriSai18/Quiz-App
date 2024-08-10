@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "https://quiz-app-dummy.vercel.app",
+    origin: process.env.ORIGIN_URI,
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -56,8 +56,8 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "https://quiz-app-dummy.vercel.app/dashboard",
-    failureRedirect: "https://quiz-app-dummy.vercel.app/failure",
+    successRedirect: `${process.env.ORIGIN_URI}/dashboard`,
+    failureRedirect: `${process.env.ORIGIN_URI}/failure`,
   })
 );
 
@@ -74,7 +74,7 @@ app.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("https://quiz-app-dummy.vercel.app");
+    res.redirect(process.env.ORIGIN_URI);
   });
 });
 
@@ -94,8 +94,8 @@ app.use("/leaderboard", LeaderBoardRouter);
 const JoinRoomRouter = require("./routers/JoinRoom");
 app.use("/room", JoinRoomRouter);
 
-const userRouter = require('./routers/Auth')
-app.use( '/profiledata', userRouter)
+const userRouter = require("./routers/Auth");
+app.use("/profiledata", userRouter);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
