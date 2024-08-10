@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import Typography from "@mui/material/Typography";
 import { Box, Modal, Card, CardContent } from "@mui/material";
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { Gauge, gaugeClasses } from "@mui/x-charts/Gauge";
 import JoinRoomModal from "../../components/Modals/JoinRoomModal";
 import LappyLottie from "../../components/animation/LappyLottie";
 import JoinRoomWithoutAuth from "../../components/Modals/JoinRoomWithoutAuth";
 import StartQuizCard from "../../components/StartQuizCard";
 import LineGraph from "../../components/Home/LineGraph";
+import useMediaQuery from "@mui/material";
 const style = {
   position: "absolute",
   top: "50%",
@@ -79,6 +79,9 @@ function studentRank(num) {
   }
 }
 export default function Home() {
+
+  const isMobile = useMediaQuery("(max-width:600px)");
+
   const userData = useSelector((state) => state.auth.userData);
   const leaderBoard = useSelector(
     (state) => state.LeaderBoard.LeaderBoardUserData
@@ -146,7 +149,7 @@ export default function Home() {
             boxShadow: 3,
             maxWidth: { xs: "100%", md: "350px" },
             height: { xs: "fit-content" },
-            width: { xs: "fit-content" },
+            width: { xs: "100%" },
           }}
         >
           <CardContent>
@@ -165,8 +168,9 @@ export default function Home() {
                   fontWeight={300}
                   mt={0.5}
                   sx={{
-                    fontSize: { xs: 10, md: 16 },
+                    fontSize: { xs: 13, md: 16 },
                   }}
+                  mb={0.5}
                 >
                   Let's make this day productive
                 </Typography>
@@ -178,7 +182,7 @@ export default function Home() {
                   sx={{
                     width: {
                       md: "250px",
-                      xs: "200px",
+                      xs: "90%",
                     },
                     height: {
                       md: "70px",
@@ -207,7 +211,7 @@ export default function Home() {
                   sx={{
                     width: {
                       md: "225px",
-                      xs: "180px",
+                      xs: "80%",
                     },
                     height: {
                       md: "70px",
@@ -289,9 +293,9 @@ export default function Home() {
             Total Quizzes
           </Typography>
         </Box>
-        <LineGraph />
+        {/* {!isMobile && <LineGraph />} */}
       </Box>
-
+      {/* {isMobile && <LineGraph />} */}
       <StartQuizCard />
 
       {/* Modals */}

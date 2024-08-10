@@ -11,7 +11,7 @@ export default function QuizzesContainer() {
 
   const getQuizzes = async () => {
     try {
-      const response = await axios.get("https://quiz-app-dummy.onrender.com/quiz");
+      const response = await axios.get("http://localhost:5500/quiz");
       const filteredQuizzes = response.data.filter(
         (quiz) => quiz.CreatorMail === userData.email
       );
