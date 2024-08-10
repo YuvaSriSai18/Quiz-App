@@ -65,7 +65,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const getLeaderBoardUsers = async () => {
       try {
-        const response = await axios.get(`http://localhost:5500/leaderboard`);
+        const response = await axios.get(`https://quiz-app-dummy.onrender.com/leaderboard`);
         setLeaderBoardUsers(response.data);
       } catch (error) {
         console.log(`Error occurred in getting leaderboard users : ${err}`);

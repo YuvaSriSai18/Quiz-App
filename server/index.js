@@ -12,7 +12,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "https://2c56bww0-5173.inc1.devtunnels.ms",
     methods: "GET,POST,PUT,DELETE",
     credentials: true,
   })
@@ -56,8 +56,8 @@ app.get(
 app.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    successRedirect: "http://localhost:5173/dashboard",
-    failureRedirect: "http://localhost:5173/failure",
+    successRedirect: "https://quiz-app-dummy.vercel.app/dashboard",
+    failureRedirect: "https://quiz-app-dummy.vercel.app/failure",
   })
 );
 
@@ -74,7 +74,7 @@ app.get("/logout", (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.redirect("http://localhost:5173");
+    res.redirect("https://2c56bww0-5173.inc1.devtunnels.ms");
   });
 });
 

@@ -38,7 +38,7 @@ export default function QuizCard({ QuizObj, onDelete }) {
 
   const deleteQuiz = () => {
     axios
-      .delete(`http://localhost:5500/quiz/${QuizObj.QuizId}`)
+      .delete(`https://quiz-app-dummy.onrender.com/quiz/${QuizObj.QuizId}`)
       .then((response) => {
         window.alert(response.data.msg);
         location.reload();

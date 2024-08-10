@@ -45,7 +45,7 @@ const Quiz_Update = () => {
   useEffect(() => {
     if (QuizId) {
       axios
-        .get(`http://localhost:5500/quiz/${QuizId}`)
+        .get(`https://quiz-app-dummy.onrender.com/quiz/${QuizId}`)
         .then((response) => {
           const data = response.data;
           setQuestionPaper((prevState) => ({
@@ -127,7 +127,7 @@ const Quiz_Update = () => {
     updateData.noOfQuestions = questionPaper.questions.length; // Compute noOfQuestions
 
     axios
-      .put(`http://localhost:5500/quiz/${QuizId}`, updateData)
+      .put(`https://quiz-app-dummy.onrender.com/quiz/${QuizId}`, updateData)
       .then((response) => {
         // console.log(response.data);
         alert("Quiz updated successfully");
