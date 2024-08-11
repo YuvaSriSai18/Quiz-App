@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import axios from "axios"; // Don't forget to import axios
 import io from "socket.io-client";
-
+const socket = io("http://localhost:8080");
+socket.connect();
 const LeaderBoard = () => {
   const [animationType, setAnimationType] = useState(null);
   const [leaderBoardUsers, setLeaderBoardUsers] = useState([]);
@@ -16,9 +17,6 @@ const LeaderBoard = () => {
     }
     sessionStorage.removeItem("answerStatus");
   }, []);
-
-  const socket = io("http://localhost:8080");
-  socket.connect();
 
   socket.on("leaderBoard_update", (response) => {
     console.log(response.message);
@@ -149,7 +147,6 @@ const LeaderBoard = () => {
                   }}
                 >
                   {participant.rollNo}
-                  
                 </Typography>
               </Box>
             ))}
@@ -173,7 +170,7 @@ const LeaderBoard = () => {
                   }}
                   mb={1}
                 >
-                  {participant.name.split(' ')[0].toUpperCase()}
+                  {participant.name.split(" ")[0]}
                 </Typography>
                 <Typography
                   variant="body2"

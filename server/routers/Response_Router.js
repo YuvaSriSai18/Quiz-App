@@ -88,7 +88,7 @@ router.post("/submit", async (req, res) => {
       }
     });
 
-    // Update or create leaderboard entry
+    // Update or create LeaderBoard entry
     let leaderBoardEntry = await LeaderBoard.findOne({ email: StudentEmail });
     if (!leaderBoardEntry) {
       leaderBoardEntry = new LeaderBoard({
@@ -147,13 +147,15 @@ router.post("/submit", async (req, res) => {
       100
     ).toFixed(2);
 
-    // Save responses and leaderboard
+    // Save responses and LeaderBoard
     await quizResponses.save();
+    // console.log(`Quiz saved`)
     await leaderBoardEntry.save();
+    // console.log(`leaderBoardEntry saved`)
 
-    // Emit leaderboard update
+    // Emit LeaderBoard update
     const LeaderBoardUsers = await LeaderBoard.find().sort({ points: -1 });
-
+    console.log(LeaderBoardUsers)
     io.emit("leaderBoard_update", {
       message: "LeaderBoard Users Data",
       data: LeaderBoardUsers, // without ranking
