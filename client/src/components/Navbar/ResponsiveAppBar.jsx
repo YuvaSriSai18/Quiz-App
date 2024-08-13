@@ -40,9 +40,18 @@ function ResponsiveAppBar() {
   const fetchLeaderBoard = async (email) => {
     try {
       const response = await axios.get(
-        `https://quiz-app-dummy.onrender.com/leaderboard/${email}`
+        `https://quiz-app-dummy.onrender.com/leaderboard`
       );
-      dispatch(setLeaderBoardUserData(response.data));
+      if(response.data){
+        const leaderBoardUserInfo = response.data.find((user => user.email === email))
+        if(leaderBoardUserInfo){
+          dispatch(setLeaderBoardUserData(response.data));
+        }else{
+          console.log(`User with E-Mail ${email} not found`)
+        }
+      }else{
+        console.log(`LeaderBoard Data is empty`)
+      }
     } catch (error) {
       console.log("Error fetching LeaderBoard data:", error);
     }
@@ -51,10 +60,15 @@ function ResponsiveAppBar() {
   const fetchDatabaseUsers = async (email) => {
     try {
       const response = await axios.get(
-        `https://quiz-app-dummy.onrender.com/profiledata/${email}`
+        `https://quiz-app-dummy.onrender.com/profiledata`
       );
       if (response.data) {
-        dispatch(setUserData(response.data));
+        const userInfo = response.data.find((user) => user.email === email)
+        if(userInfo){
+          dispatch(setUserData(response.data));
+        }else{
+          console.log(`User not found in the database`)
+        }
       } else {
         console.log(`User with email ${email} not found.`);
       }
