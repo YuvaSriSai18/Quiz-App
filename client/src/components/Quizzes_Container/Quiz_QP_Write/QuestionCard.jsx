@@ -111,11 +111,7 @@ export default function QuestionCard({
       );
       // Emit message to Socket.IO server`
       socket.emit("send_message", {
-<<<<<<< HEAD
         room: quizDetails.data.roomPass,
-=======
-        room: quizId || "Quiz",
->>>>>>> 0b997868bc541dd80363bc871a3f9ebe919e1a61
         message: `${userData.displayName} answered question ${questionNumber}`,
       });
     } catch (err) {

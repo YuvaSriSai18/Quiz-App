@@ -155,8 +155,10 @@ module.exports = (io) => {
 
       // Emit LeaderBoard update
       console.log(leaderBoardEntry);
+      const leaderBoardUsers = await LeaderBoard.find().sort({ points: -1 });
+      console.log(leaderBoardUsers)
       io.emit("leaderboard_update", {
-        data: leaderBoardEntry,
+        data: leaderBoardUsers,
         message: `Fetched LeaderBoard Users`,
       });
 

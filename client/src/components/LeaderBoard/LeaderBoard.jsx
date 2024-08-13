@@ -20,13 +20,13 @@ const LeaderBoard = () => {
   useEffect(() => {
     socket.on("leaderboard_update", (response) => {
       console.log(response.message);
-      setLeaderBoardUsers(sortByPointsDescending([response.data]));
+      setLeaderBoardUsers(sortByPointsDescending(response.data));
     });
 
     return () => {
       socket.off("leaderboard_update"); // Cleanup listener
     };
-  }, []);
+  }, [socket]);
 
   const sortByPointsDescending = (arr) =>
     arr.sort((a, b) => b.points - a.points);
@@ -175,7 +175,7 @@ const LeaderBoard = () => {
                   }}
                   mb={1}
                 >
-                  {participant.name.split(" ")[0]}
+                  {participant.name}
                 </Typography>
                 <Typography
                   variant="body2"
