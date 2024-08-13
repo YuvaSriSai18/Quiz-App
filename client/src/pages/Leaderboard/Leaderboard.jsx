@@ -16,10 +16,6 @@ import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal, faStar, faTrophy } from "@fortawesome/free-solid-svg-icons";
 
-import io from "socket.io-client";
-const socket = io("https://quiz-app-dummy.onrender.com");
-socket.connect();
-
 const getBackgroundColor = (index) => {
   switch (index) {
     case 0:
@@ -66,18 +62,16 @@ const Leaderboard = () => {
   const [leaderBoardUsers, setLeaderBoardUsers] = useState([]);
 
   useEffect(() => {
-    socket.on("leaderboard_update", (response) => {
-      console.log(response.message);
-      setLeaderBoardUsers(sortByPointsDescending(response.data));
-    });
-
-    return () => {
-      socket.off("leaderboard_update"); // Cleanup listener
+    const getLeaderBoardUsers = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5500/leaderboard`);
+        setLeaderBoardUsers(response.data);
+      } catch (error) {
+        console.log(`Error occurred in getting leaderboard users : ${err}`);
+      }
     };
-  }, [socket]);
-
-  const sortByPointsDescending = (arr) =>
-    arr.sort((a, b) => b.points - a.points);
+    getLeaderBoardUsers();
+  }, []);
 
   return (
     <Container>
