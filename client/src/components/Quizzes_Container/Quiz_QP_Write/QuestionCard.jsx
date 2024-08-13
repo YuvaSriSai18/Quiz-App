@@ -106,10 +106,12 @@ export default function QuestionCard({
         modifiedResponse
       );
       console.log("Posting response:", modifiedResponse);
-
-      // Emit message to Socket.IO server
+      const quizDetails = await axios.get(
+        `http://localhost:5500/quiz/${quizId}`
+      );
+      // Emit message to Socket.IO server`
       socket.emit("send_message", {
-        room: quizId,
+        room: quizDetails.data.roomPass,
         message: `${userData.displayName} answered question ${questionNumber}`,
       });
     } catch (err) {
