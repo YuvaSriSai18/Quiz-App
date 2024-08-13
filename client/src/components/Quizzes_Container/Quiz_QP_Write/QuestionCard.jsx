@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
 // Initialize Socket.IO client
-const socket = io("http://localhost:8080");
+const socket = io("http://localhost:5500");
 socket.connect();
 
 export default function QuestionCard({
@@ -109,7 +109,7 @@ export default function QuestionCard({
 
       // Emit message to Socket.IO server
       socket.emit("send_message", {
-        room: quizId,
+        room: quizId || "Quiz",
         message: `${userData.displayName} answered question ${questionNumber}`,
       });
     } catch (err) {

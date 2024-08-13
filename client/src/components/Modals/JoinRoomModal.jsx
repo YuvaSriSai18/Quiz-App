@@ -12,7 +12,7 @@ export default function JoinRoomModal() {
   const [error, setError] = useState("");
   const [quiz, setQuiz] = useState();
   const navigate = useNavigate();
-  const socket = io("http://localhost:8080");
+  const socket = io("http://localhost:5500");
 
   useEffect(() => {
     return () => {
