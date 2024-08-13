@@ -79,7 +79,7 @@ function ResponsiveAppBar() {
 
   useEffect(() => {
     if (userData && userData.email) {
-      const email = encodeURIComponent(userData.email);
+      const email = userData.email;
       fetchDatabaseUsers(email);
       fetchLeaderBoard(email);
     }
