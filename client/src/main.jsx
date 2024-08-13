@@ -29,7 +29,7 @@ const theme = createTheme({
 });
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <GoogleOAuthProvider clientId="887297308007-i4sa5e591pm8lnor6l5jf6lupgnhb1ti.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId="887297308007-rp2nb962fon9p83ld78k6p69im75e0da.apps.googleusercontent.com">
     <Provider store={store}>
       <ThemeProvider theme={theme}>
         <App />
