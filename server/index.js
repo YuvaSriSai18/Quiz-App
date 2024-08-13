@@ -12,14 +12,14 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: process.env.ORIGIN_URI,
+    origin: 'https://quiz-app-dummy.vercel.app',
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"]
   },
 });
 
 app.use(
   cors({
-    origin: process.env.ORIGIN_URI,
+    origin: 'https://quiz-app-dummy.vercel.app',
     methods: "GET,POST,PUT,DELETE",
   })
 );
