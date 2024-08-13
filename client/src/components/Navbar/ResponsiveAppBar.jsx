@@ -45,7 +45,7 @@ function ResponsiveAppBar() {
       if(response.data){
         const leaderBoardUserInfo = response.data.find((user => user.email === email))
         if(leaderBoardUserInfo){
-          dispatch(setLeaderBoardUserData(response.data));
+          dispatch(setLeaderBoardUserData(leaderBoardUserInfo));
         }else{
           console.log(`User with E-Mail ${email} not found`)
         }
