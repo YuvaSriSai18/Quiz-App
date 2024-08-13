@@ -15,7 +15,6 @@ import {
 import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMedal, faStar, faTrophy } from "@fortawesome/free-solid-svg-icons";
-import io from "socket.io-client";
 
 const getBackgroundColor = (index) => {
   switch (index) {
@@ -65,9 +64,7 @@ const Leaderboard = () => {
   useEffect(() => {
     const getLeaderBoardUsers = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5500/leaderboard`
-        );
+        const response = await axios.get(`http://localhost:5500/leaderboard`);
         setLeaderBoardUsers(response.data);
       } catch (error) {
         console.log(`Error occurred in getting leaderboard users : ${err}`);
@@ -75,14 +72,6 @@ const Leaderboard = () => {
     };
     getLeaderBoardUsers();
   }, []);
-
-  // const socket = io("http://localhost:8080");
-  // socket.connect();
-
-  // socket.on("setAllLeaderBoardUsersRanking", (response) => {
-  //   console.log(response.message);
-  //   setLeaderBoardUsers(response.data);
-  // });
 
   return (
     <Container>

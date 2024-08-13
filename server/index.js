@@ -1,14 +1,22 @@
 const express = require("express");
-const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("./controllers/authentication/authentication");
-const User = require("./models/User");
 
 dotenv.config();
-app.use(cors());
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.ORIGIN_URI,
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    credentials: true,
+  },
+});
 
 app.use(
   cors({
@@ -77,12 +85,38 @@ app.get("/logout", (req, res, next) => {
   });
 });
 
+// Socket.IO implementation
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
+
+  socket.on("join_room", (roomNumber) => {
+    socket.join(roomNumber);
+    console.log(`User ${socket.id} joined room ${roomNumber}`);
+  });
+
+  socket.on("leave_room", (roomNumber) => {
+    socket.leave(roomNumber);
+    console.log(`User ${socket.id} left room ${roomNumber}`);
+  });
+
+  socket.on("send_message", (data) => {
+    console.log(
+      `Message from ${socket.id} in room ${data.room}: ${data.message}`
+    );
+    socket.to(data.room).emit("received_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`User Disconnected: ${socket.id}`);
+  });
+});
+
 // Quiz Router
 const QuizRouter = require("./routers/Quiz");
 app.use("/quiz", QuizRouter);
 
 // Response Router
-const responseRouter = require("./routers/Response_Router");
+const responseRouter = require("./routers/Response_Router")(io);
 app.use("/response", responseRouter);
 
 // LeaderBoard Router
@@ -96,6 +130,7 @@ app.use("/room", JoinRoomRouter);
 const userRouter = require("./routers/Auth");
 app.use("/profiledata", userRouter);
 
-app.listen(process.env.PORT, () => {
+// Start the server with Socket.IO
+server.listen(process.env.PORT, () => {
   console.log(`Server is running on port ${process.env.PORT}`);
 });
