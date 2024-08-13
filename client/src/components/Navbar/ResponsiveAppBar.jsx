@@ -65,7 +65,7 @@ function ResponsiveAppBar() {
       if (response.data) {
         const userInfo = response.data.find((user) => user.email === email)
         if(userInfo){
-          dispatch(setUserData(response.data));
+          dispatch(setUserData(userInfo));
         }else{
           console.log(`User not found in the database`)
         }
