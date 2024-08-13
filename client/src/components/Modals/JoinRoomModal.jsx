@@ -12,7 +12,7 @@ export default function JoinRoomModal() {
   const [error, setError] = useState("");
   const [quiz, setQuiz] = useState();
   const navigate = useNavigate();
-  const socket = io("http://localhost:5500");
+  const socket = io("https://quiz-app-dummy.onrender.com");
 
   useEffect(() => {
     return () => {
@@ -41,7 +41,7 @@ export default function JoinRoomModal() {
     }
     try {
       const response = await axios.get(
-        `http://localhost:5500/room/${roomNumber}`
+        `https://quiz-app-dummy.onrender.com/room/${roomNumber}`
       );
       setQuiz(response.data.quiz);
       if (response.data.exists) {

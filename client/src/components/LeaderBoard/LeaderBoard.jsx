@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Box, Grid, Typography } from "@mui/material";
 import io from "socket.io-client";
-const socket = io("http://localhost:5500");
+const socket = io("https://quiz-app-dummy.onrender.com");
 socket.connect();
 const LeaderBoard = () => {
   const [animationType, setAnimationType] = useState(null);

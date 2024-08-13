@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 
 // Initialize Socket.IO client
-const socket = io("http://localhost:5500");
+const socket = io("https://quiz-app-dummy.onrender.com");
 socket.connect();
 
 export default function QuestionCard({
@@ -102,12 +102,12 @@ export default function QuestionCard({
       };
 
       await axios.post(
-        "http://localhost:5500/response/submit",
+        "https://quiz-app-dummy.onrender.com/response/submit",
         modifiedResponse
       );
       console.log("Posting response:", modifiedResponse);
       const quizDetails = await axios.get(
-        `http://localhost:5500/quiz/${quizId}`
+        `https://quiz-app-dummy.onrender.com/quiz/${quizId}`
       );
       // Emit message to Socket.IO server`
       socket.emit("send_message", {
