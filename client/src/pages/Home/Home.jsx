@@ -219,7 +219,7 @@ export default function Home() {
       {/* Gauges and Line Chart */}
       <ScoreCharts />
 
-      {userData.role === "Faculty" && <StartQuizCard />}
+      {userData.role === "Student" && <StartQuizCard />}
 
       {/* Modals */}
       <Modal
