@@ -62,7 +62,7 @@ router.post("/post", async (req, res) => {
     );
 
     const leaderBoardUser = await LeaderBoard.findOne({ email });
-    if (!leaderBoardUser) {
+    if (!leaderBoardUser && role === 'Student') {
       await LeaderBoard.create({
         email,
         rollNo,
