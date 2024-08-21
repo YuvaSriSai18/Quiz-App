@@ -34,7 +34,6 @@ const settings = [
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.auth.userData);
-
   const [anchorElUser, setAnchorElUser] = useState(null);
 
   const fetchLeaderBoard = async (email) => {
@@ -42,15 +41,17 @@ function ResponsiveAppBar() {
       const response = await axios.get(
         `https://quiz-app-dummy.onrender.com/leaderboard`
       );
-      if(response.data){
-        const leaderBoardUserInfo = response.data.find((user => user.email === email))
-        if(leaderBoardUserInfo){
+      if (response.data) {
+        const leaderBoardUserInfo = response.data.find(
+          (user) => user.email === email
+        );
+        if (leaderBoardUserInfo) {
           dispatch(setLeaderBoardUserData(leaderBoardUserInfo));
-        }else{
-          console.log(`User with E-Mail ${email} not found`)
+        } else {
+          console.log(`User with E-Mail ${email} not found`);
         }
-      }else{
-        console.log(`LeaderBoard Data is empty`)
+      } else {
+        console.log(`LeaderBoard Data is empty`);
       }
     } catch (error) {
       console.log("Error fetching LeaderBoard data:", error);
@@ -63,11 +64,11 @@ function ResponsiveAppBar() {
         `https://quiz-app-dummy.onrender.com/profiledata`
       );
       if (response.data) {
-        const userInfo = response.data.find((user) => user.email === email)
-        if(userInfo){
+        const userInfo = response.data.find((user) => user.email === email);
+        if (userInfo) {
           dispatch(setUserData(userInfo));
-        }else{
-          console.log(`User not found in the database`)
+        } else {
+          console.log(`User not found in the database`);
         }
       } else {
         console.log(`User with email ${email} not found.`);
@@ -78,12 +79,34 @@ function ResponsiveAppBar() {
   };
 
   useEffect(() => {
+    const storedToken = localStorage.getItem("google_access_token");
+    if (storedToken) {
+      // Automatically fetch user data if token is found in localStorage
+      axios
+        .get("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+          },
+        })
+        .then((response) => {
+          const userData = response.data;
+          dispatch(setUserData(userData));
+          fetchDatabaseUsers(userData.email);
+          fetchLeaderBoard(userData.email);
+        })
+        .catch((error) => {
+          console.log("Error using stored token:", error);
+        });
+    }
+  }, [dispatch]);
+
+  useEffect(() => {
     if (userData && userData.email) {
       const email = userData.email;
       fetchDatabaseUsers(email);
       fetchLeaderBoard(email);
     }
-  }, [userData, dispatch]); // Added `dispatch` to dependencies to ensure proper handling
+  }, [userData, dispatch]);
 
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -96,21 +119,32 @@ function ResponsiveAppBar() {
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
+        const accessToken = tokenResponse.access_token;
+
+        // Store the access token in localStorage
+        localStorage.setItem("google_access_token", accessToken);
+
         const response = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
           {
             headers: {
-              Authorization: `Bearer ${tokenResponse.access_token}`,
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         );
         dispatch(setUserData(response.data));
         await axios
-          .post(`https://quiz-app-dummy.onrender.com/profiledata/post`, response.data)
+          .post(
+            `https://quiz-app-dummy.onrender.com/profiledata/post`,
+            response.data
+          )
           .then(() => {
             console.log(`User Data Posted !!`);
           })
           .catch((err) => console.log(err));
+
+        // Fetch leaderboard data after successful login
+        fetchLeaderBoard(response.data.email);
       } catch (error) {
         console.log("Error during login process:", error);
       }
@@ -121,6 +155,7 @@ function ResponsiveAppBar() {
     googleLogout();
     dispatch(clearUserData());
     dispatch(clearLeaderBoardUserData());
+    localStorage.removeItem("google_access_token"); // Remove token from localStorage
     window.location.href = "/";
   };
 
