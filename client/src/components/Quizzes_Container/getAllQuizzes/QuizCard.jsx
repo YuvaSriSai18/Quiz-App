@@ -87,9 +87,9 @@ export default function QuizCard({ QuizObj, onDelete }) {
         View Details
       </button>
 
-      <NavLink to={`/writequiz/${QuizObj.QuizId}`}>
+      {/* <NavLink to={`/writequiz/${QuizObj.QuizId}`}>
         <button className="button">Start</button>
-      </NavLink>
+      </NavLink> */}
       <Menu
         id="demo-positioned-menu"
         aria-labelledby="demo-positioned-button"
